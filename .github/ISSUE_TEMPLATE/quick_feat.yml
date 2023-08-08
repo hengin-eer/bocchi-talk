@@ -1,0 +1,11 @@
+name: タスクリスト
+description: サクッとタスクを追加したい時向け。それほど検討しなくていい新規機能とか
+title: "[feat]:"
+body:
+  - type: textarea
+    id: tasklist
+    attributes:
+      label: タスク
+      description: タスクを記入してください
+      value: |
+        - [ ] タスクを立てる
