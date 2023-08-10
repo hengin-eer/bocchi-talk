@@ -47,7 +47,7 @@ export const ChatArea = () => {
 				))}
 			</Flex>
 			<form onSubmit={(e) => sendMessage(e)} >
-				<Flex w={800} mx='auto' mt={5}>
+				<Flex w='100%' maxW={800} px={5} mx='auto' mt={5}>
 					<Input mr={4} variant='filled' placeholder='Start Chat!!' type='text' value={text} onChange={(e) => setText(e.target.value)} />
 					<Button colorScheme='teal' type='submit'>send</Button>
 				</Flex>
