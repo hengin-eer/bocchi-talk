@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 export const ChatArea = () => {
 	const [text, setText] = useState('')
 	const [messages, setMessage] = useState([])
-	const { isOpen, onToggle } = useDisclosure()
+	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [menuIndex, setMenuIndex] = useState(null) // 右クリックされたときのメニューのindexを保持する
 
 	const sendMessage = (e) => {
@@ -21,11 +21,11 @@ export const ChatArea = () => {
 	const handleRightClick = (e, index) => {
 		e.preventDefault()
 		setMenuIndex(index) // 右クリックされたときのメニューのindexを保持する
-		onToggle()
+		onOpen() // 右クリック時にメニューを開く
 	}
 
 	return (
-		<Box>
+		<Box onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
 			<Flex direction='column' align='flex-end' rowGap={5} h="80vh" px={10} py={8} bg={'blue.200'} overflowY='auto'>
 				{messages.map((message, index) => (
 					<Box pos='relative' key={index} onContextMenu={(e) => handleRightClick(e, index)}>
