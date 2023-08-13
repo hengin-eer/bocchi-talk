@@ -7,8 +7,8 @@ export default function Document() {
         <meta name="application-name" content="BocchiTalk" />
         <meta name="theme-color" content="#fff" />
         <link rel="icon" sizes="192x192" href="../../public/512x512_Bocchi-Talk.png" />
-        <link rel="icon" href="../../public/favicon.ico" />
-        <link rel="manifest" href="../../public/manifest.json" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="manifest" href="/manifest.json" />
       </Head>
       <body>
         <Main />
