@@ -5,7 +5,7 @@ import React from 'react'
 
 export default function chat() {
 	return (
-		<div>
+		<div overflowY='hidden'>
 			<AppHeader />
 			<ChatArea />
 		</div>
