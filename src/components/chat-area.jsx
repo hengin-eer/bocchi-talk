@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 export const ChatArea = () => {
 	const [text, setText] = useState('')
-	const [messages, setMessage] = useState([{ role : "", content: ""}])
+	const [messages, setMessage] = useState([])
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [menuIndex, setMenuIndex] = useState(null) // 右クリックされたときのメニューのindexを保持する
 
@@ -48,7 +48,7 @@ export const ChatArea = () => {
 			</Flex>
 			<form onSubmit={(e) => sendMessage(e)} >
 				<Flex w='100%' maxW={800} px={5} mx='auto' mt={5}>
-					<Input mr={4} variant='filled' placeholder='Start Chat!!' type='text' value={text} onChange={(e) => setText(e.target.value)} />
+					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type='text' value={text} onChange={(e) => setText(e.target.value)} />
 					<Button colorScheme='teal' type='submit'>send</Button>
 				</Flex>
 			</form>
