@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 export const ChatArea = () => {
 	const [text, setText] = useState('')
-	const [messages, setMessage] = useState([])
+	const [messages, setMessage] = useState([{ role : "", content: ""}])
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [menuIndex, setMenuIndex] = useState(null) // 右クリックされたときのメニューのindexを保持する
 
@@ -11,7 +11,7 @@ export const ChatArea = () => {
 		e.preventDefault()
 		if (isTextEmpty) {
 		} else {
-			setMessage([...messages, text])
+			setMessage([...messages, {role: "user", content: text}])
 			setText('')
 		}
 	}
@@ -29,7 +29,7 @@ export const ChatArea = () => {
 			<Flex direction='column' align='flex-end' rowGap={5} h="80vh" px={10} py={8} bg={'blue.200'} overflowY='auto'>
 				{messages.map((message, index) => (
 					<Box pos='relative' key={index} onContextMenu={(e) => handleRightClick(e, index)}>
-						<Text w='max-content' px={5} py={3} bg={'white'} borderRadius={100}>{message}</Text>
+						<Text w='max-content' px={5} py={3} bg={'white'} borderRadius={100}>{message.content}</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
 								<Fade in={isOpen} key={index}>
