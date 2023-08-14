@@ -9,8 +9,8 @@ export const PageHeader = () => {
                 <Text fontSize='4xl' fontWeight='bold' bgClip='text' bgGradient='linear(to-br, #1DBEE1, #487EE7, #884FE4)'>Bocchi Talk</Text>
             </Flex>
             <ButtonGroup gap={2}>
-                <Button variant='outline' colorScheme='teal'>Sign Up</Button>
-                <Button colorScheme='teal'>Login</Button>
+                <Button variant='outline' colorScheme='cyan'>Sign Up</Button>
+                <Button colorScheme='green'>Login</Button>
             </ButtonGroup>
         </Flex>
     )
