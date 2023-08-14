@@ -1,4 +1,7 @@
 import Head from 'next/head'
+import { PageHeader } from '@/components/page-header'
+import { Box, Button, Flex, Grid, GridItem, Heading, Image, Stack, StackItem, Text } from '@chakra-ui/react'
+
 
 export default function Home() {
   return (
@@ -10,6 +13,54 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Box id='headerArea' bg='yellow.100'>
+          <PageHeader />
+          <Grid
+            // h='800px'
+            px='10%'
+            py='100px'
+            gridTemplateAreas={`
+          "heroImage heading"
+          "heroImage description"
+          "heroImage button"
+        `}
+            gridTemplateColumns="40% 1fr"
+            gridTemplateRows="max-content max-content 1fr"
+            columnGap='50px'
+          >
+            <GridItem area={"heroImage"}>
+              <Image maxH='800px' src='/top-page-mobile1.png' alt='hero image' />
+            </GridItem>
+            <GridItem area={"heading"}>
+              <Heading color='#1DBEE1' lineHeight='1.5' as='h1' size='2xl' wordBreak='keep-all'>英会話を<wbr />いつでもどこでも</Heading>
+              <Heading mt='20px' color='black' as='h2' size='lg'>Let's Talk anytime, anywhere!</Heading>
+            </GridItem>
+            <GridItem mt='50px' area={"description"}>
+              <Text fontSize='24px' lineHeight='10'>
+                <p>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</p>
+                <p>いつでもどこでも、自分のペースで英会話を学ぶことができます。</p>
+                <p>たとえぼっちでも大丈夫！</p>
+              </Text>
+            </GridItem>
+            <GridItem mt='50px' area={"button"}>
+              <Flex align='center' columnGap='30px'>
+                <Button colorScheme='green' size='lg'>ログインしてみる</Button>
+                <Button colorScheme='pink' color='white' size='lg'>チャットを始めてみる</Button>
+              </Flex>
+            </GridItem>
+          </Grid>
+        </Box>
+        <Stack>
+          <StackItem>
+            <p>英語の勉強をしたいけど、英会話をする相手がいない。</p>
+            <p>英語を話すのが怖い。</p>
+            <p>英語を話すのが苦手。</p>
+            <p>英語を話すのが恥ずかしい。</p>
+            <p>英語を話すのが緊張する。</p>
+            <p>英語を話すのが不安。</p>
+            <p>そんな人におすすめです。</p>
+          </StackItem>
+        </Stack>
       </main>
     </>
   )
