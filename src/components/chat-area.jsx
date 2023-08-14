@@ -26,10 +26,10 @@ export const ChatArea = () => {
 
 	return (
 		<Box onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
-			<Flex direction='column' align='flex-end' rowGap={5} h="80vh" px={10} py={8} bg={'blue.200'} overflowY='auto'>
+			<Flex direction='column' align='flex-end' rowGap={3} h="80vh" px={4} py={4} bg={'blue.200'} overflowY='auto'>
 				{messages.map((message, index) => (
 					<Box pos='relative' key={index} onContextMenu={(e) => handleRightClick(e, index)}>
-						<Text w='max-content' px={5} py={3} bg={'white'} borderRadius={100}>{message.content}</Text>
+						<Text w='max-content' maxW='70vw' px={5} py={3} bg={'white'} borderRadius='100px 0px 100px 100px'>{message.content}</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
 								<Fade in={isOpen} key={index}>
