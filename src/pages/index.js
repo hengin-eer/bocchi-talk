@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { PageHeader } from '@/components/page-header'
-import { Box, Button, ButtonGroup, Flex, Grid, GridItem, Heading, Image, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, Container, Flex, Grid, GridItem, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
 import Link from 'next/link'
 import { GradientHeading } from '@/components/custom-chakra-ui'
 
@@ -34,14 +34,14 @@ export default function Home() {
             </GridItem>
             <GridItem area={"heading"}>
               <GradientHeading as='h1' size='2xl' wordBreak='keep-all'>ぼっちでもAIと(英)会話しよう！</GradientHeading>
-              <Heading mt='20px' color='black' as='h2' size='lg'>Let's Talk anytime, anywhere!</Heading>
+              <Heading mt='20px' color='black' as='h2' size='lg' fontWeight='normal'>Let's Talk anytime, anywhere!</Heading>
             </GridItem>
             <GridItem mt='50px' area={"description"}>
-              <Text fontSize='24px' lineHeight='10'>
-                <p>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</p>
-                <p>いつでもどこでも、自分のペースで英会話を学ぶことができます。</p>
-                <p>たとえぼっちでも大丈夫！</p>
-              </Text>
+              <Box>
+                <Text fontSize='md'>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</Text>
+                <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
+                <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
+              </Box>
             </GridItem>
             <GridItem mt='50px' area={"button"}>
               <ButtonGroup spacing='30px'>
@@ -55,22 +55,45 @@ export default function Home() {
             </GridItem>
           </Grid>
         </Box>
-        <Box bg='white' px='30px' py='100px'>
-          <Heading textAlign='left' as='h2' size='2xl' lineHeight='1.5'>Bocchi Talkの特徴</Heading>
 
-        </Box>
-        <Box bg='white' px='30px' py='100px'>
-          <Heading textAlign='right' as='h2' size='2xl' lineHeight='1.5'>驚異のほとんど世の中全ての言語に対応！</Heading>
-          <Flex mt='100px'>
-            <Image w='50vw' src='/top-page-earth.svg' />
-            <Text fontSize='24px' lineHeight='10' ml='50px'>
-              <p>ぼっちトークは、世界中の言語に対応しています！</p>
-              <p>ChatGPTのシステムを利用することで、世の中に存在するほとんど全ての言語で会話をすることが出来ます！</p>
-            </Text>
+        <GradientHeading textAlign='center' mt='100px' as='h1' size='2xl' lineHeight='tall'>ぼっちトークの特徴</GradientHeading>
+
+        <Container maxW='container.lg' bg='white' px='30px' pt='100px'>
+          <Flex align='center' columnGap='50px'>
+            <Box>
+              <Heading as='h2' size='xl' lineHeight='tall'>AIを活用した(英)会話アプリ</Heading>
+              <Stack mt='30px' spacing='10px'>
+                <Text fontSize='md'>人相手だと気を使ったり、話す内容を考える時間が短くて混乱してしまうこともあります。</Text>
+                <Text fontSize='md'>このぼっちトークでは相手(AI)のことは気にせずにマイペースで取り組むことが出来ます。</Text>
+                <Text fontSize='md'>もう人との相性や、会話内容を急いで考えることなどに悩む必要はありません！！</Text>
+                <Text fontSize='md'>AIとの会話を通して、英語を話すことに慣れることができます。</Text>
+              </Stack>
+            </Box>
+            <Image mt='' ml='auto' w='450px' src='/top-page-with-ai.png' alt='top-page with AI' />
           </Flex>
-        </Box>
-        <Box>
-          <Heading textAlign='center' mt='100px' mb='50px' as='h2' size='2xl' lineHeight='1.5'>こんな人におすすめ</Heading>
+        </Container>
+
+        <Container maxW='container.lg' bg='white' px='30px' pt='100px'>
+          <Flex align='center' columnGap='50px'>
+            <Image w='400px' src='/top-page-earth.svg' alt='top-page earth' />
+            <Flex direction='column' align='flex-start'>
+              <Heading as='h2' size='xl' lineHeight='tall'>驚異の世界中の言語に対応！</Heading>
+              <Box mt='30px'>
+                <Text fontSize='md'>ぼっちトークは、ほとんど世の中全ての言語に対応しています！</Text>
+                <Text fontSize='md'>ChatGPTのシステムを利用することで、世の中に存在するほとんど全ての言語で会話をすることが出来ます！</Text>
+              </Box>
+            </Flex>
+          </Flex>
+        </Container>
+
+        <Container maxW='container.lg' px='30px' pt='100px'>
+          <GradientHeading textAlign='center' as='h2' size='2xl' lineHeight='tall'>こんな人におすすめ</GradientHeading>
+          <SimpleGrid columns={[1, 1, 2, 2]} minChildWidth='360px' spacing='40px' mt='100px'>
+            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
+            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
+            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
+            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
+          </SimpleGrid>
           <UnorderedList w='max-content' my='100px' mx='auto' spacing='20px' fontSize='20px'>
             <ListItem>英語を話すのが恥ずかしい。</ListItem>
             <ListItem>英語を話すのが怖い。</ListItem>
@@ -78,7 +101,7 @@ export default function Home() {
             <ListItem>英語を話すのが緊張する。</ListItem>
             <ListItem>英語を話すのが不安。</ListItem>
           </UnorderedList>
-        </Box>
+        </Container>
       </main>
     </>
   )
