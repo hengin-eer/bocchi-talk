@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { PageHeader } from '@/components/page-header'
-import { Box, Button, ButtonGroup, Container, Flex, Grid, GridItem, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, Container, Flex, GridItem, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
 import Link from 'next/link'
 import { GradientHeading } from '@/components/custom-chakra-ui'
 
@@ -17,33 +17,18 @@ export default function Home() {
       <main>
         <Box id='headerArea' maxH='800px' bg='greenyellow' overflowY='hidden'>
           <PageHeader />
-          <Grid
-            px='10%'
-            py='100px'
-            gridTemplateAreas={`
-          "heroImage heading"
-          "heroImage description"
-          "heroImage button"
-        `}
-            gridTemplateColumns="40% 1fr"
-            gridTemplateRows="max-content max-content 1fr"
-            columnGap='50px'
-          >
-            <GridItem area={"heroImage"}>
-              <Image maxH='800px' src='/top-page-mobile1.png' alt='hero image' />
-            </GridItem>
-            <GridItem area={"heading"}>
-              <GradientHeading as='h1' size='2xl' wordBreak='keep-all'>ぼっちでもAIと(英)会話しよう！</GradientHeading>
-              <Heading mt='20px' color='black' as='h2' size='lg' fontWeight='normal'>Let's Talk anytime, anywhere!</Heading>
-            </GridItem>
-            <GridItem mt='50px' area={"description"}>
+          <Flex maxW='container.xl' mx='auto' px='30px' py='100px' columnGap='50px'>
+            <Image src='/top-page-mobile1.png' alt='hero image' />
+            <Flex direction='column' rowGap='50px'>
+              <Box>
+                <GradientHeading as='h1' size='2xl' wordBreak='keep-all'>ぼっちでもAIと(英)会話しよう！</GradientHeading>
+                <Heading mt='20px' color='black' as='h2' size='lg' fontWeight='normal'>Let's Talk anytime, anywhere!</Heading>
+              </Box>
               <Box>
                 <Text fontSize='md'>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</Text>
                 <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
-            </GridItem>
-            <GridItem mt='50px' area={"button"}>
               <ButtonGroup spacing='30px'>
                 <Link href='/login' passHref>
                   <Button as='a' colorScheme='green' size='lg'>ログインしてみる</Button>
@@ -52,8 +37,8 @@ export default function Home() {
                   <Button as='a' colorScheme='pink' color='white' size='lg'>チャットを始めてみる</Button>
                 </Link>
               </ButtonGroup>
-            </GridItem>
-          </Grid>
+            </Flex>
+          </Flex>
         </Box>
 
         <GradientHeading textAlign='center' mt='100px' as='h1' size='2xl' lineHeight='tall'>ぼっちトークの特徴</GradientHeading>
