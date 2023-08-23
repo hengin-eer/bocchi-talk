@@ -5,7 +5,7 @@ import React from 'react'
 
 export const AppHeader = () => {
 	return (
-			<Flex mx={5} my={3} align='center' justify='space-between'>
+			<Flex h='32px' mx={5} my={3} align='center' justify='space-between'>
 				<Link href='/'>
 					<ChevronLeftIcon boxSize={8} />
 				</Link>	
