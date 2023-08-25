@@ -12,10 +12,10 @@ export const ChatArea = () => {
 	const [viewportHeight, setViewportHeight] = useState(100);
 
 	const handleInputChange = (value) => {
-		setMessage({role: "user", content: value});
+		setMessage({ role: "user", content: value });
 	}
 
-	const sendMessage = async(e) => {
+	const sendMessage = async (e) => {
 		try {
 			e.preventDefault()
 			if (message.content === "") return;
@@ -35,25 +35,25 @@ export const ChatArea = () => {
 					})),
 				}),
 			});
-			
+
 			setTimeout(() => {
 				console.log(chats); // 正しい情報が表示される可能性があります
-			  }, 0);
-			
-			  const data = await response.json();
+			}, 0);
+
+			const data = await response.json();
 			if (response.status !== 200) {
-				throw(
+				throw (
 					data.error ||
 					new Error(`Request failed with status ${response.status}`)
 				);
 			}
 			setChats([...chats, data.result]);
-			
-			setMessage({role: "user", content: ""});
-		} catch(error) {
+
+			setMessage({ role: "user", content: "" });
+		} catch (error) {
 			console.log(error);
 		} finally {
-			setMessage({role: "user", content: ""});
+			setMessage({ role: "user", content: "" });
 		}
 	};
 
@@ -67,7 +67,7 @@ export const ChatArea = () => {
 		const updateViewportHeight = () => {
 			setViewportHeight(window.visualViewport.height);
 		};
-		
+
 		updateViewportHeight();
 
 		window.addEventListener("resize", updateViewportHeight);
@@ -101,7 +101,7 @@ export const ChatArea = () => {
 			</Flex>
 			<form onSubmit={(e) => sendMessage(e)} >
 				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
-					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)}/>
+					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
 					<Button colorScheme='teal' type='submit'>send</Button>
 				</Flex>
 			</form>
