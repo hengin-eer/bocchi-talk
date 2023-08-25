@@ -20,6 +20,7 @@ export const ChatArea = () => {
 			e.preventDefault()
 			if (message.content === "") return;
 
+			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
 			// ChatGPT APIと通信
@@ -36,10 +37,6 @@ export const ChatArea = () => {
 				}),
 			});
 
-			setTimeout(() => {
-				console.log(chats); // 正しい情報が表示される可能性があります
-			}, 0);
-
 			const data = await response.json();
 			if (response.status !== 200) {
 				throw (
@@ -47,9 +44,7 @@ export const ChatArea = () => {
 					new Error(`Request failed with status ${response.status}`)
 				);
 			}
-			setChats([...chats, data.result]);
-
-			setMessage({ role: "user", content: "" });
+			setChats((prev) => [...prev, data.result]);
 		} catch (error) {
 			console.log(error);
 		} finally {
