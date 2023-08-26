@@ -3,7 +3,7 @@ import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
 import React, { use, useEffect, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-export const ChatArea = () => {
+export const ChatArea = ({ speechLanguage }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [chats, setChats] = useState([{
 		role: "system",
@@ -78,7 +78,7 @@ export const ChatArea = () => {
 	}, []);
 
 	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
-	
+
 	useEffect(() => {
 		setIsClient(true);
 	}, []);
@@ -130,7 +130,9 @@ export const ChatArea = () => {
 				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
 					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
 					<Button mr={2} colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
-					<Button mr={2} colorScheme='green' variant={listening ? 'solid': 'ghost'} onClick={() => SpeechRecognition.startListening({language: 'ja'})}><Icon as={PiMicrophoneFill} /></Button>
+					{speechLanguage !== "" && (
+						<Button mr={2} colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
+					)}
 				</Flex>
 			</form>
 		</Box>
