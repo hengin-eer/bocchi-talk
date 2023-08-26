@@ -1,5 +1,5 @@
 import { Box, Button, Fade, Flex, Icon, Image, Input, Text, useDisclosure } from '@chakra-ui/react'
-import { PiMicrophoneFill, PiMicrophoneSlashFill } from 'react-icons/pi'
+import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
 import React, { use, useEffect, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
@@ -23,6 +23,7 @@ export const ChatArea = () => {
 		try {
 			e.preventDefault()
 			if (message.content === "") return;
+			resetTranscript()
 
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
@@ -88,11 +89,6 @@ export const ChatArea = () => {
 		console.log(transcript)
 	}, [transcript])
 
-	const resetVoiceMessage = () => {
-		resetTranscript()
-		setMessage({ role: "user", content: "" });
-	}
-
 	console.log(chats)
 
 	return (
@@ -133,9 +129,8 @@ export const ChatArea = () => {
 			<form onSubmit={(e) => sendMessage(e)} >
 				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
 					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
-					<Button mr={2} colorScheme='teal' type='submit'>send</Button>
+					<Button mr={2} colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
 					<Button mr={2} colorScheme='green' variant={listening ? 'solid': 'ghost'} onClick={() => SpeechRecognition.startListening({language: 'ja'})}><Icon as={PiMicrophoneFill} /></Button>
-					<Button mr={2} colorScheme='red' variant='ghost' onClick={() => resetVoiceMessage()}><Icon as={PiMicrophoneSlashFill} /></Button>
 				</Flex>
 			</form>
 		</Box>
