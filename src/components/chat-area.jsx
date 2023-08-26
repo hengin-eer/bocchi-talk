@@ -1,5 +1,6 @@
 import { Box, Button, Fade, Flex, Image, Input, Text, useDisclosure } from '@chakra-ui/react'
 import React, { use, useEffect, useState } from 'react'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 export const ChatArea = () => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
@@ -11,6 +12,7 @@ export const ChatArea = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
 	const [viewportHeight, setViewportHeight] = useState(100);
+	const [isClient, setIsClient] = useState(false);
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -73,6 +75,23 @@ export const ChatArea = () => {
 		};
 	}, []);
 
+	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+	
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
+	if (isClient && !browserSupportsSpeechRecognition) return <Box>ブラウザが音声認識に対応していません。</Box>;
+
+	useEffect(() => {
+		transcript && setMessage({ role: "user", content: transcript });
+		console.log(transcript)
+	}, [transcript])
+
+	const resetVoiceMessage = () => {
+		resetTranscript()
+		setMessage({ role: "user", content: "" });
+	}
+
 	console.log(chats)
 
 	return (
@@ -113,7 +132,9 @@ export const ChatArea = () => {
 			<form onSubmit={(e) => sendMessage(e)} >
 				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
 					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
-					<Button colorScheme='teal' type='submit'>send</Button>
+					<Button mr={2} colorScheme='teal' type='submit'>send</Button>
+					<Button mr={2} colorScheme='green' variant={listening ? 'solid': 'ghost'} onClick={() => SpeechRecognition.startListening({language: 'ja'})}>speak</Button>
+					<Button mr={2} colorScheme='red' variant='ghost' onClick={() => resetVoiceMessage()}>Reset</Button>
 				</Flex>
 			</form>
 		</Box>
