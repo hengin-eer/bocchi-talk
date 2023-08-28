@@ -1,7 +1,9 @@
-import { Box, Button, Fade, Flex, Image, Input, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Fade, Flex, Icon, Image, Input, Text, useDisclosure } from '@chakra-ui/react'
+import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
 import React, { use, useEffect, useState } from 'react'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-export const ChatArea = () => {
+export const ChatArea = ({ speechLanguage }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [chats, setChats] = useState([{
 		role: "system",
@@ -11,6 +13,7 @@ export const ChatArea = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
 	const [viewportHeight, setViewportHeight] = useState(100);
+	const [isClient, setIsClient] = useState(false);
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -20,6 +23,7 @@ export const ChatArea = () => {
 		try {
 			e.preventDefault()
 			if (message.content === "") return;
+			resetTranscript()
 
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
@@ -73,6 +77,18 @@ export const ChatArea = () => {
 		};
 	}, []);
 
+	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
+	if (isClient && !browserSupportsSpeechRecognition) return <Box>ブラウザが音声認識に対応していません。</Box>;
+
+	useEffect(() => {
+		transcript && setMessage({ role: "user", content: transcript });
+		console.log(transcript)
+	}, [transcript])
+
 	console.log(chats)
 
 	return (
@@ -113,7 +129,10 @@ export const ChatArea = () => {
 			<form onSubmit={(e) => sendMessage(e)} >
 				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
 					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
-					<Button colorScheme='teal' type='submit'>send</Button>
+					<Button mr={2} colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
+					{speechLanguage !== "" && (
+						<Button mr={2} colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
+					)}
 				</Flex>
 			</form>
 		</Box>
