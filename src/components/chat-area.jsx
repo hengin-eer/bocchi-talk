@@ -52,8 +52,6 @@ export const ChatArea = ({ speechLanguage }) => {
 			setChats((prev) => [...prev, data.result]);
 		} catch (error) {
 			console.log(error);
-		} finally {
-			setMessage({ role: "user", content: "" });
 		}
 	};
 
