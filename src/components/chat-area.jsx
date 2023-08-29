@@ -125,13 +125,13 @@ export const ChatArea = ({ speechLanguage }) => {
 				))}
 			</Flex>
 			<form onSubmit={(e) => sendMessage(e)} >
-				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
-					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
+				<Flex w='100%' maxW={800} h='60px' px={3} mx='auto' mt={5}>
+					<Input mr={2} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
 					{(message.content !== "" || speechLanguage === "") && (
-						<Button mr={2} colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
+						<Button colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
 					)}
 					{message.content === "" && speechLanguage !== "" && (
-						<Button mr={2} colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
+						<Button colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
 					)}
 				</Flex>
 			</form>
