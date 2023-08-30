@@ -1,7 +1,8 @@
-import { Box, Button, Fade, Flex, Icon, Image, Input, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
 import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
-import React, { use, useEffect, useState } from 'react'
+import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { AutoResizeTextarea } from './custom-chakra-ui';
 
 export const ChatArea = ({ speechLanguage }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
@@ -13,6 +14,7 @@ export const ChatArea = ({ speechLanguage }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
 	const [viewportHeight, setViewportHeight] = useState(100);
+	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
 
 	const handleInputChange = (value) => {
@@ -52,8 +54,6 @@ export const ChatArea = ({ speechLanguage }) => {
 			setChats((prev) => [...prev, data.result]);
 		} catch (error) {
 			console.log(error);
-		} finally {
-			setMessage({ role: "user", content: "" });
 		}
 	};
 
@@ -77,6 +77,14 @@ export const ChatArea = ({ speechLanguage }) => {
 		};
 	}, []);
 
+	const textareaElement = useRef(null);
+	useEffect(() => {
+		if (textareaElement.current) {
+			setTextareaHeight(textareaElement.current.scrollHeight);
+		}
+	}, [message.content])
+
+
 	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
 	useEffect(() => {
@@ -92,8 +100,8 @@ export const ChatArea = ({ speechLanguage }) => {
 	console.log(chats)
 
 	return (
-		<Box height={`calc(${viewportHeight}px - ${62}px)`} overflowY='hidden' onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
-			<Flex direction='column' align='center' rowGap={3} h={`calc(${viewportHeight}px - ${132}px)`} px={4} py='4' bg={'blue.200'} my={0} overflowY='auto'>
+		<Box height={`calc(${viewportHeight}px - ${56}px)`} overflowY='hidden' onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
+			<Flex direction='column' align='center' rowGap={3} h={`calc(${viewportHeight}px - 56px - ${textareaHeight}px)`} px={4} py='4' bg={'blue.200'} my={0} overflowY='auto'>
 				{chats.slice(1, chats.length).map((message, index) => (
 					<Flex key={index} onContextMenu={(e) => handleRightClick(e, index)}
 						pos='relative' flexDirection={message.role === "user" ? 'row-reverse' : 'row'} align='flex-start' columnGap='10px'
@@ -127,11 +135,13 @@ export const ChatArea = ({ speechLanguage }) => {
 				))}
 			</Flex>
 			<form onSubmit={(e) => sendMessage(e)} >
-				<Flex w='100%' maxW={800} h='60px' px={5} mx='auto' mt={5}>
-					<Input mr={4} variant='filled' placeholder="Let's Chat!!" type="text" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
-					<Button mr={2} colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
-					{speechLanguage !== "" && (
-						<Button mr={2} colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
+				<Flex ref={textareaElement} align='flex-end' w='100%' maxW={800} h='auto' px={3} mx='auto' py={3}>
+					<AutoResizeTextarea placeholder="Let's Chat!!" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
+					{(message.content !== "" || speechLanguage === "") && (
+						<Button colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
+					)}
+					{message.content === "" && speechLanguage !== "" && (
+						<Button colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
 					)}
 				</Flex>
 			</form>
