@@ -97,6 +97,11 @@ export const ChatArea = ({ speechLanguage }) => {
 		console.log(transcript)
 	}, [transcript])
 
+	useEffect(() => {
+		// ここにページ下までスクロールするコードを追記する
+		
+		console.log("chatsが更新されました。");
+	}, [chats])
 	console.log(chats)
 
 	return (
