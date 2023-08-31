@@ -30,11 +30,11 @@ export default function Home() {
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
               <ButtonGroup spacing='30px'>
-                <Link href='/login' passHref>
-                  <Button as='a' colorScheme='green' size='lg'>ログインしてみる</Button>
+                <Link href='/login'>
+                  <Button colorScheme='green' size='lg'>ログインしてみる</Button>
                 </Link>
-                <Link href='/chat' passHref>
-                  <Button as='a' colorScheme='pink' color='white' size='lg'>チャットを始めてみる</Button>
+                <Link href='/chat'>
+                  <Button colorScheme='pink' color='white' size='lg'>チャットを始めてみる</Button>
                 </Link>
               </ButtonGroup>
             </Flex>
