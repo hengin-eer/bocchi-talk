@@ -4,12 +4,16 @@ import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 
-export const ChatArea = ({ speechLanguage }) => {
+export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [chats, setChats] = useState([{
 		role: "system",
 		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
 	}]); // 初期値の設定
+
+	useEffect(() => {
+		setChats([...chats, ...firestoreMessages])
+	}, [firestoreMessages])
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
