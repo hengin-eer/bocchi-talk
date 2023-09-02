@@ -16,6 +16,7 @@ export const ChatArea = ({ speechLanguage }) => {
 	const [viewportHeight, setViewportHeight] = useState(100);
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
+	const scrollContainer = useRef(null);
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -97,11 +98,18 @@ export const ChatArea = ({ speechLanguage }) => {
 		console.log(transcript)
 	}, [transcript])
 
+	useEffect(() => {
+		// ここにページ下までスクロールするコードを追記する
+		if (scrollContainer.current) {
+			scrollContainer.current.scrollTop = scrollContainer.current.scrollHeight;
+		}
+		console.log("chatsが更新されました。");
+	}, [chats])
 	console.log(chats)
 
 	return (
 		<Box height={`calc(${viewportHeight}px - ${56}px)`} overflowY='hidden' onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
-			<Flex direction='column' align='center' rowGap={3} h={`calc(${viewportHeight}px - 56px - ${textareaHeight}px)`} px={4} py='4' bg={'blue.200'} my={0} overflowY='auto'>
+			<Flex direction='column' align='center' rowGap={3} h={`calc(${viewportHeight}px - 56px - ${textareaHeight}px)`} px={4} py='4' bg={'blue.200'} my={0} overflowY='auto' ref={scrollContainer}>
 				{chats.slice(1, chats.length).map((message, index) => (
 					<Flex key={index} onContextMenu={(e) => handleRightClick(e, index)}
 						pos='relative' flexDirection={message.role === "user" ? 'row-reverse' : 'row'} align='flex-start' columnGap='10px'
