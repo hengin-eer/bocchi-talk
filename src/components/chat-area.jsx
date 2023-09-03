@@ -22,7 +22,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
-	const { addFirestoreDoc } = useFirestore()
+	const { addChatsData, addFirestoreDoc } = useFirestore()
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -34,6 +34,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
+			addChatsData(chatsId)
 			addFirestoreDoc(message, chatsId)
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
