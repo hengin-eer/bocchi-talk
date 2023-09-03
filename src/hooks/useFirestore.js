@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react"
 import db from "../lib/firebase"
-import { collection, addDoc, getDocs, Timestamp } from "firebase/firestore"
+import { collection, addDoc, getDocs, Timestamp, setDoc, doc } from "firebase/firestore"
 
 export const useFirestore = () => {
     // const addFirestoreChat = async (newChat)
+
+    const addChatsData = async (chatsId) => {
+        const cRef = doc(db, 'chats', chatsId)
+        await setDoc(cRef, {
+            id: chatsId,
+            updatedAt: Timestamp.now(),
+        })
+    }
 
     const addFirestoreDoc = async (newMessage, chatsId) => {
         const mRef = collection(db, 'chats', chatsId, 'messages')
@@ -57,5 +65,27 @@ export const useFirestore = () => {
         return users
     }
 
-    return { addFirestoreDoc, useMessages, useUser }
+    const getChatsId = async () => {
+        const snapshot = await getDocs(collection(db, 'chats'))
+        const getData = snapshot.docs.map((doc) => {
+            const data = doc.data()
+            data.id = doc.id
+            return data
+        })
+        return getData
+    }
+
+    const useChatsIds = () => {
+        const [chatsId, setChatsId] = useState([])
+        useEffect(() => {
+            ; (async () => {
+                const data = await getChatsId()
+                setChatsId(data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds))
+            })()
+        }, [])
+
+        return chatsId
+    }
+
+    return { addChatsData, addFirestoreDoc, useMessages, useUser, useChatsIds }
 }
