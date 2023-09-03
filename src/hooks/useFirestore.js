@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react"
 import db from "../lib/firebase"
-import { collection, addDoc, getDocs } from "firebase/firestore"
+import { collection, addDoc, getDocs, Timestamp } from "firebase/firestore"
 
 export const useFirestore = () => {
     // const addFirestoreChat = async (newChat)
 
-    const addFirestoreDoc = async (newMessage, chatsId, index) => {
-        const mRef = collection(db, "chats", chatsId, "messages")
+    const addFirestoreDoc = async (newMessage, chatsId) => {
+        const mRef = collection(db, 'chats', chatsId, 'messages')
         await addDoc(mRef, {
             content: newMessage.content,
             role: newMessage.role,
-            id: index,
+            createdAt: Timestamp.now(),
         })
-        console.log(`
-            content: ${newMessage.content},
-            role: ${newMessage.role},
-            id: ${index},
-        `)
     }
 
     const getMessages = async (chatsId) => {
