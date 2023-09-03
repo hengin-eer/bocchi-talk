@@ -1,7 +1,7 @@
 import { AppHeader } from '@/components/app-header'
 import { ChatArea } from '@/components/chat-area'
 import db from '@/lib/firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import { Timestamp, collection, getDocs } from 'firebase/firestore'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -19,7 +19,8 @@ export default function chat() {
 				const data = doc.data()
 				return data
 			})
-			setMessages(docs.sort((a, b) => a.id - b.id))
+			setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
+			console.log("読み取りが行われました！")
 		})()
 	}, [])
 	console.log(messages)
