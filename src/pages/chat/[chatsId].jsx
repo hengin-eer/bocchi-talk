@@ -3,32 +3,35 @@ import { ChatArea } from '@/components/chat-area'
 import db from '@/lib/firebase'
 import { Timestamp, collection, getDocs } from 'firebase/firestore'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 export default function chat() {
 	const [speechLanguage, setSpeechLanguage] = useState('en-US')
 	const [messages, setMessages] = useState([])
 
-	let chatsId = 'chat1'
+	const router = useRouter()
 	useEffect(() => {
-		; (async () => {
-			const colRef = collection(db, 'chats', chatsId, 'messages');
-			const snapShots = await getDocs(colRef)
+		if (router.isReady) {
+			; (async () => {
+				const id = router.query.chatsId
+				const colRef = collection(db, 'chats', id, 'messages');
+				const snapShots = await getDocs(colRef)
 
-			const docs = snapShots.docs.map((doc) => {
-				const data = doc.data()
-				return data
-			})
-			setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
-			console.log("読み取りが行われました！")
-		})()
-	}, [])
-	console.log(messages)
+				const docs = snapShots.docs.map((doc) => {
+					const data = doc.data()
+					return data
+				})
+				setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
+			})()
+		}
+	}, [router])
+	const chatsId = router.query.chatsId
 
 	return (
 		<div>
 			<AppHeader speechLanguage={speechLanguage} setSpeechLanguage={setSpeechLanguage} />
-			<ChatArea speechLanguage={speechLanguage} firestoreMessages={messages} />
+			<ChatArea speechLanguage={speechLanguage} firestoreMessages={messages} chatsId={chatsId} />
 		</div>
 	)
 }

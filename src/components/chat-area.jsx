@@ -5,7 +5,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
 
-export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
+export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [chats, setChats] = useState([{
 		role: "system",
@@ -33,7 +33,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
-			addFirestoreDoc(message, 'chat1')
+			addFirestoreDoc(message, chatsId)
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
@@ -59,7 +59,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 				);
 			}
 			setChats((prev) => [...prev, data.result]);
-			addFirestoreDoc(data.result, 'chat1')
+			addFirestoreDoc(data.result, chatsId)
 		} catch (error) {
 			console.log(error);
 		}
