@@ -3,6 +3,7 @@ import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
 import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
+import { useFirestore } from '@/hooks/useFirestore';
 
 export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
@@ -20,6 +21,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 	const [viewportHeight, setViewportHeight] = useState(100);
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
+	const { addFirestoreDoc } = useFirestore()
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -31,6 +33,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
+			addFirestoreDoc(message, 'chat1')
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
@@ -56,6 +59,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages }) => {
 				);
 			}
 			setChats((prev) => [...prev, data.result]);
+			addFirestoreDoc(data.result, 'chat1')
 		} catch (error) {
 			console.log(error);
 		}
