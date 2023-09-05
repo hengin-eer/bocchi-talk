@@ -1,6 +1,6 @@
 import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react"
 
 const AuthContext = createContext(undefined);
@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
 					const newUser = {
 						id: user.uid,
 						name: user.displayName,
+						pic: user.photoURL,
 					};
 					setDoc(docRef, newUser).then(() => {
 						setUser(newUser);
