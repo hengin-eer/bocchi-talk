@@ -3,12 +3,13 @@ import { PageHeader } from '@/components/page-header'
 import { Box, Button, ButtonGroup, Container, Flex, GridItem, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
 import Link from 'next/link'
 import { GradientHeading } from '@/components/custom-chakra-ui'
-import { useAuth } from '@/hooks/useFirebaseAuth'
+import { useAuth, useRedirectIsLogin } from '@/hooks/useFirebaseAuth'
 import { login } from '@/lib/auth'
 
 
 export default function Home() {
   const user = useAuth();
+  useRedirectIsLogin(user);
 
   return (
     <>
@@ -33,12 +34,7 @@ export default function Home() {
                 <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
-              <ButtonGroup spacing='30px'>
-                {user === null && <Button colorScheme='green' size='lg' onClick={login}>ログインしてみる</Button>}
-                <Link href='/chat'>
-                  <Button colorScheme='pink' color='white' size='lg'>チャットを始めてみる</Button>
-                </Link>
-              </ButtonGroup>
+              {user === null && <Button colorScheme='pink' size='lg' onClick={login}>ログインしてチャットを始めてみる</Button>}
             </Flex>
           </Flex>
         </Box>

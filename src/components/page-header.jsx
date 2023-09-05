@@ -14,7 +14,6 @@ export const PageHeader = () => {
             </Flex>
             <ButtonGroup gap={2}>
                 {user === null && <Button colorScheme='green' onClick={login}>Login</Button>}
-                {user && <Button colorScheme='red' onClick={logout}>Logout</Button>}
             </ButtonGroup>
         </Flex>
     )
