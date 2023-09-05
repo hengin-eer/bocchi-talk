@@ -1,6 +1,6 @@
 import { AppHeader } from '@/components/app-header'
 import { ChatArea } from '@/components/chat-area'
-import { useAuth } from '@/hooks/useFirebaseAuth'
+import { useAuth, useRedirectIsLogout } from '@/hooks/useFirebaseAuth'
 import { db } from '@/lib/firebase'
 import { Timestamp, collection, getDocs } from 'firebase/firestore'
 import Link from 'next/link'
@@ -11,6 +11,7 @@ export default function chat() {
 	const [speechLanguage, setSpeechLanguage] = useState('en-US')
 	const [messages, setMessages] = useState([])
 	const user = useAuth()
+	useRedirectIsLogout(user)
 
 	const router = useRouter()
 	useEffect(() => {

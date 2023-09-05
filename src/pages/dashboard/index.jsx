@@ -1,5 +1,5 @@
 import { DashboardNav } from '@/components/dashboard-nav'
-import { useAuth } from '@/hooks/useFirebaseAuth'
+import { useAuth, useRedirectIsLogout } from '@/hooks/useFirebaseAuth'
 import { useFirestore } from '@/hooks/useFirestore'
 import { Box, Flex, Heading, Skeleton, Text } from '@chakra-ui/react'
 import Link from 'next/link'
@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 export default function Dashboard() {
 	const user = useAuth()
 	const { useChatsIds } = useFirestore()
+	useRedirectIsLogout(user)
 	
 	const chatsIds = useChatsIds(user)
 
@@ -17,7 +18,7 @@ export default function Dashboard() {
 			<Box w='full' p='20px'>
 				<Heading as='h1' size='lg'>Chats</Heading>
 				<Flex direction='column' align='flex-start' rowGap='20px' py='20px'>
-					{user === null &&
+					{user === undefined &&
 						<>
 							<Skeleton h='65px' w='full' borderRadius='10px'></Skeleton>
 							<Skeleton h='65px' w='full' borderRadius='10px'></Skeleton>
