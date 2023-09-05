@@ -1,6 +1,6 @@
 import { AppHeader } from '@/components/app-header'
 import { ChatArea } from '@/components/chat-area'
-import db from '@/lib/firebase'
+import { db } from '@/lib/firebase'
 import { Timestamp, collection, getDocs } from 'firebase/firestore'
 import Link from 'next/link'
 import { useRouter } from 'next/router'

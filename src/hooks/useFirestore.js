@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import db from "../lib/firebase"
+import { db } from "../lib/firebase"
 import { collection, addDoc, getDocs, Timestamp, setDoc, doc } from "firebase/firestore"
 
 export const useFirestore = () => {
