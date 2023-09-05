@@ -3,12 +3,13 @@ import { useAuth } from '@/hooks/useFirebaseAuth'
 import { useFirestore } from '@/hooks/useFirestore'
 import { Box, Flex, Heading, Skeleton, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Dashboard() {
-	const { useChatsIds } = useFirestore()
-	const chatsIds = useChatsIds()
 	const user = useAuth()
+	const { useChatsIds } = useFirestore()
+	
+	const chatsIds = useChatsIds(user)
 
 	return (
 		<Flex>
