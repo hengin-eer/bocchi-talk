@@ -1,12 +1,14 @@
 import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react"
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState(undefined);
+	const router = useRouter();
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -28,9 +30,11 @@ export const AuthProvider = ({ children }) => {
 						setUser(newUser);
 					});
 				}
+				if (router.pathname === '' || router.pathname === '/') router.push('/dashboard');
 			}
 			else {
 				setUser(null);
+				if (router.pathname === '/dashboard') router.push('/');
 			}
 
 			return unsubscribe;
@@ -41,3 +45,19 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+export const useRedirectIsLogin = (user) => {
+	const router = useRouter();
+
+	useEffect(() => {
+		if (user) router.push('/dashboard');
+	}, [user])
+}
+
+export const useRedirectIsLogout = (user) => {
+	const router = useRouter();
+
+	useEffect(() => {
+		if (user === null) router.push('/');
+	}, [user])
+}
