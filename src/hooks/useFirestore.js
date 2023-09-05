@@ -5,16 +5,16 @@ import { collection, addDoc, getDocs, Timestamp, setDoc, doc } from "firebase/fi
 export const useFirestore = () => {
     // const addFirestoreChat = async (newChat)
 
-    const addChatsData = async (chatsId) => {
-        const cRef = doc(db, 'chats', chatsId)
+    const addChatsData = async (userId, chatsId) => {
+        const cRef = doc(db, 'users', userId, 'chats', chatsId)
         await setDoc(cRef, {
             id: chatsId,
             updatedAt: Timestamp.now(),
         })
     }
 
-    const addFirestoreDoc = async (newMessage, chatsId) => {
-        const mRef = collection(db, 'chats', chatsId, 'messages')
+    const addFirestoreDoc = async (newMessage, userId, chatsId) => {
+        const mRef = collection(db, 'users', userId, 'chats', chatsId, 'messages')
         await addDoc(mRef, {
             content: newMessage.content,
             role: newMessage.role,
@@ -22,8 +22,8 @@ export const useFirestore = () => {
         })
     }
 
-    const getMessages = async (chatsId) => {
-        const snapshot = await getDocs(collection(db, 'chats', chatsId, 'messages'))
+    const getMessages = async (userId, chatsId) => {
+        const snapshot = await getDocs(collection(db, 'users', userId, 'chats', chatsId, 'messages'))
         const getData = snapshot.docs.map((doc) => {
             const data = doc.data()
             data.strId = doc.id
@@ -32,19 +32,19 @@ export const useFirestore = () => {
         return getData
     }
 
-    const useMessages = async (chatsId) => {
+    const useMessages = async (userId, chatsId) => {
         const [messages, setMessages] = useState([])
         useEffect(() => {
             ; (async () => {
-                const data = await getMessages(chatsId)
+                const data = await getMessages(userId, chatsId)
                 setMessages(data)
             })()
         }, [])
         return messages
     }
 
-    const getUser = async () => {
-        const snapshot = await getDocs(collection(db, 'users'))
+    const getChatsId = async (userId) => {
+        const snapshot = await getDocs(collection(db,'users', userId, 'chats'))
         const getData = snapshot.docs.map((doc) => {
             const data = doc.data()
             data.id = doc.id
@@ -53,33 +53,11 @@ export const useFirestore = () => {
         return getData
     }
 
-    const useUser = () => {
-        const [users, setUsers] = useState([])
-        useEffect(() => {
-            ; (async () => {
-                const data = await getUser()
-                setUsers(data)
-            })()
-        }, [])
-
-        return users
-    }
-
-    const getChatsId = async () => {
-        const snapshot = await getDocs(collection(db, 'chats'))
-        const getData = snapshot.docs.map((doc) => {
-            const data = doc.data()
-            data.id = doc.id
-            return data
-        })
-        return getData
-    }
-
-    const useChatsIds = () => {
+    const useChatsIds = (userId) => {
         const [chatsId, setChatsId] = useState([])
         useEffect(() => {
             ; (async () => {
-                const data = await getChatsId()
+                const data = await getChatsId(userId)
                 setChatsId(data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds))
             })()
         }, [])
@@ -87,5 +65,5 @@ export const useFirestore = () => {
         return chatsId
     }
 
-    return { addChatsData, addFirestoreDoc, useMessages, useUser, useChatsIds }
+    return { addChatsData, addFirestoreDoc, useMessages, useChatsIds }
 }
