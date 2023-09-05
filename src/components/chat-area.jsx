@@ -4,6 +4,7 @@ import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
+import { useAuth } from '@/hooks/useFirebaseAuth';
 
 export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
@@ -23,6 +24,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
 	const { addChatsData, addFirestoreDoc } = useFirestore()
+	const loginUser = useAuth();
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -34,8 +36,8 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
-			addChatsData(chatsId)
-			addFirestoreDoc(message, chatsId)
+			addChatsData(loginUser.id, chatsId)
+			addFirestoreDoc(message, loginUser.id, chatsId)
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
@@ -61,7 +63,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 				);
 			}
 			setChats((prev) => [...prev, data.result]);
-			addFirestoreDoc(data.result, chatsId)
+			addFirestoreDoc(data.result, loginUser.id, chatsId)
 		} catch (error) {
 			console.log(error);
 		}
@@ -126,7 +128,7 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId }) => {
 						marginRight={message.role === "user" ? '0px' : 'auto'}
 					>
 						{message.role === "user" ?
-							<Image src='/face.jpg' w='40px' h='40px' borderRadius='50%' />
+							<Image src={loginUser.pic} w='40px' h='40px' borderRadius='50%' />
 							:
 							<Image src='/BocchiTalk-android-chrome-72x72.png' w='40px' h='40px' borderRadius='50%' bg='white' />
 						}
