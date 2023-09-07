@@ -124,7 +124,12 @@ export const ChatArea = ({ speechLanguage }) => {
 						<Text w='max-content' maxW='70vw' px={5} py={3} bg={'white'}
 							borderRadius={message.role === "user" ? '20px 0px 20px 20px' : '0px 20px 20px 20px'}
 						>
-							{message.content}
+							{message.content.split("\n").map((line, index) => (
+								<React.Fragment key={index}>
+									{line}
+									<br />
+								</React.Fragment>
+							))}
 						</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
