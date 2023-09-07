@@ -1,8 +1,9 @@
 import { ChevronLeftIcon, Icon } from '@chakra-ui/icons'
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Select, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Select, Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import Link from 'next/link'
 import React from 'react'
-import { PiGearSixFill } from 'react-icons/pi'
+import { PiArchiveBoxBold, PiFacebookLogoBold, PiGearSixBold, PiGearSixFill, PiLinkBold, PiListBulletsBold, PiNotepadBold, PiSnapchatLogoBold, PiTranslateBold, PiTwitterLogoBold } from 'react-icons/pi'
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
 export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
@@ -14,7 +15,7 @@ export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
 			<Text fontSize={18}>Chat Title</Text>
 			<Flex align='center' columnGap={2}>
 				<Button variant='solid' colorScheme='gray' size='md' onClick={onOpen}>
-					<Icon as={PiGearSixFill} fontSize='20px' />
+					<Icon as={PiListBulletsBold} fontSize='20px' />
 				</Button>
 				<Drawer
 					isOpen={isOpen}
@@ -29,27 +30,80 @@ export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
 						<DrawerHeader>Option Menu</DrawerHeader>
 
 						<DrawerBody>
-							<Box mb='2rem'>
-								<Text mb='1rem' fontSize='lg'>音声入力言語</Text>
-								<Select value={speechLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setSpeechLanguage(e.target.value)}>
-									<option value='en-US'>English(US)</option>
-									<option value='ja'>日本語</option>
-									<option value='ko'>한국어(韓国語)</option>
-									<option value='zh-CN'>中文(中国語)</option>
-									<option value='zh-TW'>中文(台湾語)</option>
-									<option value='fr-FR'>French(フランス語)</option>
-									<option value='de-DE'>German(ドイツ語)</option>
-									<option value='th-TH'>ภาษาไทย(タイ語)</option>
-								</Select>
-							</Box>
+							<Tabs>
+								<TabList>
+									<Tab>
+										<VStack>
+											<Icon as={PiTranslateBold} fontSize='30px' color='#5e5e5e' />
+											<Text fontSize='10px'>Translate</Text>
+										</VStack>
+									</Tab>
+									<Tab>
+										<VStack>
+											<Icon as={PiNotepadBold} fontSize='30px' color='#5e5e5e' />
+											<Text fontSize='10px'>Phrase</Text>
+										</VStack>
+									</Tab>
+									<Tab>
+										<VStack>
+											<Icon as={PiArchiveBoxBold} fontSize='30px' color='#5e5e5e' />
+											<Text fontSize='10px'>Something</Text>
+										</VStack>
+									</Tab>
+									<Tab>
+										<VStack>
+											<Icon as={PiGearSixBold} fontSize='30px' color='#5e5e5e' />
+											<Text fontSize='10px'>Setting</Text>
+										</VStack>
+									</Tab>
+								</TabList>
 
-							<Box>
-								<Text mb='1rem' fontSize='lg'>その他の設定</Text>
-							</Box>
+								<TabPanels>
+									<TabPanel>
+										<Text>翻訳</Text>
+									</TabPanel>
+									<TabPanel>
+										<Text>単語帳</Text>
+									</TabPanel>
+									<TabPanel>
+										<Text>なにか</Text>
+									</TabPanel>
+									<TabPanel>
+										<Box mb='2rem'>
+											<Text mb='1rem' fontSize='lg'>音声入力言語</Text>
+											<Select value={speechLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setSpeechLanguage(e.target.value)}>
+												<option value='en-US'>English(US)</option>
+												<option value='ja'>日本語</option>
+												<option value='ko'>한국어(韓国語)</option>
+												<option value='zh-CN'>中文(中国語)</option>
+												<option value='zh-TW'>中文(台湾語)</option>
+												<option value='fr-FR'>French(フランス語)</option>
+												<option value='de-DE'>German(ドイツ語)</option>
+												<option value='th-TH'>ภาษาไทย(タイ語)</option>
+											</Select>
+										</Box>
+
+										<Box>
+											<Text mb='1rem' fontSize='lg'>その他の設定</Text>
+										</Box>
+									</TabPanel>
+								</TabPanels>
+							</Tabs>
 						</DrawerBody>
 
 						<DrawerFooter>
-							<Button variant='outline' colorScheme='gray' onClick={onClose}>Close</Button>
+							<Flex w='50%'>
+								<Spacer />
+								<Icon as={PiLinkBold} fontSize='22px' color='#5e5e5e' />
+								<Spacer />
+								<Icon as={PiTwitterLogoBold} fontSize='22px' color='#5e5e5e' />
+								<Spacer />
+								<Icon as={PiSnapchatLogoBold} fontSize='22px' color='#5e5e5e' />
+								<Spacer />
+								<Icon as={PiFacebookLogoBold} fontSize='22px' color='#5e5e5e' />
+								<Spacer />
+							</Flex>
+								<Button variant='outline' colorScheme='gray' onClick={onClose}>Close</Button>
 						</DrawerFooter>
 					</DrawerContent>
 				</Drawer>
