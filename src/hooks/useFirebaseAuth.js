@@ -4,54 +4,47 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react"
 
-const AuthContext = createContext(undefined);
+const AuthContext = createContext();
+
+export const useAuth = () => {
+	return useContext(AuthContext);
+};
 
 export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(undefined);
+	const [currentUser, setCurrentUser] = useState(undefined);
+	const [isLoading, setIsLoading] = useState(true);
 	const router = useRouter();
+	const loginUser = auth.currentUser;
 
 	useEffect(() => {
+		if (loginUser) setCurrentUser(loginUser);
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
+			setIsLoading(true);
 			if (user) {
-				const docRef = doc(db, 'users', user.uid);
-				const snapshot = await getDoc(docRef);
-
-				if (snapshot.exists()) {
-					const userData = snapshot.data();
-					setUser(userData);
-				}
-				else {
-					const newUser = {
-						id: user.uid,
-						name: user.displayName,
-						pic: user.photoURL,
-					};
-					setDoc(docRef, newUser).then(() => {
-						setUser(newUser);
-					});
-				}
+				setCurrentUser(user);
 				if (router.pathname === '' || router.pathname === '/') router.push('/dashboard');
 			}
 			else {
-				setUser(null);
-				if (router.pathname === '/dashboard') router.push('/');
+				setCurrentUser(null);
 			}
+			setIsLoading(false);
 
 			return unsubscribe;
 		});
+		setIsLoading(false);
+
 	}, []);
 
-	return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={{ currentUser, isLoading }}>
+			{isLoading && <p>Loading...</p>}
+			{!isLoading && children}
+		</AuthContext.Provider>
+	);
 };
 
-export const useAuth = () => useContext(AuthContext);
-
-export const useRedirectIsLogin = (user) => {
-	const router = useRouter();
-
-	useEffect(() => {
-		if (user) router.push('/dashboard');
-	}, [user])
+export const getServerSideProps = async (context) => {
+	
 }
 
 export const useRedirectIsLogout = (user) => {
