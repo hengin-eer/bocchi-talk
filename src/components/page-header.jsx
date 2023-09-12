@@ -1,11 +1,9 @@
-import { Button, ButtonGroup, Flex, Image, Text } from '@chakra-ui/react'
+import { Button, ButtonGroup, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
 import { GradientText } from './custom-chakra-ui'
-import { useAuth } from '@/hooks/useFirebaseAuth'
-import { login, logout } from '@/lib/auth'
+import { signIn } from 'next-auth/react'
 
 export const PageHeader = () => {
-    const user = useAuth();
     return (
         <Flex align='center' justify='space-between' h='80px' w='100%' px={30} bg={'blackAlpha.50'}>
             <Flex align='center'>
@@ -13,7 +11,7 @@ export const PageHeader = () => {
                 <GradientText fontSize='4xl' fontWeight='bold'>Bocchi Talk</GradientText>
             </Flex>
             <ButtonGroup gap={2}>
-                {user === null && <Button colorScheme='green' onClick={login}>Login</Button>}
+                <Button colorScheme='green' onClick={() => signIn()}>Login</Button>
             </ButtonGroup>
         </Flex>
     )
