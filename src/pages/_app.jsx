@@ -1,14 +1,14 @@
 import '@/styles/globals.css'
 import 'regenerator-runtime'
 import { ChakraProvider } from '@chakra-ui/react'
-import { AuthProvider } from '@/hooks/useFirebaseAuth'
+import { SessionProvider } from 'next-auth/react'
 
 export default function App({ Component, pageProps }) {
   return (
-    <AuthProvider>
+    <SessionProvider>
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
-    </AuthProvider>
+    </SessionProvider>
   )
 }
