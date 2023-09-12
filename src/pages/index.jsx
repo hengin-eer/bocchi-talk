@@ -1,16 +1,13 @@
 import Head from 'next/head'
 import { PageHeader } from '@/components/page-header'
-import { Box, Button, ButtonGroup, Container, Flex, GridItem, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
-import Link from 'next/link'
+import { Box, Button, Container, Flex, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
 import { GradientHeading } from '@/components/custom-chakra-ui'
-import { useAuth, useRedirectIsLogin } from '@/hooks/useFirebaseAuth'
-import { login } from '@/lib/auth'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
+import { signIn } from 'next-auth/react'
 
 
 export default function Home() {
-  const user = useAuth();
-  useRedirectIsLogin(user);
-
   return (
     <>
       <Head>
@@ -34,7 +31,7 @@ export default function Home() {
                 <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
-              {user === null && <Button colorScheme='pink' size='lg' onClick={login}>ログインしてチャットを始めてみる</Button>}
+              <Button w='max' colorScheme='pink' size='lg' onClick={() => signIn()}>ログインしてチャットを始めてみる</Button>
             </Flex>
           </Flex>
         </Box>
@@ -89,3 +86,20 @@ export default function Home() {
     </>
   )
 }
+
+export const getServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  }
+};
