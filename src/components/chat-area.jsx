@@ -131,7 +131,10 @@ export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId, currentUs
 							<Image src='/BocchiTalk-android-chrome-72x72.png' w='40px' h='40px' borderRadius='50%' bg='white' />
 						}
 						<Text w='max-content' maxW='70vw' px={5} py={3} bg={'white'}
-							borderRadius={message.role === "user" ? '20px 0px 20px 20px' : '0px 20px 20px 20px'}
+							borderRadius={message.role === "user" ? '20px 0px 20px 20px' : '0px 20px 20px 20px'} 
+							css={{
+								whiteSpace: 'pre-wrap', 
+							}}
 						>
 							{message.content}
 						</Text>
