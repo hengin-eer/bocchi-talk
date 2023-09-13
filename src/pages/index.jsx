@@ -31,7 +31,7 @@ export default function Home() {
                 <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
-              <Button w='max' colorScheme='pink' size='lg' onClick={() => signIn()}>ログインしてチャットを始めてみる</Button>
+              <Button w='max' colorScheme='pink' size='lg' onClick={() => signIn('google')}>ログインしてチャットを始めてみる</Button>
             </Flex>
           </Flex>
         </Box>

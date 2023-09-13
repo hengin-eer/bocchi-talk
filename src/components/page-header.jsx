@@ -11,7 +11,7 @@ export const PageHeader = () => {
                 <GradientText fontSize='4xl' fontWeight='bold'>Bocchi Talk</GradientText>
             </Flex>
             <ButtonGroup gap={2}>
-                <Button colorScheme='green' onClick={() => signIn()}>Login</Button>
+                <Button colorScheme='green' onClick={() => signIn('google')}>Login</Button>
             </ButtonGroup>
         </Flex>
     )
