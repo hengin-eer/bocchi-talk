@@ -1,24 +1,23 @@
 import { AppHeader } from '@/components/app-header'
 import { ChatArea } from '@/components/chat-area'
-import { useAuth, useRedirectIsLogout } from '@/hooks/useFirebaseAuth'
 import { db } from '@/lib/firebase'
-import { Timestamp, collection, getDocs } from 'firebase/firestore'
-import Link from 'next/link'
+import { collection, getDocs } from 'firebase/firestore'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 export default function chat() {
 	const [speechLanguage, setSpeechLanguage] = useState('en-US')
 	const [messages, setMessages] = useState([])
-	const user = useAuth()
-	useRedirectIsLogout(user)
+	const [isFetched, setIsFetched] = useState(false)
+	const { data: session } = useSession({ required: true })
 
 	const router = useRouter()
 	useEffect(() => {
-		if (router.isReady && user) {
+		if (router.isReady && !isFetched && session) {
 			; (async () => {
 				const id = router.query.chatsId
-				const colRef = collection(db, 'users', user.id, 'chats', id, 'messages');
+				const colRef = collection(db, 'users', session.user.email, 'chats', id, 'messages');
 				const snapShots = await getDocs(colRef)
 
 				const docs = snapShots.docs.map((doc) => {
@@ -27,14 +26,16 @@ export default function chat() {
 				})
 				setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
 			})()
+			setIsFetched(true)
+			console.log(session)
 		}
-	}, [router, user])
+	}, [router, session])
 	const chatsId = router.query.chatsId
 
 	return (
 		<div>
 			<AppHeader speechLanguage={speechLanguage} setSpeechLanguage={setSpeechLanguage} />
-			<ChatArea speechLanguage={speechLanguage} firestoreMessages={messages} chatsId={chatsId} />
+			<ChatArea speechLanguage={speechLanguage} firestoreMessages={messages} chatsId={chatsId} currentUser={session && session.user} />
 		</div>
 	)
 }
