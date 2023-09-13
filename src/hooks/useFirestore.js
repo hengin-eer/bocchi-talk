@@ -32,16 +32,16 @@ export const useFirestore = () => {
         return getData
     }
 
-    const useMessages = async (user, chatsId) => {
+    const useMessages = async (userId, chatsId) => {
         const [messages, setMessages] = useState([])
         useEffect(() => {
-            if (user) {
+            if (userId) {
                 ; (async () => {
-                    const data = await getMessages(user.id, chatsId)
+                    const data = await getMessages(userId, chatsId)
                     setMessages(data)
                 })()
             }
-        }, [user])
+        }, [userId])
         return messages
     }
 
@@ -55,12 +55,12 @@ export const useFirestore = () => {
         return getData
     }
 
-    const useChatsIds = (user) => {
+    const useChatsIds = (user, session) => {
         const [chatsId, setChatsId] = useState([])
         useEffect(() => {
-            if (user) {
+            if (user && session) {
                 ; (async () => {
-                    const data = await getChatsId(user.id)
+                    const data = await getChatsId(user.email)
                     setChatsId(data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds))
                 })()
             }
