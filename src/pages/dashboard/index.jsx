@@ -1,13 +1,32 @@
 import { DashboardNav } from '@/components/dashboard-nav'
 import { useFirestore } from '@/hooks/useFirestore'
-import { Box, Flex, Heading, Skeleton, Text } from '@chakra-ui/react'
-import { getServerSession } from 'next-auth'
+import { Box, Flex, Heading, Icon, Skeleton, Text } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { useLoading } from '@/hooks/useLoading'
+import { PiLink, PiPlusCircleFill } from 'react-icons/pi'
 import { authOptions } from '../api/auth/[...nextauth]'
 
-export default function Dashboard({ currentUser }) {
+export default function Dashboard() {
 	const { useChatsIds } = useFirestore()
-	console.log(currentUser)
+	const [currentUser, setCurrentUser] = useState(null)
+	const [isFetched, setIsFetched] = useState(false)
+	const { data: session } = useSession({ required: true })
+	const { isLoading, isPageLoading } = useLoading()
+
+	useEffect(() => {
+		if (!isFetched && session) {
+			setCurrentUser({
+				name: session.user.name,
+				email: session.user.email,
+				image: session.user.image,
+			})
+			setIsFetched(true)
+		}
+	}, [session])
+
+	const chatsIds = useChatsIds(currentUser, session)
 
 	const chatsIds = useChatsIds(currentUser.email)
 
@@ -17,13 +36,13 @@ export default function Dashboard({ currentUser }) {
 			<Box w='full' p='20px'>
 				<Heading as='h1' size='lg'>Chats</Heading>
 				<Flex direction='column' align='flex-start' rowGap='20px' py='20px'>
-					{!currentUser &&
+					{(!currentUser || isLoading || isPageLoading || chatsIds.length === 0) &&
 						<>
 							<Skeleton h='65px' w='full' borderRadius='10px'></Skeleton>
 							<Skeleton h='65px' w='full' borderRadius='10px'></Skeleton>
 						</>
 					}
-					{currentUser && chatsIds.map((chatsId) => (
+					{currentUser && !isLoading && !isPageLoading && chatsIds.map((chatsId) => (
 						<Box w='full' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
 							<Link key={chatsId} href={`/chat/${chatsId.id}`}>
 								<Text fontSize='md'>{chatsId.id}</Text>
@@ -36,28 +55,3 @@ export default function Dashboard({ currentUser }) {
 		</Flex>
 	)
 }
-
-export const getServerSideProps = async (context) => {
-	const session = await getServerSession(context.req, context.res, authOptions);
-
-	if (!session) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		};
-	}
-
-	const currentUser = {
-		name: session.user.name,
-		email: session.user.email,
-		image: session.user.image,
-	}
-
-	if (session) {
-		return {
-			props: { currentUser },
-		};
-	}
-};
