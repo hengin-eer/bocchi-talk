@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
 import { PiLink, PiPlusCircleFill } from 'react-icons/pi'
-import { authOptions } from '../api/auth/[...nextauth]'
+import Randomstring from 'randomstring'
 
 export default function Dashboard() {
 	const { useChatsIds } = useFirestore()
@@ -28,7 +28,7 @@ export default function Dashboard() {
 
 	const chatsIds = useChatsIds(currentUser, session)
 
-	const chatsIds = useChatsIds(currentUser.email)
+	const randomSlug = Randomstring.generate(16)
 
 	return (
 		<Flex>
@@ -50,6 +50,10 @@ export default function Dashboard() {
 							</Link>
 						</Box>
 					))}
+					<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
+						<Icon as={PiPlusCircleFill} color='slategray' w={6} h={6} />
+						<Link href={`/chat/${randomSlug}`}>新しくチャットを始める</Link>
+					</Flex>
 				</Flex>
 			</Box>
 		</Flex>
