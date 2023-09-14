@@ -1,12 +1,13 @@
 import { DashboardNav } from '@/components/dashboard-nav'
 import { useFirestore } from '@/hooks/useFirestore'
-import { Box, Flex, Heading, Icon, Skeleton, Text } from '@chakra-ui/react'
+import { Box, Editable, EditableInput, EditablePreview, Flex, Heading, Icon, Skeleton, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
 import { PiLink, PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
+import { EditableControls } from '@/components/editable-controls'
 
 export default function Dashboard() {
 	const { useChatsIds } = useFirestore()
@@ -14,6 +15,7 @@ export default function Dashboard() {
 	const [isFetched, setIsFetched] = useState(false)
 	const { data: session } = useSession({ required: true })
 	const { isLoading, isPageLoading } = useLoading()
+	const [chatTitle, setChatTitle] = useState('')
 
 	useEffect(() => {
 		if (!isFetched && session) {
@@ -38,16 +40,26 @@ export default function Dashboard() {
 				<Flex direction='column' align='flex-start' rowGap='20px' py='20px'>
 					{(!currentUser || isLoading || isPageLoading || chatsIds.length === 0) &&
 						<>
-							<Skeleton h='65px' w='full' borderRadius='10px'></Skeleton>
-							<Skeleton h='65px' w='full' borderRadius='10px'></Skeleton>
+							<Skeleton h='52px' w='full' borderRadius='10px'></Skeleton>
+							<Skeleton h='52px' w='full' borderRadius='10px'></Skeleton>
 						</>
 					}
 					{currentUser && !isLoading && !isPageLoading && chatsIds.map((chatsId) => (
-						<Box w='full' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
-							<Link key={chatsId} href={`/chat/${chatsId.id}`}>
-								<Text fontSize='md'>{chatsId.id}</Text>
-								<Text fontSize='sm' color='gray.400'>{new Date(chatsId.updatedAt.seconds * 1000).toLocaleString()}</Text>
-							</Link>
+						<Box key={chatsId} w='full' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
+							<Editable
+								textAlign='center'
+								defaultValue={chatsId.title ? chatsId.title : chatsId.id}
+								fontSize='md'
+								isPreviewFocusable={false}
+							>
+								<Flex align='center' justify='space-between'>
+									<Link href={`/chat/${chatsId.id}`}>
+										<EditablePreview />
+									</Link>
+									<EditableInput onChange={(e) => setChatTitle(e.target.value)} />
+									<EditableControls userId={currentUser.email} chatsId={chatsId.id} chatTitle={chatTitle} />
+								</Flex>
+							</Editable>
 						</Box>
 					))}
 					<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
