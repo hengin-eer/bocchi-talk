@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react"
 import { db } from "../lib/firebase"
-import { collection, addDoc, getDocs, Timestamp, setDoc, doc, updateDoc } from "firebase/firestore"
+import { collection, addDoc, getDocs, Timestamp, setDoc, doc, updateDoc, deleteDoc } from "firebase/firestore"
 
 export const useFirestore = () => {
-    // const addFirestoreChat = async (newChat)
-
     const addChatsData = async (userId, chatsId) => {
         const cRef = doc(db, 'users', userId, 'chats', chatsId)
         await setDoc(cRef, {
@@ -12,6 +10,11 @@ export const useFirestore = () => {
             updatedAt: Timestamp.now(),
         })
     }
+
+    const deleteChatsData = async (userId, chatsId) => {
+        const cRef = doc(db, 'users', userId, 'chats', chatsId)
+        await deleteDoc(cRef)
+    } // Firestoreからチャットデータを削除する
 
     const addChatTitle = async (userId, chatsId, chatTitle) => {
         const cRef = doc(db, 'users', userId, 'chats', chatsId)
@@ -52,29 +55,5 @@ export const useFirestore = () => {
         return messages
     }
 
-    const getChatsId = async (userId) => {
-        const snapshot = await getDocs(collection(db, 'users', userId, 'chats'))
-        const getData = snapshot.docs.map((doc) => {
-            const data = doc.data()
-            data.id = doc.id
-            return data
-        })
-        return getData
-    }
-
-    const useChatsIds = (user, session) => {
-        const [chatsId, setChatsId] = useState([])
-        useEffect(() => {
-            if (user && session) {
-                ; (async () => {
-                    const data = await getChatsId(user.email)
-                    setChatsId(data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds))
-                })()
-            }
-        }, [user])
-
-        return chatsId
-    }
-
-    return { addChatsData, addChatTitle, addFirestoreDoc, useMessages, useChatsIds }
+    return { addChatsData, deleteChatsData, addChatTitle, addFirestoreDoc, useMessages }
 }
