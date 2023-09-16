@@ -32,7 +32,7 @@ export const DashboardNav = ({ user }) => {
 							<Text fontSize='xs'>Settings</Text>
 						</Link>
 					</Button>
-					<Button display='block' variant='link' colorScheme='red' onClick={() => signOut()}>
+					<Button display='block' variant='link' colorScheme='red' onClick={() => signOut({redirect: true, callbackUrl: '/'})}>
 						<Icon boxSize='30px' as={PiSignOutFill} />
 						<Text fontSize='xs'>LogOut</Text>
 					</Button>
