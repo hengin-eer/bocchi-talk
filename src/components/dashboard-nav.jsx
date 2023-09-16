@@ -1,4 +1,5 @@
-import { Avatar, Button, Flex, Icon, SkeletonCircle, Text } from '@chakra-ui/react'
+import { Image } from '@chakra-ui/react';
+import { Button, Flex, Icon, SkeletonCircle, Text } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react';
 import Link from 'next/link'
 import { PiGearSixFill, PiHeartFill, PiHouseFill, PiSignOutFill } from 'react-icons/pi';
@@ -7,7 +8,7 @@ export const DashboardNav = ({ user }) => {
 	return (
 		<Flex direction={{ base: 'row', sm: 'column' }} align='center' justify='space-between' h={{ base: '80px', sm: '100dvh' }} w={{ base: '100%', sm: '80px' }} mt={{ base: 'auto', sm: '0px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
 			{user ?
-				<Avatar name={user.name} src={user.image} boxSize='50px' />
+				<Image src={user.image} alt={user.name} boxSize='50px' borderRadius='50%' />
 				:
 				<SkeletonCircle size='50px' />
 			}
