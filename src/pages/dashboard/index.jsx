@@ -18,6 +18,7 @@ export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
 	const [chatTitle, setChatTitle] = useState('')
+	const [hoveredChat, setHoveredChat] = useState('')
 
 	const currentUser = useRecoilValue(currentUserState)
 
@@ -50,7 +51,7 @@ export default function Dashboard() {
 					</>
 				}
 				{currentUser && !isLoading && !isPageLoading && chatsData.map((chatData) => (
-					<Box key={chatData.id} w='full' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
+					<Box key={chatData.id} w='full' px='30px' py='10px' bg={(hoveredChat === chatData.id) ? 'gray.300' : 'gray.200'} borderRadius='10px' transitionDuration='.5s'>
 						<Editable
 							textAlign='center'
 							defaultValue={chatData.title ? chatData.title : chatData.id}
@@ -59,7 +60,9 @@ export default function Dashboard() {
 						>
 							<Flex align='center' justify='space-between'>
 								<Link href={`/chat/${chatData.id}`}>
-									<EditablePreview />
+									<>
+										<EditablePreview cursor='pointer' onMouseEnter={() => setHoveredChat(chatData.id)} onMouseLeave={() => setHoveredChat('')}/>
+									</>
 								</Link>
 								<EditableInput onChange={(e) => setChatTitle(e.target.value)} />
 								<EditableControls chatsData={chatsData} setChatsData={setChatsData} userId={currentUser.email} chatsId={chatData.id} chatTitle={chatTitle} />
