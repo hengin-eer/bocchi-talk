@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
-import { PiLink, PiPlusCircleFill } from 'react-icons/pi'
+import { PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
 import { EditableControls } from '@/components/editable-controls'
 import { collection, getDocs } from 'firebase/firestore'
@@ -48,7 +48,7 @@ export default function Dashboard() {
 	const randomSlug = Randomstring.generate(16)
 
 	return (
-		<Flex>
+		<Flex h='100dvh' direction={{ base: 'column-reverse', sm: 'row' }}>
 			<DashboardNav user={currentUser} />
 			<Box w='full' p='20px'>
 				<Heading as='h1' size='lg'>Chats</Heading>
