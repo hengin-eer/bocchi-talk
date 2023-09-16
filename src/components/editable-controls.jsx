@@ -1,7 +1,7 @@
 import { useFirestore } from '@/hooks/useFirestore';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, Flex, IconButton, useDisclosure, useEditableContext } from '@chakra-ui/react'
 import { useRef } from 'react';
-import { PiCheck, PiPencilSimpleLine, PiTrash, PiX } from 'react-icons/pi';
+import { PiCheck, PiCheckBold, PiPencilSimpleLine, PiPencilSimpleLineFill, PiTrash, PiTrashFill, PiX, PiXBold } from 'react-icons/pi';
 
 export const EditableControls = ({ chatsData, setChatsData, userId, chatsId, chatTitle }) => {
 	const { isEditing, getEditButtonProps, getCancelButtonProps, getSubmitButtonProps } = useEditableContext()
@@ -19,14 +19,14 @@ export const EditableControls = ({ chatsData, setChatsData, userId, chatsId, cha
 
 	return isEditing ? (
 		<ButtonGroup alignItems='center' justifyContent='center' size='xs' ml='1rem'>
-			<IconButton as={PiCheck} variant='ghost' {...getSubmitButtonProps()} onSubmit={addChatTitle(userId, chatsId, chatTitle)} />
-			<IconButton as={PiX} variant='ghost' {...getCancelButtonProps()} />
+			<IconButton as={PiCheckBold} variant='ghost' {...getSubmitButtonProps()} onSubmit={addChatTitle(userId, chatsId, chatTitle)} />
+			<IconButton as={PiXBold} variant='ghost' {...getCancelButtonProps()} />
 		</ButtonGroup>
 	) : (
 		<>
 			<ButtonGroup alignItems='center' justifyContent='center' size='xs'>
-				<IconButton as={PiPencilSimpleLine} variant='ghost' {...getEditButtonProps()} />
-				<IconButton as={PiTrash} variant='ghost' {...getCancelButtonProps()} onClick={onOpen} />
+				<IconButton as={PiPencilSimpleLineFill} variant='ghost' {...getEditButtonProps()} />
+				<IconButton as={PiTrashFill} variant='ghost' {...getCancelButtonProps()} onClick={onOpen} />
 			</ButtonGroup>
 			<AlertDialog
 				motionPreset='slideInBottom'
