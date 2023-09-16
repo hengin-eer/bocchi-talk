@@ -22,7 +22,7 @@ export default function Dashboard() {
 	const currentUser = useRecoilValue(currentUserState)
 
 	useEffect(() => {
-		if (currentUser) {
+		if (currentUser && chatsData.length === 0) {
 			; (async () => {
 				const snapshot = await getDocs(collection(db, 'users', currentUser.email, 'chats'))
 				const getData = snapshot.docs.map((doc) => {
