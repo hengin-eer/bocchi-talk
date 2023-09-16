@@ -10,17 +10,19 @@ import { EditableControls } from '@/components/editable-controls'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { DashboardLayout } from '@/components/dashboard-layout'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { currentUserState } from '@/states/currentUserState'
+import { chatsDataState } from '@/states/chatsDataState'
 
 export default function Dashboard() {
-	const [chatsData, setChatsData] = useState([])
-	const { data: session } = useSession({ required: true })
+	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
 	const [chatTitle, setChatTitle] = useState('')
 
-	const currentUser = session?.user
+	const currentUser = useRecoilValue(currentUserState)
 
 	useEffect(() => {
-		if (currentUser && session) {
+		if (currentUser) {
 			; (async () => {
 				const snapshot = await getDocs(collection(db, 'users', currentUser.email, 'chats'))
 				const getData = snapshot.docs.map((doc) => {

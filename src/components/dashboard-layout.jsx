@@ -1,10 +1,12 @@
 import { DashboardNav } from '@/components/dashboard-nav'
+import { currentUserState } from '@/states/currentUserState'
 import { Box, Flex } from '@chakra-ui/react'
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
 
 export const DashboardLayout = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
     const [isFetched, setIsFetched] = useState(false)
     const { data: session } = useSession({ required: true })
 
