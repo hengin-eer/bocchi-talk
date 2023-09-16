@@ -11,7 +11,7 @@ export const DashboardLayout = ({ children }) => {
     const { data: session } = useSession({ required: true })
 
     useEffect(() => {
-        if (!isFetched && session) {
+        if (!isFetched && session && !currentUser) {
             setCurrentUser({
                 name: session.user.name,
                 email: session.user.email,
