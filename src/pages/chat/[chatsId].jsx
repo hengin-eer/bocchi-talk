@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 export default function chat() {
-	const [speechLanguage, setSpeechLanguage] = useState('en-US')
 	const [messages, setMessages] = useState([])
 	const [isFetched, setIsFetched] = useState(false)
 	const { data: session } = useSession({ required: true })
@@ -34,8 +33,8 @@ export default function chat() {
 
 	return (
 		<div>
-			<AppHeader speechLanguage={speechLanguage} setSpeechLanguage={setSpeechLanguage} />
-			<ChatArea speechLanguage={speechLanguage} firestoreMessages={messages} chatsId={chatsId} currentUser={session && session.user} />
+			<AppHeader/>
+			<ChatArea firestoreMessages={messages} chatsId={chatsId} currentUser={session && session.user} />
 		</div>
 	)
 }
