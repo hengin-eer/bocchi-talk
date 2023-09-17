@@ -4,6 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { SessionProvider } from 'next-auth/react'
 import { LoadingProvider } from '@/hooks/useLoading'
 import { RecoilRoot } from 'recoil'
+import { GetCurrentUser } from '@/components/get-current-user'
 
 export default function App({ Component, pageProps }) {
   return (
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }) {
         <ChakraProvider>
           <LoadingProvider>
             <Component {...pageProps} />
+            <GetCurrentUser />
           </LoadingProvider>
         </ChakraProvider>
       </SessionProvider>
