@@ -4,8 +4,11 @@ import Link from 'next/link'
 import React from 'react'
 import { PiArchiveBoxBold, PiFacebookLogoBold, PiGearSixBold, PiGearSixFill, PiLinkBold, PiListBulletsBold, PiNotepadBold, PiSnapchatLogoBold, PiTranslateBold, PiTwitterLogoBold } from 'react-icons/pi'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { useRecoilState } from 'recoil'
+import { speechLanguageState } from '@/states/speechLanguageState'
 
-export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
+export const AppHeader = () => {
+	const [speechLanguage, setSpeechLanguage] = useRecoilState(speechLanguageState)
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	return (
 		<Flex h='32px' mx={5} my={3} align='center' justify='space-between'>
