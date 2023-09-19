@@ -9,7 +9,7 @@ export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	return (
 		<Flex h='32px' mx={5} my={3} align='center' justify='space-between'>
-			<Link href='/'>
+			<Link href='/dashboard'>
 				<ChevronLeftIcon boxSize={8} />
 			</Link>
 			<Text fontSize={18}>Chat Title</Text>

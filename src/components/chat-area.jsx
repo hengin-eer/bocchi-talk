@@ -3,13 +3,18 @@ import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
 import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
+import { useFirestore } from '@/hooks/useFirestore';
 
-export const ChatArea = ({ speechLanguage }) => {
+export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId, currentUser }) => {
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [chats, setChats] = useState([{
 		role: "system",
 		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
 	}]); // 初期値の設定
+
+	useEffect(() => {
+		setChats([...chats, ...firestoreMessages])
+	}, [firestoreMessages])
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
@@ -17,6 +22,7 @@ export const ChatArea = ({ speechLanguage }) => {
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
+	const { addChatsData, addFirestoreDoc } = useFirestore()
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -28,6 +34,8 @@ export const ChatArea = ({ speechLanguage }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
+			addChatsData(currentUser.email, chatsId)
+			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
@@ -53,6 +61,7 @@ export const ChatArea = ({ speechLanguage }) => {
 				);
 			}
 			setChats((prev) => [...prev, data.result]);
+			addFirestoreDoc(data.result, currentUser.email, chatsId)
 		} catch (error) {
 			console.log(error);
 		}
@@ -117,7 +126,7 @@ export const ChatArea = ({ speechLanguage }) => {
 						marginRight={message.role === "user" ? '0px' : 'auto'}
 					>
 						{message.role === "user" ?
-							<Image src='/face.jpg' w='40px' h='40px' borderRadius='50%' />
+							<Image src={currentUser.image} w='40px' h='40px' borderRadius='50%' />
 							:
 							<Image src='/BocchiTalk-android-chrome-72x72.png' w='40px' h='40px' borderRadius='50%' bg='white' />
 						}

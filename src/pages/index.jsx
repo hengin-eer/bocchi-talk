@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import { PageHeader } from '@/components/page-header'
-import { Box, Button, ButtonGroup, Container, Flex, GridItem, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
-import Link from 'next/link'
+import { Box, Button, Container, Flex, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
 import { GradientHeading } from '@/components/custom-chakra-ui'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
+import { getServerSession } from 'next-auth'
+import { signIn } from 'next-auth/react'
 
 
 export default function Home() {
@@ -29,14 +31,7 @@ export default function Home() {
                 <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
-              <ButtonGroup spacing='30px'>
-                <Link href='/login'>
-                  <Button colorScheme='green' size='lg'>ログインしてみる</Button>
-                </Link>
-                <Link href='/chat'>
-                  <Button colorScheme='pink' color='white' size='lg'>チャットを始めてみる</Button>
-                </Link>
-              </ButtonGroup>
+              <Button w='max' colorScheme='pink' size='lg' onClick={() => signIn('google')}>ログインしてチャットを始めてみる</Button>
             </Flex>
           </Flex>
         </Box>
@@ -91,3 +86,20 @@ export default function Home() {
     </>
   )
 }
+
+export const getServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  }
+};
