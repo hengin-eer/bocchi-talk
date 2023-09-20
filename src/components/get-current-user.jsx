@@ -6,7 +6,14 @@ import { useRecoilState } from "recoil"
 export const GetCurrentUser = () => {
     const [currentUser, setCurrentUser] = useRecoilState(currentUserState)
     const [isFetched, setIsFetched] = useState(false)
-    const { data: session } = useSession({ required: true })
+    const [isSession, setIsSession] = useState(false)
+    useEffect(() => {
+        if (window.location.pathname === '/') setIsSession(false)
+        else if ((window.location.pathname !== '/') && !isSession) setIsSession(true)
+        else return
+        console.log('isSession is changed!!')
+    }, [])
+    const { data: session } = useSession({ required: isSession })
 
     useEffect(() => {
         if (!isFetched && session && !currentUser) {
