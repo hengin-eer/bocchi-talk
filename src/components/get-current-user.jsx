@@ -14,17 +14,14 @@ export const GetCurrentUser = () => {
         console.log('isSession is changed!!')
     }, [])
     const { data: session } = useSession({ required: isSession })
-
-    useEffect(() => {
-        if (!isFetched && session && !currentUser) {
-            setCurrentUser({
-                name: session.user.name,
-                email: session.user.email,
-                image: session.user.image,
-            })
-            setIsFetched(true)
-        }
-    }, [session])
+    if (!isFetched && session && !currentUser) {
+        setCurrentUser({
+            name: session.user.name,
+            email: session.user.email,
+            image: session.user.image,
+        })
+        setIsFetched(true)
+    }
 
     return;
 }
