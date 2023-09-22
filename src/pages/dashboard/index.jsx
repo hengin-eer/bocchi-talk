@@ -1,12 +1,10 @@
-import { DashboardNav } from '@/components/dashboard-nav'
-import { Box, Editable, EditableInput, EditablePreview, Flex, Heading, Icon, Skeleton, Text } from '@chakra-ui/react'
+import { Box, Editable, Flex, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useLoading } from '@/hooks/useLoading'
 import { PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
-import { EditableControls } from '@/components/editable-controls'
+import { EditableChatList } from '@/components/editable-controls'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { DashboardLayout } from '@/components/dashboard-layout'
@@ -17,8 +15,7 @@ import { chatsDataState } from '@/states/chatsDataState'
 export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
-	const [chatTitle, setChatTitle] = useState('')
-	const [hoveredChat, setHoveredChat] = useState('')
+	const hoveredChat = useRecoilValue(chatsDataState)
 
 	const currentUser = useRecoilValue(currentUserState)
 
@@ -46,8 +43,8 @@ export default function Dashboard() {
 			<Flex direction='column' align='flex-start' rowGap='20px' py='20px'>
 				{(!currentUser || isLoading || isPageLoading || chatsData.length === 0) &&
 					<>
-						<Skeleton h='52px' w='full' borderRadius='10px'></Skeleton>
-						<Skeleton h='52px' w='full' borderRadius='10px'></Skeleton>
+						<Skeleton h='73px' w='full' borderRadius='10px'></Skeleton>
+						<Skeleton h='73px' w='full' borderRadius='10px'></Skeleton>
 					</>
 				}
 				{currentUser && !isLoading && !isPageLoading && chatsData.map((chatData) => (
@@ -58,15 +55,7 @@ export default function Dashboard() {
 							fontSize='md'
 							isPreviewFocusable={false}
 						>
-							<Flex align='center' justify='space-between'>
-								<Link href={`/chat/${chatData.id}`}>
-									<>
-										<EditablePreview cursor='pointer' onMouseEnter={() => setHoveredChat(chatData.id)} onMouseLeave={() => setHoveredChat('')}/>
-									</>
-								</Link>
-								<EditableInput onChange={(e) => setChatTitle(e.target.value)} />
-								<EditableControls chatsData={chatsData} setChatsData={setChatsData} userId={currentUser.email} chatsId={chatData.id} chatTitle={chatTitle} />
-							</Flex>
+							<EditableChatList chatData={chatData} userId={currentUser.email} />
 						</Editable>
 					</Box>
 				))}
