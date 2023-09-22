@@ -54,7 +54,7 @@ export default function Dashboard() {
 					<Box key={chatData.id} w='full' px='30px' py='10px' bg={(hoveredChat === chatData.id) ? 'gray.300' : 'gray.200'} borderRadius='10px' transitionDuration='.5s'>
 						<Editable
 							textAlign='center'
-							defaultValue={chatData.title ? chatData.title : chatData.id}
+							defaultValue={chatData.title ? chatData.title : 'Untitled'}
 							fontSize='md'
 							isPreviewFocusable={false}
 						>
