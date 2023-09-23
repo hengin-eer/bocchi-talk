@@ -1,6 +1,6 @@
 import { Box, Editable, Flex, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
 import { PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
@@ -10,30 +10,28 @@ import { db } from '@/lib/firebase'
 import { DashboardLayout } from '@/components/dashboard-layout'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentUserState } from '@/states/currentUserState'
-import { chatsDataState } from '@/states/chatsDataState'
+import { chatsDataState, hoveredChatState } from '@/states/chatsDataState'
 
 export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
-	const hoveredChat = useRecoilValue(chatsDataState)
-
+	const hoveredChat = useRecoilValue(hoveredChatState)
 	const currentUser = useRecoilValue(currentUserState)
+	const [currentChatTitle, setCurrentChatTitle] = useState('')
 
-	useEffect(() => {
-		if (currentUser && chatsData.length === 0) {
-			; (async () => {
-				const snapshot = await getDocs(collection(db, 'users', currentUser.email, 'chats'))
-				const getData = snapshot.docs.map((doc) => {
-					const data = doc.data()
-					if (data.id !== doc.id) data.id = doc.id
-					return data
-				})
+	if (currentUser && chatsData.length === 0) {
+		; (async () => {
+			const snapshot = await getDocs(collection(db, 'users', currentUser.email, 'chats'))
+			const getData = snapshot.docs.map((doc) => {
+				const data = doc.data()
+				if (data.id !== doc.id) data.id = doc.id
+				return data
+			})
 
-				const data = getData
-				setChatsData(data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds))
-			})()
-		}
-	}, [currentUser])
+			const data = getData
+			setChatsData(data.sort((a, b) => b.updatedAt.seconds - a.updatedAt.seconds))
+		})()
+	}
 
 	const randomSlug = Randomstring.generate(16)
 
@@ -54,8 +52,12 @@ export default function Dashboard() {
 							defaultValue={chatData.title ? chatData.title : 'Untitled'}
 							fontSize='md'
 							isPreviewFocusable={false}
+							onSubmit={() => setChatsData(chatsData.map((chat) => {
+								if (chat.id === chatData.id) return { ...chat, title: currentChatTitle }
+								return chat
+							}))}
 						>
-							<EditableChatList chatData={chatData} userId={currentUser.email} />
+							<EditableChatList currentChatTitle={currentChatTitle} setCurrentChatTitle={setCurrentChatTitle} chatData={chatData} userId={currentUser.email} />
 						</Editable>
 					</Box>
 				))}
