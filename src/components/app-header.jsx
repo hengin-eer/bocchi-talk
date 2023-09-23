@@ -4,15 +4,19 @@ import Link from 'next/link'
 import React from 'react'
 import { PiArchiveBoxBold, PiFacebookLogoBold, PiGearSixBold, PiGearSixFill, PiLinkBold, PiListBulletsBold, PiNotepadBold, PiSnapchatLogoBold, PiTranslateBold, PiTwitterLogoBold } from 'react-icons/pi'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
+import { useRecoilState } from 'recoil'
+import { speechLanguageState } from '@/states/speechLanguageState'
 
-export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
+export const AppHeader = ({ chatTitle }) => {
+	const [speechLanguage, setSpeechLanguage] = useRecoilState(speechLanguageState)
 	const { isOpen, onOpen, onClose } = useDisclosure()
+
 	return (
 		<Flex h='32px' mx={5} my={3} align='center' justify='space-between'>
 			<Link href='/dashboard'>
 				<ChevronLeftIcon boxSize={8} />
 			</Link>
-			<Text fontSize={18}>Chat Title</Text>
+			<Text fontSize={18}>{chatTitle ? chatTitle : 'Untitled'}</Text>
 			<Flex align='center' columnGap={2}>
 				<Button variant='solid' colorScheme='gray' size='md' onClick={onOpen}>
 					<Icon as={PiListBulletsBold} fontSize='20px' />
@@ -103,7 +107,7 @@ export const AppHeader = ({ speechLanguage, setSpeechLanguage }) => {
 								<Icon as={PiFacebookLogoBold} fontSize='22px' color='#5e5e5e' />
 								<Spacer />
 							</Flex>
-								<Button variant='outline' colorScheme='gray' onClick={onClose}>Close</Button>
+							<Button variant='outline' colorScheme='gray' onClick={onClose}>Close</Button>
 						</DrawerFooter>
 					</DrawerContent>
 				</Drawer>

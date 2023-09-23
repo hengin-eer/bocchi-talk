@@ -4,8 +4,11 @@ import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
+import { useRecoilValue } from 'recoil';
+import { speechLanguageState } from '@/states/speechLanguageState';
 
-export const ChatArea = ({ speechLanguage, firestoreMessages, chatsId, currentUser }) => {
+export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
+	const speechLanguage = useRecoilValue(speechLanguageState)
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [chats, setChats] = useState([{
 		role: "system",
