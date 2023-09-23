@@ -2,17 +2,16 @@ import { useFirestore } from '@/hooks/useFirestore';
 import { chatsDataState, hoveredChatState } from '@/states/chatsDataState';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, EditableInput, EditablePreview, Flex, IconButton, Text, useDisclosure, useEditableContext } from '@chakra-ui/react'
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { PiCheck, PiCheckBold, PiPencilSimpleLine, PiPencilSimpleLineFill, PiTrash, PiTrashFill, PiX, PiXBold } from 'react-icons/pi';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-export const EditableChatList = ({ chatData, userId }) => {
+export const EditableChatList = ({ currentChatTitle, setCurrentChatTitle, chatData, userId }) => {
 	const { isEditing, getEditButtonProps, getCancelButtonProps, getSubmitButtonProps } = useEditableContext()
 	const { addChatTitle } = useFirestore()
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const cancelRef = useRef()
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
-	const [chatTitle, setChatTitle] = useState('')
 	const setHoveredChat = useSetRecoilState(hoveredChatState)
 
 	const handleDelete = () => {
@@ -25,7 +24,7 @@ export const EditableChatList = ({ chatData, userId }) => {
 
 	const EditableControls = () => isEditing ? (
 		<ButtonGroup alignItems='center' justifyContent='center' size='xs' ml='1rem'>
-			<IconButton as={PiCheckBold} variant='ghost' {...getSubmitButtonProps()} onSubmit={addChatTitle(userId, chatData.id, chatTitle)} />
+			<IconButton as={PiCheckBold} variant='ghost' {...getSubmitButtonProps()} onSubmit={addChatTitle(userId, chatData.id, currentChatTitle)} />
 			<IconButton as={PiXBold} variant='ghost' {...getCancelButtonProps()} />
 		</ButtonGroup>
 	) : (
@@ -66,7 +65,7 @@ export const EditableChatList = ({ chatData, userId }) => {
 					</Flex>
 				</>
 			</Link>
-			<EditableInput onChange={(e) => setChatTitle(e.target.value)} />
+			<EditableInput onChange={(e) => setCurrentChatTitle(e.target.value)} />
 			<EditableControls />
 		</Flex>
 	)
