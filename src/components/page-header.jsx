@@ -1,6 +1,7 @@
-import { Button, ButtonGroup, Flex, Image, Text } from '@chakra-ui/react'
+import { Button, ButtonGroup, Flex, Image } from '@chakra-ui/react'
 import React from 'react'
 import { GradientText } from './custom-chakra-ui'
+import { signIn } from 'next-auth/react'
 
 export const PageHeader = () => {
     return (
@@ -10,8 +11,7 @@ export const PageHeader = () => {
                 <GradientText fontSize='4xl' fontWeight='bold'>Bocchi Talk</GradientText>
             </Flex>
             <ButtonGroup gap={2}>
-                <Button variant='outline' colorScheme='cyan'>Sign Up</Button>
-                <Button colorScheme='green'>Login</Button>
+                <Button colorScheme='green' onClick={() => signIn('google')}>Login</Button>
             </ButtonGroup>
         </Flex>
     )
