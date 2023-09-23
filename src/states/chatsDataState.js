@@ -5,6 +5,11 @@ export const chatsDataState = atom({
     default: []
 })
 
+export const chatTitleState = atom({
+    key: "chatTitleState",
+    default: ''
+})
+
 export const hoveredChatState = atom({
     key: "hoveredChatState",
     default: ''
