@@ -2,7 +2,7 @@
     "name":             "BocchiTalk",
     "short_name":       "BocchiTalk",
     "description":      "this is my app",
-    "start_url":        "/chat",
+    "start_url":        "/dashboard",
     "display":          "standalone",
     "orientation":      "portrate-primary",
     "background_color": "#fff",
