@@ -25,7 +25,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
-	const { addChatsData, addFirestoreDoc } = useFirestore()
+	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -37,7 +37,8 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
-			addChatsData(currentUser.email, chatsId)
+			if (firestoreMessages.length === 0) addChatsData(currentUser.email, chatsId)
+			else updateChatsData(currentUser.email, chatsId)
 			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
