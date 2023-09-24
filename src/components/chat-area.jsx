@@ -15,9 +15,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
 	}]); // 初期値の設定
 
-	useEffect(() => {
-		setChats([...chats, ...firestoreMessages])
-	}, [firestoreMessages])
+	setChats([...chats, ...firestoreMessages])
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
