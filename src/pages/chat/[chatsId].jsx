@@ -10,34 +10,36 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 
 export default function chat() {
 	const [messages, setMessages] = useState([])
-	const [isFetched, setIsFetched] = useState(false)
 	const currentUser = useRecoilValue(currentUserState)
 	const chatsData = useRecoilValue(chatsDataState)
 	const [chatTitle, setChatTitle] = useRecoilState(chatTitleState)
 
 	const router = useRouter()
-	if (router.isReady && !isFetched && currentUser) {
+	if (router.isReady && currentUser) {
 		const id = router.query.chatsId
 		if (chatsData.length !== 0) setChatTitle(chatsData.filter((chat) => chat.id === id).map((chat) => chat.title)[0])
-		if (chatsData.length === 0) {
+
+
+		if (messages.length === 0) {
+			; (async () => {
+				const colRef = collection(db, 'users', currentUser.email, 'chats', id, 'messages');
+				const snapShots = await getDocs(colRef)
+
+				const docs = snapShots.docs.map((doc) => {
+					const data = doc.data()
+					return data
+				})
+				setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
+			})()
+		}
+
+		if ((chatsData.length === 0) && (messages.length !== 0)) {
 			; (async () => {
 				const snapshot = await getDoc(doc(db, 'users', currentUser.email, 'chats', id))
 				const data = snapshot.data()
 				setChatTitle(data.title)
 			})()
 		}
-
-		; (async () => {
-			const colRef = collection(db, 'users', currentUser.email, 'chats', id, 'messages');
-			const snapShots = await getDocs(colRef)
-
-			const docs = snapShots.docs.map((doc) => {
-				const data = doc.data()
-				return data
-			})
-			setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
-		})()
-		setIsFetched(true)
 	}
 	const chatsId = router.query.chatsId
 
