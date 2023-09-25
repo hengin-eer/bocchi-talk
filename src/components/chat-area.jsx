@@ -15,9 +15,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
 	}]); // 初期値の設定
 
-	useEffect(() => {
+	if (firestoreMessages && (firestoreMessages.length !== 0) && (chats.length === 1)) {
 		setChats([...chats, ...firestoreMessages])
-	}, [firestoreMessages])
+	}
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
@@ -25,7 +25,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
-	const { addChatsData, addFirestoreDoc } = useFirestore()
+	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -37,7 +37,8 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			if (message.content === "") return;
 			resetTranscript()
 
-			addChatsData(currentUser.email, chatsId)
+			if (firestoreMessages.length === 0) addChatsData(currentUser.email, chatsId)
+			else updateChatsData(currentUser.email, chatsId)
 			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
@@ -103,21 +104,15 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	useEffect(() => {
 		setIsClient(true);
 	}, []);
+
 	if (isClient && !browserSupportsSpeechRecognition) return <Box>ブラウザが音声認識に対応していません。</Box>;
+	transcript && setMessage({ role: "user", content: transcript });
 
-	useEffect(() => {
-		transcript && setMessage({ role: "user", content: transcript });
-		console.log(transcript)
-	}, [transcript])
-
-	useEffect(() => {
-		// ここにページ下までスクロールするコードを追記する
-		if (scrollContainer.current) {
-			scrollContainer.current.scrollTop = scrollContainer.current.scrollHeight;
-		}
-		console.log("chatsが更新されました。");
-	}, [chats])
-	console.log(chats)
+	// ここにページ下までスクロールするコードを追記する
+	if (scrollContainer.current) {
+		scrollContainer.current.scrollTop = scrollContainer.current.scrollHeight;
+	}
+	console.log("chatsが更新されました。");
 
 	return (
 		<Box height={`calc(${viewportHeight}px - ${56}px)`} overflowY='hidden' onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
@@ -134,9 +129,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 							<Image src='/BocchiTalk-android-chrome-72x72.png' w='40px' h='40px' borderRadius='50%' bg='white' />
 						}
 						<Text w='max-content' maxW='70vw' px={5} py={3} bg={'white'}
-							borderRadius={message.role === "user" ? '20px 0px 20px 20px' : '0px 20px 20px 20px'} 
+							borderRadius={message.role === "user" ? '20px 0px 20px 20px' : '0px 20px 20px 20px'}
 							css={{
-								whiteSpace: 'pre-wrap', 
+								whiteSpace: 'pre-wrap',
 							}}
 						>
 							{message.content}
