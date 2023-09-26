@@ -70,9 +70,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					message: [...chats, message].map((d) => ({
-						role: d.role === "proofread" ? '' : d.role,
-						content: d.role === "proofread" ? '' : d.content,
+					message: [...chats, message].filter(d => d.role !== "proofread").map((d) => ({
+						role: d.role,
+						content: d.content,
 					})),
 				}),
 			});
@@ -86,7 +86,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			}
 
 			const proofText = proofData.result.content;
-			if (proofText !== proovedText.content) {
+			if (proofText !== proovedText) {
 				const proofreadingSentences = {
 					role: "proofread",
 					content: {
