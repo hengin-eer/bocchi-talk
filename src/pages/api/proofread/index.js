@@ -15,19 +15,27 @@ export default async function handler(req, res) {
 		return;
 	}
 
+	const requestContents = `
+	# Proofread the following sentences.
+
+	Before: hallo, wolld!
+	After: Hello, world!
+
+	Before: this is an pens.
+	After: This is a pen.
+
+	Before: Im "hengineer"!
+	After: I'm "hengineer"!
+
+	Before: Thank you.
+	After: Thank you.
+
+	Before: ${req.body.message}
+	After: `
+
 	const message = [{
 		role: "user",
-		content:
-		`// Proofread the following sentences.
-		
-		Before: hallo, wolld!
-		After: Hello, world!
-
-		Before: this is an pens.
-		After: This is a pen.
-
-		Before: ${req.body.message}
-		After: `
+		content: requestContents,		
 	}];
 
 	try {
