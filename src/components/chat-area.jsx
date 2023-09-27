@@ -1,15 +1,17 @@
-import { Box, Button, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
-import { PiMicrophoneFill, PiPaperPlaneRightFill } from 'react-icons/pi'
+import { Box, Button, Divider, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
+import { PiCheckBold, PiMicrophoneFill, PiPaperPlaneRightFill, PiXBold } from 'react-icons/pi'
 import React, { use, useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
 import { useRecoilValue } from 'recoil';
 import { speechLanguageState } from '@/states/speechLanguageState';
+import { NewerDiffMessages, OlderDiffMessages } from './preview-diff-messages';
 
 export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const speechLanguage = useRecoilValue(speechLanguageState)
 	const [message, setMessage] = useState({ role: "user", content: "" });
+	const [proovedText, setProovedText] = useState('') // 校正対象のメッセージを管理
 	const [chats, setChats] = useState([{
 		role: "system",
 		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
@@ -29,6 +31,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
+		setProovedText(value);
 	}
 
 	const sendMessage = async (e) => {
@@ -43,29 +46,62 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
-			// ChatGPT APIと通信
-			const response = await fetch("/api/messages", {
+			const proofResponse = await fetch("/api/proofread", {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					message: [...chats, message].map((d) => ({
+					message: proovedText,
+				}),
+			});
+
+			const proofData = await proofResponse.json();
+			if (proofResponse.status !== 200) {
+				throw (
+					proofData.error ||
+					new Error(`Request failed with status ${proofResponse.status}`)
+				);
+			}
+
+			// ChatGPT APIと通信
+			const msgResponse = await fetch("/api/messages", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					message: [...chats, message].filter(d => d.role !== "proofread").map((d) => ({
 						role: d.role,
 						content: d.content,
 					})),
 				}),
 			});
 
-			const data = await response.json();
-			if (response.status !== 200) {
+			const msgData = await msgResponse.json();
+			if (msgResponse.status !== 200) {
 				throw (
-					data.error ||
-					new Error(`Request failed with status ${response.status}`)
+					msgData.error ||
+					new Error(`Request failed with status ${msgResponse.status}`)
 				);
 			}
-			setChats((prev) => [...prev, data.result]);
-			addFirestoreDoc(data.result, currentUser.email, chatsId)
+
+			const proofText = proofData.result.content;
+			if (proofText !== proovedText) {
+				const proofreadingSentences = {
+					role: "proofread",
+					content: {
+						beforeText: proovedText,
+						afterText: proofText,
+					},
+				}
+				setChats((prev) => [...prev, proofreadingSentences]);
+				addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
+				console.log(proovedText)
+			}
+
+			setChats((prev) => [...prev, msgData.result]);
+			addFirestoreDoc(msgData.result, currentUser.email, chatsId)
 		} catch (error) {
 			console.log(error);
 		}
@@ -133,8 +169,23 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 							css={{
 								whiteSpace: 'pre-wrap',
 							}}
+							border={message.role === "proofread" ? '2px' : 'none'}
+							borderColor={message.role === "proofread" ? 'green' : ''}
 						>
-							{message.content}
+							{message.role === "proofread" && (
+								<Flex direction='column' align='flex-start' rowGap='10px'>
+									<Flex align='center' columnGap='10px'>
+										<Icon as={PiXBold} color='red' fontSize='sm' />
+										<OlderDiffMessages beforeText={message.content.beforeText} AfterText={message.content.afterText} />
+									</Flex>
+									<Divider borderBottomWidth='2px' />
+									<Flex align='center' columnGap='10px'>
+										<Icon as={PiCheckBold} color='green' fontSize='sm' />
+										<NewerDiffMessages beforeText={message.content.beforeText} AfterText={message.content.afterText} />
+									</Flex>
+								</Flex>
+							)}
+							{(message.role === "assistant" || message.role === "user") && message.content}
 						</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
