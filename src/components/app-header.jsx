@@ -9,7 +9,7 @@ import { speechLanguageState } from '@/states/speechLanguageState'
 import { AutoResizeTextarea } from '@/components/custom-chakra-ui'
 
 export const AppHeader = ({ chatTitle }) => {
-	const [speechLanguage, setSpeechLanguage] = useRecoilState(speechLanguageState)
+	const [ speechLanguage, setSpeechLanguage ] = useRecoilState(speechLanguageState);
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	return (
