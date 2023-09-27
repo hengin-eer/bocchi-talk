@@ -1,15 +1,68 @@
 import { ChevronLeftIcon, Icon } from '@chakra-ui/icons'
 import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Select, Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { PiArchiveBoxBold, PiFacebookLogoBold, PiGearSixBold, PiGearSixFill, PiLinkBold, PiListBulletsBold, PiNotepadBold, PiSnapchatLogoBold, PiTranslateBold, PiTwitterLogoBold } from 'react-icons/pi'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
 import { speechLanguageState } from '@/states/speechLanguageState'
+import { AutoResizeTextarea } from '@/components/custom-chakra-ui'
+import { translateLanguageState } from '@/states/translateLanguageState'
+import { isWaitChatGPTState } from '@/states/isWaitChatGPTState'
 
 export const AppHeader = ({ chatTitle }) => {
-	const [speechLanguage, setSpeechLanguage] = useRecoilState(speechLanguageState)
+	const [ speechLanguage, setSpeechLanguage ] = useRecoilState(speechLanguageState);
+	const [ translatedLanguage, setTranslatedLanguage ] = useRecoilState(translateLanguageState);
 	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [ originalText, setOriginalText ] = useState({ role: "user", content: "" });
+	const [ translatedText, setTranslatedText ] = useState({ role: "assistant", content: "" });
+	const [ isWaitChatGPT, setIsWaitChatGPT ] = useRecoilState(isWaitChatGPTState);
+
+	const handleInputChange = (value) => {
+		setOriginalText({
+			role: "user",
+			content: value
+		});
+	}
+
+	const onClickTranslate = async (e) => {
+		try {
+			e.preventDefault()
+			if (originalText.content === "") return;
+
+			setIsWaitChatGPT(true);
+			// ChatGPT APIと通信
+			const response = await fetch("/api/messages", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					message: [
+					{
+						role: "system",
+						content: "system_prompt",
+					},
+					{
+						role: "user",
+						content: "命令 \n あなたは高性能な翻訳アプリです。\"" + originalText.content + "\"を" + translatedLanguage + "に翻訳した結果を出力してください。\n 条件 \n 出力には「翻訳された単語」(\"\"は含まない), 「品詞」, 「意味」, 「例文と" + translatedLanguage + "語訳」, 「説明(簡潔に)」を含めてください。それぞれは改行が必要ですが、箇条書きや太字は使用しないでください。意味などが複数ある場合はすべて出力してください。",
+					},]
+				}),
+			});
+
+			const data = await response.json();
+			if (response.status !== 200) {
+				throw (
+					data.error ||
+					new Error(`Request failed with status ${response.status}`)
+				);
+			}
+			setIsWaitChatGPT(false);
+			setTranslatedText(data.result);
+		} catch (error) {
+			console.log(error);
+		};
+	};
 
 	return (
 		<Flex h='32px' mx={5} my={3} align='center' justify='space-between'>
@@ -64,7 +117,23 @@ export const AppHeader = ({ chatTitle }) => {
 
 								<TabPanels>
 									<TabPanel>
-										<Text>翻訳</Text>
+										<Box>
+											<AutoResizeTextarea mt='1rem' mb='1rem' placeholder="Original text..." value={originalText.content} onChange={(e) => handleInputChange(e.target.value)} />
+											<Flex>
+												<Text mr='0.5rem' ml='0.5rem' fontSize='lg' fontWeight={600}>&rarr;</Text>
+												<Select value={translatedLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setTranslatedLanguage(e.target.value)}>
+													<option value='en-US'>English(US)</option>
+													<option value='ja'>日本語</option>
+													<option value='th-TH'>ภาษาไทย(タイ語)</option>
+												</Select>
+											</Flex>
+											{isWaitChatGPT ? 
+												<Button mt='1rem' w='100%' variant='outline' colorScheme='gray'>Wait...</Button>
+											:
+												<Button mt='1rem' w='100%' variant='outline' colorScheme='gray' onClick={onClickTranslate}>Translate</Button>
+											}
+											<Text mt='1rem' w='100%' css={{whiteSpace: 'pre-wrap',}}>{translatedText.content}</Text>
+										</Box>
 									</TabPanel>
 									<TabPanel>
 										<Text>単語帳</Text>

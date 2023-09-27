@@ -25,7 +25,7 @@ export default async function handler( req, res ) {
       model: "gpt-3.5-turbo",
       messages: message,
       temperature: 0.9,
-      max_tokens: 100, // GPTから返ってくるメッセージの最大文字数
+      max_tokens: 200, // GPTから返ってくるメッセージの最大文字数
     });
     // GPTの返答を取得
     res.status(200).json({ result: completion.data.choices[0].message });
