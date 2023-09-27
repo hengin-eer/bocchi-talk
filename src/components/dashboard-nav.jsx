@@ -1,14 +1,39 @@
-import { Image } from '@chakra-ui/react';
-import { Button, Flex, Icon, SkeletonCircle, Text } from '@chakra-ui/react'
+import {
+	Button,
+	Flex,
+	Icon,
+	SkeletonCircle,
+	Text,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuItem,
+	Image,
+} from '@chakra-ui/react'
 import { signOut } from 'next-auth/react';
 import Link from 'next/link'
-import { PiGearSixFill, PiHeartFill, PiHouseFill, PiSignOutFill } from 'react-icons/pi';
+import { PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
 
 export const DashboardNav = ({ user }) => {
 	return (
 		<Flex direction={{ base: 'row', sm: 'column' }} align='center' justify='space-between' h={{ base: '80px', sm: '100dvh' }} w={{ base: '100%', sm: '80px' }} mt={{ base: 'auto', sm: '0px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
 			{user ?
-				<Image src={user.image} alt={user.name} boxSize='50px' borderRadius='50%' />
+				<Menu>
+					<MenuButton variant='unstyled' p={0} bg="transparent">
+						<Image src={user.image} alt={user.name} boxSize="50px" borderRadius="50%" />
+					</MenuButton>
+					<MenuList>
+						<MenuItem>
+							<Link href='/settings'>
+								<Flex align='center' columnGap='12px'>
+									<Icon boxSize='30px' color='slategray' as={PiGearSixFill} />
+									<Text>Settings</Text>
+								</Flex>
+							</Link>
+						</MenuItem>
+						<MenuItem onClick={() => signOut({ redirect: true, callbackUrl: '/' })} icon={<Icon boxSize='30px' color='red' as={PiSignOutFill} />}>LogOut</MenuItem>
+					</MenuList>
+				</Menu>
 				:
 				<SkeletonCircle size='50px' />
 			}
@@ -27,14 +52,10 @@ export const DashboardNav = ({ user }) => {
 						</Link>
 					</Button>
 					<Button display='block' variant='link' colorScheme='cyan'>
-						<Link href='/settings'>
-							<Icon boxSize='30px' as={PiGearSixFill} />
-							<Text fontSize='xs'>Settings</Text>
-						</Link>
-					</Button>
-					<Button display='block' variant='link' colorScheme='red' onClick={() => signOut({redirect: true, callbackUrl: '/'})}>
-						<Icon boxSize='30px' as={PiSignOutFill} />
-						<Text fontSize='xs'>LogOut</Text>
+						<a href="https://forms.gle/uLbxD1v2XmXhXfer7" target="_blank" rel="noopener noreferrer">
+							<Icon boxSize='30px' as={PiPaperPlaneTiltFill} />
+							<Text fontSize='xs'>FeedBack</Text>
+						</a>
 					</Button>
 				</Flex>
 			)}
