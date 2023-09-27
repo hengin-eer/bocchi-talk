@@ -6,6 +6,7 @@ import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
 import { useRecoilValue } from 'recoil';
 import { speechLanguageState } from '@/states/speechLanguageState';
+import { NewerDiffMessages, OlderDiffMessages } from './preview-diff-messages';
 
 export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const speechLanguage = useRecoilValue(speechLanguageState)
@@ -175,12 +176,12 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 								<Flex direction='column' align='flex-start' rowGap='10px'>
 									<Flex align='center' columnGap='10px'>
 										<Icon as={PiXBold} color='red' fontSize='sm' />
-										<Text>{message.content.beforeText}</Text>
+										<OlderDiffMessages beforeText={message.content.beforeText} AfterText={message.content.afterText} />
 									</Flex>
 									<Divider borderBottomWidth='2px' />
 									<Flex align='center' columnGap='10px'>
 										<Icon as={PiCheckBold} color='green' fontSize='sm' />
-										<Text>{message.content.afterText}</Text>
+										<NewerDiffMessages beforeText={message.content.beforeText} AfterText={message.content.afterText} />
 									</Flex>
 								</Flex>
 							)}
