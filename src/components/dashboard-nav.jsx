@@ -2,7 +2,7 @@ import { Image } from '@chakra-ui/react';
 import { Button, Flex, Icon, SkeletonCircle, Text } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react';
 import Link from 'next/link'
-import { PiGearSixFill, PiHeartFill, PiHouseFill, PiSignOutFill } from 'react-icons/pi';
+import { PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
 
 export const DashboardNav = ({ user }) => {
 	return (
@@ -31,6 +31,12 @@ export const DashboardNav = ({ user }) => {
 							<Icon boxSize='30px' as={PiGearSixFill} />
 							<Text fontSize='xs'>Settings</Text>
 						</Link>
+					</Button>
+					<Button display='block' variant='link' colorScheme='cyan'>
+						<a href="https://forms.gle/uLbxD1v2XmXhXfer7" target="_blank" rel="noopener noreferrer">
+							<Icon boxSize='30px' as={PiPaperPlaneTiltFill} />
+							<Text fontSize='xs'>FeedBack</Text>
+						</a>
 					</Button>
 					<Button display='block' variant='link' colorScheme='red' onClick={() => signOut({redirect: true, callbackUrl: '/'})}>
 						<Icon boxSize='30px' as={PiSignOutFill} />
