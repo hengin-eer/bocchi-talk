@@ -66,34 +66,17 @@ export const AppHeader = ({ chatTitle }) => {
 								<TabPanels>
 									<TabPanel>
 										<Box>
+											<AutoResizeTextarea mt='1rem' mb='1rem' placeholder="Original text..." value={originalText.content} onChange={(e) => handleInputChange(e.target.value)} />
 											<Flex>
-												<Text mr='1rem' fontSize='lg'>Before</Text>
-												<Select value={speechLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setSpeechLanguage(e.target.value)}>
+												<Text mr='0.5rem' ml='0.5rem' fontSize='lg' fontWeight={600}>&rarr;</Text>
+												<Select value={translatedLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setTranslatedLanguage(e.target.value)}>
 													<option value='en-US'>English(US)</option>
 													<option value='ja'>日本語</option>
-													<option value='ko'>한국어(韓国語)</option>
-													<option value='zh-CN'>中文(中国語)</option>
-													<option value='zh-TW'>中文(台湾語)</option>
-													<option value='fr-FR'>French(フランス語)</option>
-													<option value='de-DE'>German(ドイツ語)</option>
 													<option value='th-TH'>ภาษาไทย(タイ語)</option>
 												</Select>
 											</Flex>
-											<AutoResizeTextarea mt='1rem'></AutoResizeTextarea>
-
-											<Flex mt='1rem'>
-												<Text mr='1rem' fontSize='lg'>After</Text>
-												<Select value={speechLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setSpeechLanguage(e.target.value)}>
-													<option value='en-US'>English(US)</option>
-													<option value='ja'>日本語</option>
-													<option value='ko'>한국어(韓国語)</option>
-													<option value='zh-CN'>中文(中国語)</option>
-													<option value='zh-TW'>中文(台湾語)</option>
-													<option value='fr-FR'>French(フランス語)</option>
-													<option value='de-DE'>German(ドイツ語)</option>
-													<option value='th-TH'>ภาษาไทย(タイ語)</option>
-												</Select>
-											</Flex>
+											<Button mt='1rem' w='100%' variant='outline' colorScheme='gray' onClick={onClickTranslate}>Translate</Button>
+											<Text mt='1rem' w='100%' css={{whiteSpace: 'pre-wrap',}}>{translatedText.content}</Text>
 										</Box>
 									</TabPanel>
 									<TabPanel>
