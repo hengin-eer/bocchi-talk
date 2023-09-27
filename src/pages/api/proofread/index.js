@@ -30,6 +30,9 @@ export default async function handler(req, res) {
 	Before: Thank you.
 	After: Thank you.
 
+	Before: 私わ日本産まれです。
+	After: 私は日本生まれです。
+
 	Before: ${req.body.message}
 	After: `
 
