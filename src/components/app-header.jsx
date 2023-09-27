@@ -8,6 +8,7 @@ import { useRecoilState } from 'recoil'
 import { speechLanguageState } from '@/states/speechLanguageState'
 import { AutoResizeTextarea } from '@/components/custom-chakra-ui'
 import { translateLanguageState } from '@/states/translateLanguageState'
+import { isWaitChatGPTState } from '@/states/isWaitChatGPTState'
 
 export const AppHeader = ({ chatTitle }) => {
 	const [ speechLanguage, setSpeechLanguage ] = useRecoilState(speechLanguageState);
@@ -15,6 +16,7 @@ export const AppHeader = ({ chatTitle }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [ originalText, setOriginalText ] = useState({ role: "user", content: "" });
 	const [ translatedText, setTranslatedText ] = useState({ role: "assistant", content: "" });
+	const [ isWaitChatGPT, setIsWaitChatGPT ] = useRecoilState(isWaitChatGPTState);
 
 	const handleInputChange = (value) => {
 		setOriginalText({
@@ -28,6 +30,7 @@ export const AppHeader = ({ chatTitle }) => {
 			e.preventDefault()
 			if (originalText.content === "") return;
 
+			setIsWaitChatGPT(true);
 			// ChatGPT APIと通信
 			const response = await fetch("/api/messages", {
 				method: 'POST',
@@ -54,8 +57,8 @@ export const AppHeader = ({ chatTitle }) => {
 					new Error(`Request failed with status ${response.status}`)
 				);
 			}
+			setIsWaitChatGPT(false);
 			setTranslatedText(data.result);
-			console.log(data.result);
 		} catch (error) {
 			console.log(error);
 		};
@@ -124,7 +127,11 @@ export const AppHeader = ({ chatTitle }) => {
 													<option value='th-TH'>ภาษาไทย(タイ語)</option>
 												</Select>
 											</Flex>
-											<Button mt='1rem' w='100%' variant='outline' colorScheme='gray' onClick={onClickTranslate}>Translate</Button>
+											{isWaitChatGPT ? 
+												<Button mt='1rem' w='100%' variant='outline' colorScheme='gray'>Wait...</Button>
+											:
+												<Button mt='1rem' w='100%' variant='outline' colorScheme='gray' onClick={onClickTranslate}>Translate</Button>
+											}
 											<Text mt='1rem' w='100%' css={{whiteSpace: 'pre-wrap',}}>{translatedText.content}</Text>
 										</Box>
 									</TabPanel>
