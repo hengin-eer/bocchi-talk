@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react"
 import { db } from "../lib/firebase"
-import { collection, addDoc, getDocs, Timestamp, doc, updateDoc, deleteDoc } from "firebase/firestore"
+import { collection, addDoc, getDocs, Timestamp, doc, updateDoc, deleteDoc, setDoc } from "firebase/firestore"
 
 export const useFirestore = () => {
     const addChatsData = async (userId, chatsId) => {
         const cRef = doc(db, 'users', userId, 'chats', chatsId)
-        await updateDoc(cRef, {
+        await setDoc(cRef, {
             id: chatsId,
+            updatedAt: Timestamp.now(),
+        })
+    }
+
+    const updateChatsData = async (userId, chatsId) => {
+        const cRef = doc(db, 'users', userId, 'chats', chatsId)
+        await updateDoc(cRef, {
             updatedAt: Timestamp.now(),
         })
     }
@@ -55,5 +62,5 @@ export const useFirestore = () => {
         return messages
     }
 
-    return { addChatsData, deleteChatsData, addChatTitle, addFirestoreDoc, useMessages }
+    return { addChatsData, updateChatsData, deleteChatsData, addChatTitle, addFirestoreDoc, useMessages }
 }
