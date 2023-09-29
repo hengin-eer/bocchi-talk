@@ -11,7 +11,16 @@ import {
     Box,
     Text,
 } from '@chakra-ui/react'
+import ReactMarkdown from 'react-markdown';
 
+const PolicyBody = `
+# プライバシーポリシー
+- あ
+- い
+1. う
+2. え
+  - お
+`;
 
 export default function Policy() {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -25,9 +34,7 @@ export default function Policy() {
                 <ModalHeader>Modal Title</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Box>
-                        <Text>Lorem ipsum, doloeriam autem sit reprehenderit possimus repudiandae.</Text>
-                    </Box>
+                    <ReactMarkdown>{PolicyBody}</ReactMarkdown>
                 </ModalBody>
     
                 <ModalFooter>

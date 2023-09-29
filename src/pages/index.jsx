@@ -5,8 +5,8 @@ import { GradientHeading } from '@/components/custom-chakra-ui'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { signIn } from 'next-auth/react'
-import Terms from '@/pages/terms'
-import Policy from '@/pages/policy'
+import Terms from '@/components/terms'
+import Policy from '@/components/policy'
 
 
 export default function Home() {
