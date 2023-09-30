@@ -1,7 +1,10 @@
-import { Box, Button, Flex, Heading, Icon, Text, Textarea, forwardRef } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Heading, Icon, Text, Textarea, forwardRef } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 import { PiArrowSquareOutFill, PiPaperPlaneTiltFill, PiSignInFill } from "react-icons/pi";
 import ResizeTextarea from 'react-textarea-autosize';
+import Terms from "./terms";
+import Policy from "./policy";
 
 export const GradientHeading = (props) => {
 	return (
@@ -15,16 +18,23 @@ export const GradientText = (props) => {
 	)
 }
 
-export const LoginButton = (props) => {
+export const LoginButton = () => {
+	const [ischecked, setIschecked] = useState(false)
 	return (
-		<Button variant='unstyled' display='block' h='max' w='max' px='50px' py='20px'
-			color='black' bg='greenyellow' borderRadius='full' {...props} transitionDuration='.3s'
-			_hover={{ color: 'white', bg: 'green.500' }} onClick={() => signIn('google')}>
-			<Flex align='center' columnGap='10px'>
-				<Icon as={PiSignInFill} fontSize='30px' />
-				<Text fontSize='20px'>ログインして始める</Text>
+		<Flex direction='column' align='center' rowGap='10px'>
+			<Button variant='unstyled' display='block' h='max' w='max' px='50px' py='20px'
+				color='black' bg={ischecked ? 'greenyellow' : 'gray.200'} borderRadius='full' transitionDuration='.3s'
+				_hover={ischecked ? { color: 'white', bg: 'green.500' } : {}} onClick={ischecked ? () => signIn('google') : () => alert('利用規約とプライバシーポリシーを確認してください')}>
+				<Flex align='center' columnGap='10px'>
+					<Icon as={PiSignInFill} fontSize='30px' />
+					<Text fontSize='20px'>ログインして始める</Text>
+				</Flex>
+			</Button>
+			<Flex align='center' gap='5px'>
+				<Checkbox borderColor='black' value={ischecked} onChange={(e) => setIschecked(e.target.checked)} />
+				<Terms />と<Policy />に同意する。
 			</Flex>
-		</Button>
+		</Flex>
 	)
 }
 
@@ -41,7 +51,7 @@ export const PrimaryButton = ({ children, icon = PiPaperPlaneTiltFill }) => {
 	)
 }
 
-export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = ''}, props) => {
+export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = '' }, props) => {
 	return (
 		<Button as='a' href={href} {...props} variant='unstyled' display='block'
 			h='max' w='max' px='25px' py='10px' color='black' bg='white'
