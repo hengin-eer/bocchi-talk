@@ -5,12 +5,13 @@ import { SessionProvider } from 'next-auth/react'
 import { LoadingProvider } from '@/hooks/useLoading'
 import { RecoilRoot } from 'recoil'
 import { GetCurrentUser } from '@/components/get-current-user'
+import { customTheme } from '@/styles/ChakraTheme'
 
 export default function App({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <SessionProvider>
-        <ChakraProvider>
+        <ChakraProvider theme={customTheme}>
           <LoadingProvider>
             <Component {...pageProps} />
             <GetCurrentUser />
