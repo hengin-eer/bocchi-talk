@@ -41,9 +41,9 @@ export const PrimaryButton = ({ children, icon = PiPaperPlaneTiltFill }) => {
 	)
 }
 
-export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = '' }) => {
+export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = ''}, props) => {
 	return (
-		<Button as='a' href={href} variant='unstyled' display='block'
+		<Button as='a' href={href} {...props} variant='unstyled' display='block'
 			h='max' w='max' px='25px' py='10px' color='black' bg='white'
 			border='2px' borderColor='#884FE4' borderRadius='full' transitionDuration='.3s'
 			_hover={{ color: 'white', bg: '#884FE4' }}>
@@ -64,6 +64,12 @@ export const Title100 = ({ children, color = 'black' }) => {
 export const Text100 = ({ children, color = 'black' }) => {
 	return (
 		<Text fontSize={{ base: '16px', lg: '20px' }} color={color} w='auto' lineHeight='150%'>{children}</Text>
+	)
+}
+
+export const Text110 = ({ children, color = 'black' }) => {
+	return (
+		<Text fontSize={{ base: '16px', lg: '20px' }} color={color} w='auto' lineHeight='150%' dangerouslySetInnerHTML={{ __html: children }}></Text>
 	)
 }
 
