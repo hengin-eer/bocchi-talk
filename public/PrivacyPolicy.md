@@ -1,9 +1,15 @@
-# プライバシーポリシーとCookieポリシー
+## Google Analytisの使用について
+当サイトでは、Googleによるアクセス解析ツール「Googleアナリティクス」を利用しています。このGoogleアナリティクスはトラフィックデータの収集のためにクッキー（Cookie）を使用しております。トラフィックデータは匿名で収集されており、個人を特定するものではありません。また、この機能は拒否することも可能ですので、お使いのブラウザの設定をご確認ください。
+
+Google Analyticsの[利用規約](http://www.google.com/analytics/terms/jp.html)
+
+Googleの[プライバシーポリシー](http://www.google.com/intl/ja/policies/privacy/)
+
 ## 1. 個人情報の収集方法
 私たちは、、ユーザが利用登録する際にメールアドレスなどの個人情報をお尋ねすることがあります。
 
 ## 2. 個人情報を収集・利用する目的
-私たちがk人情報を収集する目的は、以下の通りです。
+私たちが個人情報を収集する目的は、以下の通りです。
 
 1. 本サービスの提供・運営のため
 2. ユーザからのお問い合わせに回答するため
@@ -45,9 +51,15 @@
 ## 9. お問い合わせ窓口
 本ポリシーに関する問い合わせは、下記の窓口までお願いいたします。
 
-Eメールアドレス：bocchitalk@gmail.com
-X(旧Twitter)：
-https://twitter.com/QwerTayu/
-https://twitter.com/tim_daik/
-GitHub：
-https://github.com/hengin-eer/bocchi-talk
+### Eメールアドレス
+[bocchitalk@gmail.com](bocchitalk@gmail.com)
+
+### X(旧Twitter)
+
+[https://twitter.com/QwerTayu/](https://twitter.com/QwerTayu/)
+
+[https://twitter.com/tim_daik/](https://twitter.com/tim_daik/)
+
+### GitHubリポジトリ
+
+[https://github.com/hengin-eer/bocchi-talk](https://github.com/hengin-eer/bocchi-talk)
