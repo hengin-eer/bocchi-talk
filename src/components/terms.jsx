@@ -13,17 +13,18 @@ import {
     Text,
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown';
+import MarkdownComponents from '@/components/markdownComponents';
 
 export default function Terms() {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [ PolicyContent, setPolicyContent ] = useState('');
+    const [ TermsContent, setTermsContent ] = useState('');
 
     const fetchPolicyFile = async () => {
         try {
             const response = await fetch('/TermsOfService.md');
             if (response.ok) {
                 const markdownText = await response.text();
-                setPolicyContent(markdownText);
+                setTermsContent(markdownText);
             } else {
                 throw new Error('Failed to fetch policy file. Please reload.');
             }
@@ -46,7 +47,9 @@ export default function Terms() {
                 <ModalHeader>利用規約</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <ReactMarkdown>{PolicyContent}</ReactMarkdown>
+                    <ReactMarkdown components={MarkdownComponents}>
+                        {TermsContent}
+                    </ReactMarkdown>
                 </ModalBody>
     
                 <ModalFooter>

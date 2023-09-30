@@ -13,6 +13,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown';
+import MarkdownComponents from '@/components/markdownComponents';
 
 export default function Policy() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,7 +47,9 @@ export default function Policy() {
                 <ModalHeader>プライバシーポリシーとCookieポリシー</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <ReactMarkdown>{PolicyContent}</ReactMarkdown>
+                    <ReactMarkdown components={MarkdownComponents}>
+                        {PolicyContent}
+                    </ReactMarkdown>
                 </ModalBody>
     
                 <ModalFooter>
