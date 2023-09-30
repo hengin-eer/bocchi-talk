@@ -5,6 +5,8 @@ import { GradientHeading } from '@/components/custom-chakra-ui'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { signIn } from 'next-auth/react'
+import Terms from '@/components/terms'
+import Policy from '@/components/policy'
 
 
 export default function Home() {
@@ -32,6 +34,12 @@ export default function Home() {
                 <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
               </Box>
               <Button w='max' colorScheme='pink' size='lg' onClick={() => signIn('google')}>ログインしてチャットを始めてみる</Button>
+              <Flex align='center' columnGap='10px'>
+                <Terms />
+                と
+                <Policy />
+                に同意する。
+              </Flex>
             </Flex>
           </Flex>
         </Box>
