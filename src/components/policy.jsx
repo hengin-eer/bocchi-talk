@@ -20,7 +20,7 @@ export default function Policy() {
 
     const fetchPolicyFile = async () => {
         try {
-            const response = await fetch('public/PrivacyPolicy.md');
+            const response = await fetch('/PrivacyPolicy.md');
             if (response.ok) {
                 const markdownText = await response.text();
                 setPolicyContent(markdownText);
@@ -43,7 +43,7 @@ export default function Policy() {
             <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Policy</ModalHeader>
+                <ModalHeader>プライバシーポリシーとCookieポリシー</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <ReactMarkdown>{PolicyContent}</ReactMarkdown>
