@@ -1,4 +1,6 @@
 import { DashboardLayout } from '@/components/dashboard-layout'
+import Policy from '@/components/policy'
+import Terms from '@/components/terms'
 import { speechLanguageState } from '@/states/speechLanguageState'
 import { Box, Flex, Heading, Select, Text } from '@chakra-ui/react'
 import { useRecoilState } from 'recoil'
@@ -23,9 +25,14 @@ export default function Settings() {
 						<option value='th-TH'>ภาษาไทย(タイ語)</option>
 					</Select>
 				</Box>
-				<Box>
+				<Box mb='2rem'>
 					<Text mb='1rem' fontSize='lg'>その他の設定</Text>
 					<Text>Coming soon...</Text>
+				</Box>
+				<Box>
+					<Text mb='1rem' fontSize='lg'>利用規約・プライバシーポリシー</Text>
+					<Terms />
+					<Policy />
 				</Box>
 			</Flex>
 		</DashboardLayout>

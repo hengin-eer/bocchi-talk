@@ -4,6 +4,9 @@ import { Box, Checkbox, Flex, Heading, Image, Text } from '@chakra-ui/react'
 import { ButtonLink, GradientHeading, LoginButton, PrimaryButton, Text100, Text110, Title100 } from '@/components/custom-chakra-ui'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import Terms from '@/components/terms'
+import Policy from '@/components/policy'
+
 
 export default function Home() {
   const reasons = [
@@ -63,7 +66,12 @@ export default function Home() {
               </Flex>
               <Flex direction='column' align='center' rowGap='10px'>
                 <LoginButton />
-                <Checkbox borderColor='black'>利用規約、プライバシーポリシーに同意する</Checkbox>
+                <Checkbox borderColor='black'>
+                  <Terms />
+                  と
+                  <Policy />
+                  に同意する。
+                </Checkbox>
               </Flex>
             </Flex>
           </Flex>
