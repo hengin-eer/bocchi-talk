@@ -43,7 +43,7 @@ export default function Policy() {
     
             <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent maxW="90vw">
                 <ModalHeader>プライバシーポリシーとCookieポリシー</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>

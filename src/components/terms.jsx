@@ -43,7 +43,7 @@ export default function Terms() {
     
             <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent maxW="90vw">
                 <ModalHeader>利用規約</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
