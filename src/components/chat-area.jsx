@@ -97,7 +97,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 				}
 				setChats((prev) => [...prev, proofreadingSentences]);
 				addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
-				console.log(proovedText)
+				// console.log(proovedText)
 			}
 
 			setChats((prev) => [...prev, msgData.result]);
@@ -148,7 +148,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	if (scrollContainer.current) {
 		scrollContainer.current.scrollTop = scrollContainer.current.scrollHeight;
 	}
-	console.log("chatsが更新されました。");
+	// console.log("chatsが更新されました。");
 
 	return (
 		<Box height={`calc(${viewportHeight}px - ${56}px)`} overflowY='hidden' onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
