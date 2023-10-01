@@ -14,13 +14,13 @@ import {
 import ReactMarkdown from 'react-markdown';
 import MarkdownComponents from '@/components/markdownComponents';
 
-export default function Policy() {
+export default function HowToUsePWA() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ PolicyContent, setPolicyContent ] = useState('');
 
     const fetchPolicyFile = async () => {
         try {
-            const response = await fetch('/PrivacyPolicy.md');
+            const response = await fetch('/HowToUsePWA.md');
             if (response.ok) {
                 const markdownText = await response.text();
                 setPolicyContent(markdownText);
@@ -38,12 +38,12 @@ export default function Policy() {
 
     return (
         <>
-            <Text textDecoration="underline" onClick={onOpen}>ポリシー</Text>
+            <Text onClick={onOpen}>インストール方法</Text>
     
             <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
             <ModalOverlay />
             <ModalContent maxW="90vw">
-                <ModalHeader>プライバシーポリシーとCookieポリシー</ModalHeader>
+                <ModalHeader>デバイスへのアプリのインストール方法</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <ReactMarkdown components={MarkdownComponents}>

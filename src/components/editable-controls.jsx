@@ -3,7 +3,7 @@ import { chatsDataState, hoveredChatState } from '@/states/chatsDataState';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, ButtonGroup, EditableInput, EditablePreview, Flex, IconButton, Text, useDisclosure, useEditableContext } from '@chakra-ui/react'
 import Link from 'next/link';
 import { useRef } from 'react';
-import { PiCheck, PiCheckBold, PiPencilSimpleLine, PiPencilSimpleLineFill, PiTrash, PiTrashFill, PiX, PiXBold } from 'react-icons/pi';
+import { PiCheckBold, PiPencilSimpleLineFill, PiTrashFill, PiXBold } from 'react-icons/pi';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 export const EditableChatList = ({ currentChatTitle, setCurrentChatTitle, chatData, userId }) => {

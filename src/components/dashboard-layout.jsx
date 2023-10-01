@@ -7,7 +7,7 @@ export const DashboardLayout = ({ children }) => {
     const currentUser = useRecoilValue(currentUserState)
 
     return (
-        <Flex h='100dvh' direction={{ base: 'column-reverse', sm: 'row' }}>
+        <Flex h='100dvh' direction={{ base: 'column-reverse', lg: 'row' }} justify='space-between'>
             <DashboardNav user={currentUser} />
             <Box w='full' p='20px'>
                 {children}

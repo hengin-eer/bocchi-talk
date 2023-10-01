@@ -9,7 +9,6 @@ import {
     ModalCloseButton,
     useDisclosure,
     Button,
-    Box,
     Text,
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown';
@@ -41,7 +40,7 @@ export default function Terms() {
         <>
             <Text textDecoration="underline" onClick={onOpen}>利用規約</Text>
     
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
             <ModalOverlay />
             <ModalContent maxW="90vw">
                 <ModalHeader>利用規約</ModalHeader>

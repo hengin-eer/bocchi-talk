@@ -5,7 +5,7 @@ import { chatTitleState, chatsDataState } from '@/states/chatsDataState'
 import { currentUserState } from '@/states/currentUserState'
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 export default function chat() {

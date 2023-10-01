@@ -1,6 +1,6 @@
 import { Flex, Image } from '@chakra-ui/react'
 import React from 'react'
-import { ButtonLink, GradientText, Text100 } from './custom-chakra-ui'
+import { ButtonLink, GradientText } from './custom-chakra-ui'
 
 export const PageHeader = () => {
     return (
