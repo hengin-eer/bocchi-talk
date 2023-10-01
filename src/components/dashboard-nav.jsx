@@ -16,29 +16,9 @@ import { PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOu
 
 export const DashboardNav = ({ user }) => {
 	return (
-		<Flex direction={{ base: 'row', sm: 'column' }} align='center' justify='space-between' h={{ base: '80px', sm: '100dvh' }} w={{ base: '100%', sm: '80px' }} mt={{ base: 'auto', sm: '0px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
-			{user ?
-				<Menu>
-					<MenuButton variant='unstyled' p={0} bg="transparent">
-						<Image src={user.image} alt={user.name} boxSize="50px" borderRadius="50%" />
-					</MenuButton>
-					<MenuList>
-						<MenuItem>
-							<Link href='/settings'>
-								<Flex align='center' columnGap='12px'>
-									<Icon boxSize='30px' color='slategray' as={PiGearSixFill} />
-									<Text>Settings</Text>
-								</Flex>
-							</Link>
-						</MenuItem>
-						<MenuItem onClick={() => signOut({ redirect: true, callbackUrl: '/' })} icon={<Icon boxSize='30px' color='red' as={PiSignOutFill} />}>LogOut</MenuItem>
-					</MenuList>
-				</Menu>
-				:
-				<SkeletonCircle size='50px' />
-			}
-			{user && (
-				<Flex direction={{ base: 'row', sm: 'column' }} align='center' gap={{ base: '20px', sm: '30px' }} pb={{ base: '0px', sm: '50px' }}>
+		<Flex direction={{ base: 'row', sm: 'column' }} align='center' justify={{ base: 'space-around', sm: 'end' }} h={{ base: '80px', sm: '100dvh' }} w={{ base: '100%', sm: '80px' }} gap={{ base: '20px', sm: '30px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
+			{user ? (
+				<>
 					<Button display='block' variant='link' colorScheme='orange'>
 						<Link href='/dashboard'>
 							<Icon boxSize='30px' as={PiHouseFill} />
@@ -57,8 +37,27 @@ export const DashboardNav = ({ user }) => {
 							<Text fontSize='xs'>FeedBack</Text>
 						</a>
 					</Button>
-				</Flex>
-			)}
+					<Menu>
+						<MenuButton variant='unstyled' p={0} bg="transparent">
+							<Image src={user.image} alt={user.name} boxSize="50px" borderRadius="50%" />
+						</MenuButton>
+						<MenuList>
+							<MenuItem>
+								<Link href='/settings'>
+									<Flex align='center' columnGap='12px'>
+										<Icon boxSize='30px' color='slategray' as={PiGearSixFill} />
+										<Text>Settings</Text>
+									</Flex>
+								</Link>
+							</MenuItem>
+							<MenuItem onClick={() => signOut({ redirect: true, callbackUrl: '/' })} icon={<Icon boxSize='30px' color='red' as={PiSignOutFill} />}>LogOut</MenuItem>
+						</MenuList>
+					</Menu>
+				</>
+			)
+			:
+				<SkeletonCircle size='50px' />
+			}
 		</Flex>
 	)
 }
