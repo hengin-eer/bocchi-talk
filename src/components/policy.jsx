@@ -41,7 +41,7 @@ export default function Policy() {
         <>
             <Text textDecoration="underline" onClick={onOpen}>ポリシー</Text>
     
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
             <ModalOverlay />
             <ModalContent maxW="90vw">
                 <ModalHeader>プライバシーポリシーとCookieポリシー</ModalHeader>
