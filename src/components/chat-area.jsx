@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
 import { PiCheckBold, PiMicrophoneFill, PiPaperPlaneRightFill, PiXBold } from 'react-icons/pi'
-import React, { use, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
