@@ -9,7 +9,6 @@ import {
     ModalCloseButton,
     useDisclosure,
     Button,
-    Box,
     Text,
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown';
