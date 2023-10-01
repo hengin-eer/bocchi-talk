@@ -1,4 +1,4 @@
-import { Text, Link } from '@chakra-ui/react';
+import { Text, Link, Image } from '@chakra-ui/react';
 
 const MarkdownComponents = {
     h1: (props) => (
@@ -23,6 +23,9 @@ const MarkdownComponents = {
     ),
     p: (props) => (
         <Text {...props} mb={2} />
+    ),
+    img: (props) => (
+        <Image h="500px" {...props} />
     ),
 };
 

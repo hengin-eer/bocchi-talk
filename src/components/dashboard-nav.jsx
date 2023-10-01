@@ -1,3 +1,4 @@
+import HowToUsePWA from '@/components/howToUsePWA';
 import {
 	Button,
 	Flex,
@@ -12,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react';
 import Link from 'next/link'
-import { PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
+import { PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
 
 export const DashboardNav = ({ user }) => {
 	return (
@@ -49,6 +50,12 @@ export const DashboardNav = ({ user }) => {
 										<Text>Settings</Text>
 									</Flex>
 								</Link>
+							</MenuItem>
+							<MenuItem>
+								<Flex align='center' columnGap='12px'>
+									<Icon boxSize='30px' color='slategray' as={PiDevicesBold} />
+									<HowToUsePWA />
+								</Flex>
 							</MenuItem>
 							<MenuItem onClick={() => signOut({ redirect: true, callbackUrl: '/' })} icon={<Icon boxSize='30px' color='red' as={PiSignOutFill} />}>LogOut</MenuItem>
 						</MenuList>
