@@ -1,5 +1,5 @@
 ## PC
-### Chrome
+### Chrome(windows, macOSとも同じ)
 検索バー右側のアイコンをクリック
 ![PC-Chromeでのインストール方法](/image_howToUsePWA/pc-chrome.png)
 
@@ -8,7 +8,8 @@
 ![PC-Edgeでのインストール方法](/image_howToUsePWA/pc-edge.png)
 
 ### Safari
-Coming soon...
+不明...
+「Safari PWA 方法」で検索
 
 ## Android
 ### Chrome
@@ -25,7 +26,7 @@ Coming soon...
 
 ## iOS
 ### Chrome
-共有より「インストール」をクリック
+共有より「ホーム画面に追加」をクリック
 ![iOS-Chromeでのインストール方法](/image_howToUsePWA/iOS-Chrome.jpg)
 
 ### Safari
