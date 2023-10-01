@@ -17,7 +17,7 @@ import { PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTil
 
 export const DashboardNav = ({ user }) => {
 	return (
-		<Flex direction={{ base: 'row', sm: 'column' }} align='center' justify={{ base: 'space-around', sm: 'end' }} h={{ base: '80px', sm: '100dvh' }} w={{ base: '100%', sm: '80px' }} gap={{ base: '20px', sm: '30px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
+		<Flex direction={{ base: 'row', lg: 'column' }} align='center' justify={{ base: 'space-around', lg: 'end' }} h={{ base: '80px', lg: '100dvh' }} w={{ base: '100%', lg: '80px' }} gap={{ base: '20px', lg: '30px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
 			{user ? (
 				<>
 					<Button display='block' variant='link' colorScheme='orange'>
