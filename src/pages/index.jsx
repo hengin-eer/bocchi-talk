@@ -1,13 +1,35 @@
 import Head from 'next/head'
 import { PageHeader } from '@/components/page-header'
-import { Box, Button, Container, Flex, Heading, Image, ListItem, SimpleGrid, Stack, Text, UnorderedList } from '@chakra-ui/react'
-import { GradientHeading } from '@/components/custom-chakra-ui'
+import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react'
+import { ButtonLink, GradientHeading, LoginButton, PrimaryButton, Text100, Text110, Title100 } from '@/components/custom-chakra-ui'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
-import { signIn } from 'next-auth/react'
 
 
 export default function Home() {
+  const reasons = [
+    {
+      "key": 1,
+      "isReverse": false,
+      "imagePath": '/multi-lang-chat-mobile.png',
+      "title": "驚異の世界中の言語に対応！",
+      "text": "Bocchi Talkは、理論上、世の中全ての言語に対応しています！<br />ChatGPTを利用することで、世の中に存在するほとんど全ての言語で会話をすることが出来ます！",
+    },
+    {
+      "key": 2,
+      "isReverse": true,
+      "imagePath": '/feature-proofread-mobile.png',
+      "title": "文章校正で正しく言語を話そう！",
+      "text": "Bocchi Talkはデフォルトで文章校正機能を備えています。<br />正しく言語を話せるように、文法チェックと適切なフレーズの提案を行ってくれます！<br />正しい言語を話せていたら、校正についてのメッセージは表示されません！",
+    },
+    {
+      "key": 3,
+      "isReverse": false,
+      "imagePath": '/feature-option-mobile.png',
+      "title": "アシスト機能で効率的に学ぼう！",
+      "text": "Bocchi Talkは、オプションメニューにも様々な機能が用意されています。<br />例えば、辞書機能は文章の翻訳から使用される品詞の解説、2つの言語での例文紹介などが使えます！<br />今後アップデートによって追加される可能性もありますので、ぜひフィードバックから機能追加をリクエストしてください！",
+    },
+  ]
   return (
     <>
       <Head>
@@ -17,71 +39,144 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box id='headerArea' maxH='800px' bg='greenyellow' overflowY='hidden'>
+        <Box id='headerSection' h={{ base: 'full', lg: '700px' }} maxW='1080px' px={{ base: '20px', lg: '0' }} mx='auto' overflowY='hidden'>
           <PageHeader />
-          <Flex maxW='container.xl' mx='auto' px='30px' py='100px' columnGap='50px'>
-            <Image src='/top-page-mobile1.png' alt='hero image' />
-            <Flex direction='column' rowGap='50px'>
-              <Box>
-                <GradientHeading as='h1' size='2xl' wordBreak='keep-all'>ぼっちでもAIと(英)会話しよう！</GradientHeading>
-                <Heading mt='20px' color='black' as='h2' size='lg' fontWeight='normal'>Let's Talk anytime, anywhere!</Heading>
-              </Box>
-              <Box>
-                <Text fontSize='md'>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</Text>
-                <Text fontSize='md'>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
-                <Text fontSize='md'>たとえぼっちでも大丈夫！</Text>
-              </Box>
-              <Button w='max' colorScheme='pink' size='lg' onClick={() => signIn('google')}>ログインしてチャットを始めてみる</Button>
+          <Flex direction={{ base: 'column-reverse', lg: 'row' }} align={{ base: 'center', lg: 'flex-start' }} justify='center' gap='50px'
+            maxW='inherit' pt={{ base: '30px', lg: '80px' }} pb={{ base: '50px', lg: '0' }} mx='auto'>
+            <Image w={{ base: '300px', md: '350px' }} src='/hero-mobile.png' alt='hero image' />
+            <Flex direction='column' rowGap={{ base: '30px', lg: '50px' }}>
+              <Flex direction='column' align='flex-start' rowGap={{ base: '30px', lg: '50px' }}>
+                <Box>
+                  <GradientHeading as='h1' fontSize='40px'>ぼっちでもAIと会話しよう！</GradientHeading>
+                  <Heading mt='20px' color='black' as='h2' fontSize='32px' fontWeight='bold'>Talk any-time / where!</Heading>
+                </Box>
+                <Flex direction='column' align={{ base: 'center', lg: 'flex-start' }} gap='20px'>
+                  <Box fontSize={{ base: '16px', lg: '20px' }} lineHeight='150%'>
+                    <Text>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</Text>
+                    <Text>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
+                    <Text>たとえぼっちでも大丈夫！</Text>
+                  </Box>
+                  <Flex direction={{ base: 'column', lg: 'row' }} align='center' gap='20px'>
+                    <ButtonLink href='/#target-user'>こんな人におすすめ</ButtonLink>
+                    <ButtonLink href='/#features'>機能を見る</ButtonLink>
+                  </Flex>
+                </Flex>
+              </Flex>
+              <Flex direction='column' align='center' rowGap='10px'>
+                <LoginButton />
+              </Flex>
             </Flex>
           </Flex>
         </Box>
 
-        <GradientHeading textAlign='center' mt='100px' as='h1' size='2xl' lineHeight='tall'>ぼっちトークの特徴</GradientHeading>
+        <Box w='100%' py='80px' bgGradient='linear(to-br, #1DBEE1, #487EE7, #884FE4)' borderTopLeftRadius='80px'>
+          <Flex direction={{ base: 'column', lg: 'row' }} align='center' justify={{ base: 'center', lg: 'space-between' }}
+            w={{ base: '100%', lg: '1080px' }} px={{ base: '20px', lg: '0' }} mx='auto'>
+            <Flex direction='column' gap={{ base: '50px', lg: '80px' }} w={{ base: 'full', lg: '520px' }}>
+              <Title100 color='white'>
+                会話が思い通りにいかない？<br />
+                人間だもの。<br />
+                だからAIとお話ししよう！
+              </Title100>
+              <Flex direction='column' rowGap='30px'>
+                <Text100 color='white'>会話するときに次のようなことにうんざりしていませんか？</Text100>
+                <Flex direction='column' rowGap='20px' w='full' px={{ base: '20px', lg: '40px' }} py='20px' bg='rgba(255, 255, 255, 0.5)' borderRadius='40px'>
+                  <Flex align='center' columnGap='20px'>
+                    <Image src='/beforeList.svg' h='16px' />
+                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                  </Flex>
 
-        <Container maxW='container.lg' bg='white' px='30px' pt='100px'>
-          <Flex align='center' columnGap='50px'>
-            <Box>
-              <Heading as='h2' size='xl' lineHeight='tall'>AIを活用した(英)会話アプリ</Heading>
-              <Stack mt='30px' spacing='10px'>
-                <Text fontSize='md'>人相手だと気を使ったり、話す内容を考える時間が短くて混乱してしまうこともあります。</Text>
-                <Text fontSize='md'>このぼっちトークでは相手(AI)のことは気にせずにマイペースで取り組むことが出来ます。</Text>
-                <Text fontSize='md'>もう人との相性や、会話内容を急いで考えることなどに悩む必要はありません！！</Text>
-                <Text fontSize='md'>AIとの会話を通して、英語を話すことに慣れることができます。</Text>
-              </Stack>
-            </Box>
-            <Image mt='' ml='auto' w='450px' src='/top-page-with-ai.png' alt='top-page with AI' />
+                  <Flex align='center' columnGap='20px'>
+                    <Image src='/beforeList.svg' h='16px' />
+                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                  </Flex>
+
+                  <Flex align='center' columnGap='20px'>
+                    <Image src='/beforeList.svg' h='16px' />
+                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                  </Flex>
+                </Flex>
+                <Text100 color='white'>
+                  人とのコミュニケーションは素晴らしいですが、相手が
+                  ヒトだからこそ抱える問題があります。<br />
+                  これは学習機会において弊害でしかありません。
+                </Text100>
+              </Flex>
+            </Flex>
+
+            <Image display={{ base: 'none', lg: 'block' }} w='300px' borderRadius='36px' src='/lets-chat-mobile.png' alt='hero image' />
           </Flex>
-        </Container>
+        </Box>
 
-        <Container maxW='container.lg' bg='white' px='30px' pt='100px'>
-          <Flex align='center' columnGap='50px'>
-            <Image w='400px' src='/top-page-earth.svg' alt='top-page earth' />
-            <Flex direction='column' align='flex-start'>
-              <Heading as='h2' size='xl' lineHeight='tall'>驚異の世界中の言語に対応！</Heading>
-              <Box mt='30px'>
-                <Text fontSize='md'>ぼっちトークは、ほとんど世の中全ての言語に対応しています！</Text>
-                <Text fontSize='md'>ChatGPTのシステムを利用することで、世の中に存在するほとんど全ての言語で会話をすることが出来ます！</Text>
-              </Box>
+        <Flex align='center' justify='center' gap='30px' h={{ base: 'full', lg: '300px' }} w='100%' px='20px' py={{ base: '50px', lg: '0' }}>
+          <Box h='2px' w={{ base: '30px', lg: '50px' }} bg='black' borderRadius='1px'></Box>
+
+          <Title100>
+            だから、私は<Box as='br' display={{ base: 'block', lg: 'none' }} />
+            Bocchi Talkを<Box as='br' display={{ base: 'block', md: 'none' }} />
+            使っています
+          </Title100>
+
+          <Box h='2px' w={{ base: '30px', lg: '50px' }} bg='black' borderRadius='1px'></Box>
+        </Flex>
+
+        {reasons.map((reason) => (
+          <Box w='100%' key={reason.key}>
+            <Flex direction={{ base: 'column-reverse', lg: reason.isReverse ? 'row-reverse' : 'row' }} align='center' justify='center' gap='50px'
+              w={{ base: '100%', lg: '1080px' }} py={{ base: '50px', lg: '0px' }} px={{ base: '20px', lg: '0' }} mx='auto'>
+              <Image w='250px' src={reason.imagePath} alt='hero image' />
+
+              <Flex direction='column' rowGap='50px' w={{ base: 'full', lg: '600px' }}>
+                <GradientHeading as='h2' fontSize='32px' wordBreak='keep-all'>{reason.title}</GradientHeading>
+                <Text110>{reason.text}</Text110>
+              </Flex>
+            </Flex>
+          </Box>
+        ))}
+
+        <Flex direction='column' align='center' rowGap='30px' py='100px' mx='auto'>
+          <Text fontSize='20px' lineHeight='150%'>追加機能を募集しています！！</Text>
+          <PrimaryButton>機能をリクエストする</PrimaryButton>
+        </Flex>
+
+        <Flex id='target-user' direction='column' align='center' w='full' py='100px' bg='#884FE4'>
+          <Title100 color='white'>こんな人におすすめ</Title100>
+
+          <Flex direction={{ base: 'column', lg: 'row' }} align='center' gap='50px' py={{ base: '80px', lg: '100px' }}>
+            <Flex direction='column' rowGap='30px' w='300px'>
+              <Box h='200px' bg='white' borderRadius='20px'></Box>
+              <Text100 color='white'>
+                英会話を始めてみたいけど、いきなり対面で始めるのは大変そう。
+                日本語で質問できないのは致命的なので始められない。
+              </Text100>
+            </Flex>
+
+            <Flex direction='column' rowGap='30px' w='300px'>
+              <Box h='200px' bg='white' borderRadius='20px'></Box>
+              <Text100 color='white'>
+                英会話をやっているけど、レッスンの時間を制限されるのが嫌。
+                講師の方に気を使って思いっきり取り組めない。
+              </Text100>
+            </Flex>
+
+            <Flex direction='column' rowGap='30px' w='300px'>
+              <Box h='200px' bg='white' borderRadius='20px'></Box>
+              <Text100 color='white'>
+                英会話を長くやっているけど、もう少しディープな話題やマイペースで進めるなど自由に会話を楽しみたい。
+              </Text100>
             </Flex>
           </Flex>
-        </Container>
 
-        <Container maxW='container.lg' px='30px' pt='100px'>
-          <GradientHeading textAlign='center' as='h2' size='2xl' lineHeight='tall'>こんな人におすすめ</GradientHeading>
-          <SimpleGrid columns={[1, 1, 2, 2]} minChildWidth='360px' spacing='40px' mt='100px'>
-            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
-            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
-            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
-            <Box h='300px' borderRadius='20px' bg='gray.400'></Box>
-          </SimpleGrid>
-          <UnorderedList w='max-content' my='100px' mx='auto' spacing='20px' fontSize='20px'>
-            <ListItem>英語を話すのが恥ずかしい。</ListItem>
-            <ListItem>英語を話すのが怖い。</ListItem>
-            <ListItem>英語を話すのが苦手。</ListItem>
-            <ListItem>英語を話すのが緊張する。</ListItem>
-            <ListItem>英語を話すのが不安。</ListItem>
-          </UnorderedList>
-        </Container>
+          <Flex direction='column' align='center' rowGap='50px' py='100px'>
+            <Title100 color='white'>早速始めよう！</Title100>
+            <LoginButton />
+          </Flex>
+        </Flex>
+
+        <Flex direction='column' align='center' py='50px' bg='greenyellow'>
+          <Text100>&copy; 2023~ Bocchi Talk App.</Text100>
+          <Text100>All rights reserved.</Text100>
+        </Flex>
       </main>
     </>
   )

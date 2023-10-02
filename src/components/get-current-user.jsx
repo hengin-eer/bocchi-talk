@@ -11,7 +11,7 @@ export const GetCurrentUser = () => {
         if (window.location.pathname === '/') setIsSession(false)
         else if ((window.location.pathname !== '/') && !isSession) setIsSession(true)
         else return
-        console.log('isSession is changed!!')
+        // console.log('isSession is changed!!')
     }, [])
     const { data: session } = useSession({ required: isSession })
     if (!isFetched && session && !currentUser) {

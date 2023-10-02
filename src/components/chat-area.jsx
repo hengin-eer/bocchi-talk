@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
 import { PiCheckBold, PiMicrophoneFill, PiPaperPlaneRightFill, PiXBold } from 'react-icons/pi'
-import React, { use, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
@@ -97,7 +97,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 				}
 				setChats((prev) => [...prev, proofreadingSentences]);
 				addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
-				console.log(proovedText)
+				// console.log(proovedText)
 			}
 
 			setChats((prev) => [...prev, msgData.result]);
@@ -148,7 +148,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	if (scrollContainer.current) {
 		scrollContainer.current.scrollTop = scrollContainer.current.scrollHeight;
 	}
-	console.log("chatsが更新されました。");
+	// console.log("chatsが更新されました。");
 
 	return (
 		<Box height={`calc(${viewportHeight}px - ${56}px)`} overflowY='hidden' onClick={() => onClose()}> {/* クリックしたときにメニューを閉じる */}
