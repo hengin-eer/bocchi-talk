@@ -56,10 +56,13 @@ Googleの[プライバシーポリシー](http://www.google.com/intl/ja/policies
 
 ### X(旧Twitter)
 
-[https://twitter.com/QwerTayu/](https://twitter.com/QwerTayu/)
+[https://twitter.com/tayu99_qwert/](https://twitter.com/tayu99_qwert/)
 
 [https://twitter.com/tim_daik/](https://twitter.com/tim_daik/)
 
 ### GitHubリポジトリ
 
 [https://github.com/hengin-eer/bocchi-talk](https://github.com/hengin-eer/bocchi-talk)
+
+## 10. 施行・更新日
+2023年10月02日-更新
