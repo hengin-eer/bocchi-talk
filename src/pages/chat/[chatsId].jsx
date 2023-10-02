@@ -13,6 +13,7 @@ export default function chat() {
 	const currentUser = useRecoilValue(currentUserState)
 	const chatsData = useRecoilValue(chatsDataState)
 	const [chatTitle, setChatTitle] = useRecoilState(chatTitleState)
+	const [isMessagesFetched, setIsMessagesFetched] = useState(false)
 
 	const router = useRouter()
 	if (router.isReady && currentUser) {
@@ -20,7 +21,7 @@ export default function chat() {
 		if (chatsData.length !== 0) setChatTitle(chatsData.filter((chat) => chat.id === id).map((chat) => chat.title)[0])
 
 
-		if (messages.length === 0) {
+		if (!isMessagesFetched && (messages.length === 0)) {
 			; (async () => {
 				const colRef = collection(db, 'users', currentUser.email, 'chats', id, 'messages');
 				const snapShots = await getDocs(colRef)
@@ -31,6 +32,8 @@ export default function chat() {
 				})
 				setMessages(docs.sort((a, b) => a.createdAt.seconds - b.createdAt.seconds))
 			})()
+			console.log("2.メッセージを追加！")
+			setIsMessagesFetched(true)
 		}
 
 		if ((chatsData.length === 0) && (messages.length !== 0)) {
