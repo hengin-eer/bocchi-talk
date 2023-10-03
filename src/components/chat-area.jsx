@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
 import { PiCheckBold, PiMicrophoneFill, PiPaperPlaneRightFill, PiXBold } from 'react-icons/pi'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AutoResizeTextarea } from './custom-chakra-ui';
 import { useFirestore } from '@/hooks/useFirestore';
@@ -142,7 +142,10 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	}, []);
 
 	if (isClient && !browserSupportsSpeechRecognition) return <Box>ブラウザが音声認識に対応していません。</Box>;
-	transcript && setMessage({ role: "user", content: transcript });
+	useMemo(() => {
+		transcript && setMessage({ role: "user", content: transcript });
+		console.log(transcript);
+	}, [transcript])
 
 	// ここにページ下までスクロールするコードを追記する
 	if (scrollContainer.current) {
