@@ -22,6 +22,7 @@ export default function Dashboard() {
 	const currentUser = useRecoilValue(currentUserState)
 	const [currentChatTitle, setCurrentChatTitle] = useState('')
 	const [ newsData, setNewsData ] = useState([])
+	const [ isFetched, setIsFetched ] = useState(false);
 
 	if (currentUser && chatsData.length === 0) {
 		; (async () => {
@@ -39,10 +40,11 @@ export default function Dashboard() {
 
 	const randomSlug = Randomstring.generate(16);
 	
-	if (currentUser) {
+	if (currentUser && !isFetched) {
 		; (async () => {
 			const data = await getNewsData();
 			setNewsData(data);
+			setIsFetched(true);
 		})()
 	}
 
