@@ -9,7 +9,7 @@ export const DashboardLayout = ({ children }) => {
     return (
         <Flex h='100dvh' direction={{ base: 'column-reverse', lg: 'row' }} justify='space-between'>
             <DashboardNav user={currentUser} />
-            <Box w='full' p='20px'>
+            <Box w='full' p='20px' overflowY='auto'>
                 {children}
             </Box>
         </Flex>
