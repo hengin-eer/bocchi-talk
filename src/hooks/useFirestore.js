@@ -62,5 +62,15 @@ export const useFirestore = () => {
         return messages
     }
 
-    return { addChatsData, updateChatsData, deleteChatsData, addChatTitle, addFirestoreDoc, useMessages }
+    const getNewsData = async () => {
+        const snapshot = await getDocs(collection(db, 'news'))
+        const getData = snapshot.docs.map((doc) => {
+            const data = doc.data()
+            data.strId = doc.id
+            return data
+        })
+        return getData
+    }
+
+    return { addChatsData, updateChatsData, deleteChatsData, addChatTitle, addFirestoreDoc, useMessages, getNewsData }
 }
