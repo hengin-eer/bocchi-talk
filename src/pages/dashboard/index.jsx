@@ -1,8 +1,9 @@
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spacer, Text } from '@chakra-ui/react'
 import { Box, Editable, Flex, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
-import { PiPlusCircleFill } from 'react-icons/pi'
+import { PiBellZBold, PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
 import { EditableChatList } from '@/components/editable-controls'
 import { collection, getDocs } from 'firebase/firestore'
@@ -11,13 +12,16 @@ import { DashboardLayout } from '@/components/dashboard-layout'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentUserState } from '@/states/currentUserState'
 import { chatsDataState, hoveredChatState } from '@/states/chatsDataState'
+import { useFirestore } from '@/hooks/useFirestore'
 
 export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
+	const { getNewsData } = useFirestore()
 	const hoveredChat = useRecoilValue(hoveredChatState)
 	const currentUser = useRecoilValue(currentUserState)
 	const [currentChatTitle, setCurrentChatTitle] = useState('')
+	const [ newsData, setNewsData ] = useState([])
 
 	if (currentUser && chatsData.length === 0) {
 		; (async () => {
@@ -33,7 +37,14 @@ export default function Dashboard() {
 		})()
 	}
 
-	const randomSlug = Randomstring.generate(16)
+	const randomSlug = Randomstring.generate(16);
+	
+	if (currentUser) {
+		; (async () => {
+			const data = await getNewsData();
+			setNewsData(data);
+		})()
+	}
 
 	return (
 		<DashboardLayout>
@@ -66,6 +77,33 @@ export default function Dashboard() {
 					<Link href={`/chat/${randomSlug}`}>新しくチャットを始める</Link>
 				</Flex>
 			</Flex>
+			<Heading as='h1' size='lg' mt='10px'>News</Heading>
+			<Accordion allowToggle py='20px'>
+				{newsData.slice() // オリジナルの配列を変更せずにコピーを作成
+  				.sort((b, a) => a.date.seconds - b.date.seconds) // 日付でソート
+  				.map((newData, index) => (
+					<AccordionItem key={index}>
+						<h2>
+							<AccordionButton>
+								<Flex as="span" textAlign='left'>
+									<Icon as={PiBellZBold} w={6} h={6} mr={2} color='slategray' />
+									<Text fontSize='md'>{newData.titleJA}</Text>
+								</Flex>
+								<Spacer />
+								<Text pr={2} color='gray.500'>-{new Date(newData.date.seconds * 1000).toLocaleDateString('ja-JP')}-</Text>
+								<AccordionIcon />
+							</AccordionButton>
+						</h2>
+						<AccordionPanel pb={4} pl={12}>
+							{newData.isInNewTab?(
+								<Link href={newData.linkURL} target="_blank" rel="noopener noreferrer"><Text fontSize='sm'>{newData.contentJA}</Text></Link>
+							) : (
+								<Link href={newData.linkURL}><Text fontSize='sm'>{newData.contentJA}</Text></Link>
+							)}
+						</AccordionPanel>
+					</AccordionItem>
+				))}
+			</Accordion>
 		</DashboardLayout>
 	)
 }
