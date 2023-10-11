@@ -88,12 +88,12 @@ export default function Home() {
 
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                    <Text100>相手が消極的だから会話が弾まない</Text100>
                   </Flex>
 
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                    <Text100>相手の話し方や、態度が気になる</Text100>
                   </Flex>
                 </Flex>
                 <Text100 color='white'>
