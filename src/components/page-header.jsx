@@ -9,7 +9,7 @@ export const PageHeader = () => {
                 <Image src={'/512x512_Bocchi-Talk.png'} alt='Bocchi Talk' boxSize='50px' />
                 <GradientText fontSize='24px' fontWeight='bold'>Bocchi Talk</GradientText>
             </Flex>
-            <ButtonLink href='/'>お問い合わせ</ButtonLink>
+            <ButtonLink href='https://forms.gle/EWAGxPBGrEeKSWJg9'>お問い合わせ</ButtonLink>
         </Flex>
     )
 }
