@@ -51,9 +51,10 @@ export const PrimaryButton = ({ children, icon = PiPaperPlaneTiltFill }) => {
 	)
 }
 
-export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = '' }, props) => {
+export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = '', isBlank=false }, props) => {
 	return (
-		<Button as='a' href={href} {...props} variant='unstyled' display='block'
+		<Button as='a' href={href} target={isBlank ? '_blank' : '_self'} rel="noopener noreferrer"
+			{...props} variant='unstyled' display='block'
 			h='max' w='max' px='25px' py='10px' color='black' bg='white'
 			border='2px' borderColor='#884FE4' borderRadius='full' transitionDuration='.3s'
 			_hover={{ color: 'white', bg: '#884FE4' }}>
