@@ -108,7 +108,7 @@ export default function Home() {
           </Flex>
         </Box>
 
-        <Flex align='center' justify='center' gap='30px' h={{ base: 'full', lg: '300px' }} w='100%' px='20px' py={{ base: '50px', lg: '0' }}>
+        <Flex id='features' align='center' justify='center' gap='30px' h={{ base: 'full', lg: '300px' }} w='100%' px='20px' py={{ base: '50px', lg: '0' }}>
           <Box h='2px' w={{ base: '30px', lg: '50px' }} bg='black' borderRadius='1px'></Box>
 
           <Title100>
