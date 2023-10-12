@@ -33,7 +33,7 @@ export const DashboardNav = ({ user }) => {
 						</Link>
 					</Button>
 					<Button display='block' variant='link' colorScheme='cyan'>
-						<a href="https://forms.gle/uLbxD1v2XmXhXfer7" target="_blank" rel="noopener noreferrer">
+						<a href="https://forms.gle/EWAGxPBGrEeKSWJg9" target="_blank" rel="noopener noreferrer">
 							<Icon boxSize='30px' as={PiPaperPlaneTiltFill} />
 							<Text fontSize='xs'>FeedBack</Text>
 						</a>
