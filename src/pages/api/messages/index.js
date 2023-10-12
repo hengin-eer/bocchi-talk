@@ -32,8 +32,25 @@ export default async function handler( req, res ) {
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
+      if (error.response.status === 429) {
+        console.error(
+          `OpenAI API rate limit exceeded: ${error.response.data.error.message}`
+        );
+        res.status(429).json({
+          error: {
+            status: 429,
+            message: "OpenAI API rate limit exceeded.",
+          },
+        });
+        return;
+      }
       console.error(error.response.status, error.response.data);
-      res.status(error.response.status).json(error.response.data);
+      res.status(error.response.status).json({
+        error: {
+          status: error.response.status,
+          message: error.response.data.error.message,
+        },
+      });
     } else {
       console.error(`Error with OpenAI API request: ${error.message}`);
       res.status(500).json({
