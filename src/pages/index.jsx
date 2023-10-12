@@ -88,12 +88,12 @@ export default function Home() {
 
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                    <Text100>相手が消極的だから会話が弾まない</Text100>
                   </Flex>
 
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
+                    <Text100>相手の話し方や、態度が気になる</Text100>
                   </Flex>
                 </Flex>
                 <Text100 color='white'>
@@ -108,7 +108,7 @@ export default function Home() {
           </Flex>
         </Box>
 
-        <Flex align='center' justify='center' gap='30px' h={{ base: 'full', lg: '300px' }} w='100%' px='20px' py={{ base: '50px', lg: '0' }}>
+        <Flex id='features' align='center' justify='center' gap='30px' h={{ base: 'full', lg: '300px' }} w='100%' px='20px' py={{ base: '50px', lg: '0' }}>
           <Box h='2px' w={{ base: '30px', lg: '50px' }} bg='black' borderRadius='1px'></Box>
 
           <Title100>
