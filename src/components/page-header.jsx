@@ -12,7 +12,7 @@ export const PageHeader = () => {
                     <GradientText fontSize='24px' fontWeight='bold'>Bocchi Talk</GradientText>
                 </Flex>
             </Link>
-            <ButtonLink href='https://forms.gle/EWAGxPBGrEeKSWJg9' isBlank={true}>お問い合わせ</ButtonLink>
+            <ButtonLink href='https://forms.gle/NK5GJSAVJzUGDtao7' isBlank={true}>お問い合わせ</ButtonLink>
         </Flex>
     )
 }
