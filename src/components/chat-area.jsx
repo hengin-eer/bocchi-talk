@@ -103,7 +103,11 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			setChats((prev) => [...prev, msgData.result]);
 			addFirestoreDoc(msgData.result, currentUser.email, chatsId)
 		} catch (error) {
-			console.log(error);
+			console.error(error);
+			if (error.status === 429) {
+				alert("Error 429: サーバーへのリクエストが多すぎます。しばらく時間をおいてから再度お試しください。")
+			}
+			alert(`Error ${error.status}: サーバーとの通信に失敗しました。ページをリロードしてください！`)
 		}
 	};
 
