@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, Icon } from '@chakra-ui/icons'
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Select, Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Select, Spacer, Switch, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { PiArchiveBoxBold, PiFacebookLogoBold, PiGearSixBold, PiLinkBold, PiListBulletsBold, PiNotepadBold, PiSnapchatLogoBold, PiTranslateBold, PiTwitterLogoBold } from 'react-icons/pi'
@@ -9,20 +9,26 @@ import { speechLanguageState } from '@/states/speechLanguageState'
 import { AutoResizeTextarea } from '@/components/custom-chakra-ui'
 import { translateLanguageState } from '@/states/translateLanguageState'
 import { isWaitChatGPTState } from '@/states/isWaitChatGPTState'
+import isProofOnState from '@/states/isProofOnState'
 
 export const AppHeader = ({ chatTitle }) => {
-	const [ speechLanguage, setSpeechLanguage ] = useRecoilState(speechLanguageState);
-	const [ translatedLanguage, setTranslatedLanguage ] = useRecoilState(translateLanguageState);
+	const [speechLanguage, setSpeechLanguage] = useRecoilState(speechLanguageState);
+	const [translatedLanguage, setTranslatedLanguage] = useRecoilState(translateLanguageState);
 	const { isOpen, onOpen, onClose } = useDisclosure()
-	const [ originalText, setOriginalText ] = useState({ role: "user", content: "" });
-	const [ translatedText, setTranslatedText ] = useState({ role: "assistant", content: "" });
-	const [ isWaitChatGPT, setIsWaitChatGPT ] = useRecoilState(isWaitChatGPTState);
+	const [originalText, setOriginalText] = useState({ role: "user", content: "" });
+	const [translatedText, setTranslatedText] = useState({ role: "assistant", content: "" });
+	const [isWaitChatGPT, setIsWaitChatGPT] = useRecoilState(isWaitChatGPTState);
+	const [isProofOn, setIsProofOn] = useRecoilState(isProofOnState)
 
 	const handleInputChange = (value) => {
 		setOriginalText({
 			role: "user",
 			content: value
 		});
+	}
+
+	const toggleProof = () => {
+		setIsProofOn(!isProofOn)
 	}
 
 	const onClickTranslate = async (e) => {
@@ -39,14 +45,14 @@ export const AppHeader = ({ chatTitle }) => {
 				},
 				body: JSON.stringify({
 					message: [
-					{
-						role: "system",
-						content: "system_prompt",
-					},
-					{
-						role: "user",
-						content: "命令 \n あなたは高性能な翻訳アプリです。\"" + originalText.content + "\"を" + translatedLanguage + "に翻訳した結果を出力してください。\n 条件 \n 出力には「翻訳された単語」(\"\"は含まない), 「品詞」, 「意味」, 「例文と" + translatedLanguage + "語訳」, 「説明(簡潔に)」を含めてください。それぞれは改行が必要ですが、箇条書きや太字は使用しないでください。意味などが複数ある場合はすべて出力してください。",
-					},]
+						{
+							role: "system",
+							content: "system_prompt",
+						},
+						{
+							role: "user",
+							content: "命令 \n あなたは高性能な翻訳アプリです。\"" + originalText.content + "\"を" + translatedLanguage + "に翻訳した結果を出力してください。\n 条件 \n 出力には「翻訳された単語」(\"\"は含まない), 「品詞」, 「意味」, 「例文と" + translatedLanguage + "語訳」, 「説明(簡潔に)」を含めてください。それぞれは改行が必要ですが、箇条書きや太字は使用しないでください。意味などが複数ある場合はすべて出力してください。",
+						},]
 				}),
 			});
 
@@ -127,12 +133,12 @@ export const AppHeader = ({ chatTitle }) => {
 													<option value='th-TH'>ภาษาไทย(タイ語)</option>
 												</Select>
 											</Flex>
-											{isWaitChatGPT ? 
+											{isWaitChatGPT ?
 												<Button mt='1rem' w='100%' variant='outline' colorScheme='gray'>Wait...</Button>
-											:
+												:
 												<Button mt='1rem' w='100%' variant='outline' colorScheme='gray' onClick={onClickTranslate}>Translate</Button>
 											}
-											<Text mt='1rem' w='100%' css={{whiteSpace: 'pre-wrap',}}>{translatedText.content}</Text>
+											<Text mt='1rem' w='100%' css={{ whiteSpace: 'pre-wrap', }}>{translatedText.content}</Text>
 										</Box>
 									</TabPanel>
 									<TabPanel>
@@ -154,6 +160,13 @@ export const AppHeader = ({ chatTitle }) => {
 												<option value='de-DE'>German(ドイツ語)</option>
 												<option value='th-TH'>ภาษาไทย(タイ語)</option>
 											</Select>
+										</Box>
+
+										<Box mb='2rem'>
+											<Text mb='1rem' fontSize='lg'>校正機能を有効にする</Text>
+											<Switch size='lg' colorScheme='green'
+												onChange={() => toggleProof()} isChecked={isProofOn}
+											/>
 										</Box>
 
 										<Box>
