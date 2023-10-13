@@ -7,6 +7,7 @@ import { useFirestore } from '@/hooks/useFirestore';
 import { useRecoilValue } from 'recoil';
 import { speechLanguageState } from '@/states/speechLanguageState';
 import { NewerDiffMessages, OlderDiffMessages } from './preview-diff-messages';
+import isProofOnState from '@/states/isProofOnState';
 
 export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const speechLanguage = useRecoilValue(speechLanguageState)
@@ -28,6 +29,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
 	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
+	const isProofOn = useRecoilValue(isProofOnState)
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -46,22 +48,38 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			setMessage({ role: "user", content: "" });
 			setChats((prev) => [...prev, message]);
 
-			const proofResponse = await fetch("/api/proofread", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					message: proovedText,
-				}),
-			});
+			if (isProofOn) {
+				const proofResponse = await fetch("/api/proofread", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						message: proovedText,
+					}),
+				});
 
-			const proofData = await proofResponse.json();
-			if (proofResponse.status !== 200) {
-				throw (
-					proofData.error ||
-					new Error(`Request failed with status ${proofResponse.status}`)
-				);
+				const proofData = await proofResponse.json();
+				if (proofResponse.status !== 200) {
+					throw (
+						proofData.error ||
+						new Error(`Request failed with status ${proofResponse.status}`)
+					);
+				}
+
+				const proofText = proofData.result.content;
+				if (proofText !== proovedText) {
+					const proofreadingSentences = {
+						role: "proofread",
+						content: {
+							beforeText: proovedText,
+							afterText: proofText,
+						},
+					}
+					setChats((prev) => [...prev, proofreadingSentences]);
+					addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
+					// console.log(proovedText)
+				}
 			}
 
 			// ChatGPT APIと通信
@@ -84,20 +102,6 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					msgData.error ||
 					new Error(`Request failed with status ${msgResponse.status}`)
 				);
-			}
-
-			const proofText = proofData.result.content;
-			if (proofText !== proovedText) {
-				const proofreadingSentences = {
-					role: "proofread",
-					content: {
-						beforeText: proovedText,
-						afterText: proofText,
-					},
-				}
-				setChats((prev) => [...prev, proofreadingSentences]);
-				addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
-				// console.log(proovedText)
 			}
 
 			setChats((prev) => [...prev, msgData.result]);
