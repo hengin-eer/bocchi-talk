@@ -41,12 +41,11 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			e.preventDefault()
 			if (message.content === "") return;
 			resetTranscript()
-
 			if (firestoreMessages.length === 0) addChatsData(currentUser.email, chatsId)
 			else updateChatsData(currentUser.email, chatsId)
 			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
-			setChats((prev) => [...prev, message]);
+			setChats((prev) => [...prev, message, { role: "loading", content: true }]);
 
 			if (isProofOn) {
 				const proofResponse = await fetch("/api/proofread", {
@@ -89,7 +88,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					message: [...chats, message].filter(d => d.role !== "proofread").map((d) => ({
+					message: [...chats, message].filter(d => d.role !== "proofread").filter(d => d.role !== "loading").map((d) => ({
 						role: d.role,
 						content: d.content,
 					})),
@@ -104,7 +103,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 				);
 			}
 
-			setChats((prev) => [...prev, msgData.result]);
+			setChats(prev => [...prev.filter((chat) => chat.role !== "loading"), msgData.result]);
 			addFirestoreDoc(msgData.result, currentUser.email, chatsId)
 		} catch (error) {
 			console.error(error);
@@ -197,6 +196,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 								</Flex>
 							)}
 							{(message.role === "assistant" || message.role === "user") && message.content}
+							{(message.role === "loading" && message.content == true) && "loading..."}
 						</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
