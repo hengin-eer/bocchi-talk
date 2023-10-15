@@ -1,105 +1,11 @@
-import { Flex, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react'
+import { Box, Flex, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
 import { ButtonLink, GradientText, ResponsiveButtonLink } from './custom-chakra-ui'
 import Link from 'next/link'
-import { PiBellRingingFill, PiClockClockwiseFill, PiEnvelopeSimpleFill } from 'react-icons/pi'
+import { PiArrowSquareOutFill, PiBellRingingFill, PiClockClockwiseFill, PiEnvelopeSimpleFill } from 'react-icons/pi'
 
 export const PageHeader = ({ newsData }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    console.log(newsData)
-
-    const newsDataSample = [
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-        {
-            "titleJA": "Bocchi Talkのベータ版がリリースされました！",
-            "contentJA": "こんにちは、Bocchi Talkのベータ版がリリースされました！是非お試しください。",
-            "date": {
-                "seconds": 1631958000,
-                "nanoseconds": 0
-            },
-            "strId": "bocchi-talk-beta-released",
-        },
-    ]
 
     return (
         <Flex align='center' justify='space-between' h='70px' w='100%' >
@@ -124,20 +30,30 @@ export const PageHeader = ({ newsData }) => {
                 <ModalContent maxW='80vw'>
                     <ModalHeader>お知らせ</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody h='auto' maxH='70vh' overflowY='scroll'>
-                        {newsDataSample.slice()
+                    <ModalBody h='auto' maxH='70vh' overflowY='auto'>
+                        {newsData.slice()
                             .sort((b, a) => a.date.seconds - b.date.seconds)
                             .map((news) => (
                                 <Flex direction='column' align='flex-start' key={news.strId} mb='30px'>
-                                    <Flex justify='flex-start' columnGap='10px' w='100%' mb='10px'>
+                                    <Flex direction={{ base: 'column', md: 'row' }} justify='flex-start' gap={{ base: '5px', md: '10px' }} w='100%' mb='10px'>
                                         <Flex align='center' columnGap='5px'>
                                             <Icon as={PiClockClockwiseFill} fontSize='16px' />
                                             <Text fontSize='14px'>
                                                 {new Date(news.date.seconds * 1000).toLocaleDateString('ja-JP')}
                                             </Text>
                                         </Flex>
-                                        <Text fontSize='20px' fontWeight='bold'>{news.titleJA}</Text>
+                                        <Link
+                                            href={(news.linkURL === '#') ? '' : news.linkURL}
+                                            target={news.isInNewTab ? '_blank' : '_self'}
+                                            rel="noopener noreferrer"
+                                        >
+                                            <Text color={(news.linkURL === '#') ? 'black' : '#884FE4'} fontSize='20px' fontWeight='bold'>
+                                                {news.isInNewTab && <Icon as={PiArrowSquareOutFill} mr='2px' fontSize='24px' color='#884FE4' verticalAlign='text-bottom' />}
+                                                {news.titleJA}
+                                            </Text>
+                                        </Link>
                                     </Flex>
+
                                     <Text fontSize='16px'>{news.contentJA}</Text>
                                 </Flex>
                             ))}
