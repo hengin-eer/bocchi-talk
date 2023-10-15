@@ -1,7 +1,7 @@
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spacer, Text } from '@chakra-ui/react'
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spacer, Text, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Stack, Radio, RadioGroup, ModalFooter, Button, Input, Divider } from '@chakra-ui/react'
 import { Box, Editable, Flex, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
 import { PiBellZBold, PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
@@ -23,6 +23,12 @@ export default function Dashboard() {
 	const [currentChatTitle, setCurrentChatTitle] = useState('')
 	const [ newsData, setNewsData ] = useState([])
 	const [ isFetched, setIsFetched ] = useState(false);
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const initialRef = useRef(null);
+	const finalRef = useRef(null);
+	const [courseValue, setCourseValue] = useState('1');
+	const [rollValue, setRollValue] = useState('1');
+	const [discussionTheme, setDiscussionTheme] = useState('');
 
 	if (currentUser && chatsData.length === 0) {
 		; (async () => {
@@ -46,6 +52,38 @@ export default function Dashboard() {
 			setNewsData(data);
 			setIsFetched(true);
 		})()
+	}
+
+	const resetWizard = () => {
+		setCourseValue('1');
+		setRollValue('1');
+		setDiscussionTheme('');
+		onOpen();
+	}
+
+	const handleThemeChange = (value) => {
+		setDiscussionTheme(value);
+	}
+
+	const onClickWizardSave = () => {
+		if (courseValue === '1') {
+			if (discussionTheme === '') {
+				return;
+			}
+			onClose();
+			console.log(discussionTheme);
+		} else if (courseValue === '2') {
+			if (rollValue === '1') {
+				onClose();
+				console.log('空港');
+			} else if (rollValue === '2') {
+				onClose();
+				console.log('ホテル');
+			}
+		} else if (courseValue === '3') {
+			onClose();
+			console.log('フリートーク');
+		}
 	}
 
 	return (
@@ -76,7 +114,7 @@ export default function Dashboard() {
 				))}
 				<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
 					<Icon as={PiPlusCircleFill} color='slategray' w={6} h={6} />
-					<Link href={`/chat/${randomSlug}`}>新しくチャットを始める</Link>
+					<Button onClick={resetWizard}>新しくチャットを始める</Button>{/* <Link href={`/chat/${randomSlug}`}>新しくチャットを始める</Link> */}
 				</Flex>
 			</Flex>
 			<Heading as='h1' size='lg' mt='10px'>News</Heading>
@@ -106,6 +144,56 @@ export default function Dashboard() {
 					</AccordionItem>
 				))}
 			</Accordion>
+			<Modal
+				initialFocusRef={initialRef}
+				finalFocusRef={finalRef}
+				isOpen={isOpen}
+				onClose={onClose}
+			>
+				<ModalOverlay />
+				<ModalContent mx={2}>
+					<ModalHeader>Start Chat with Wizard</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody pb={6}>
+						<RadioGroup onChange={setCourseValue} value={courseValue} mb={2}>
+							<Stack direction='row'>
+								<Radio value='1'>Discussion</Radio>
+								<Radio value='2'>Roll Play</Radio>
+								<Radio value='3'>Free Talk</Radio>
+							</Stack>
+						</RadioGroup>
+						{courseValue === '1' && (
+							<>
+								<Divider/>
+								<Text fontSize='sm' mt={2}>Input the theme</Text>
+								<Input placeholder='Theme...' onChange={(e) => handleThemeChange(e.target.value)} mt={1}/>
+								{discussionTheme === '' && (
+									<Text fontSize='xs' ml={2} mt={1} color='tomato'>テーマを入力してください</Text>
+								)}
+							</>
+						)}
+						{courseValue === '2' && (
+							<>
+								<Divider />
+								<RadioGroup onChange={setRollValue} value={rollValue} mt={2}>
+									<Stack>
+										<Radio value='1'>Airport</Radio>
+										<Radio value='2'>Hotel</Radio>
+										<Radio isDisabled>Coming soon...</Radio>
+									</Stack>
+								</RadioGroup>
+							</>
+						)}
+					</ModalBody>
+
+					<ModalFooter>
+						<Button colorScheme='blue' mr={3} onClick={onClickWizardSave}>
+						Go
+						</Button>
+						<Button onClick={onClose}>Cancel</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</DashboardLayout>
 	)
 }
