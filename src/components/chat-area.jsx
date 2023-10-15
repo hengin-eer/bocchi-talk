@@ -30,6 +30,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const scrollContainer = useRef(null);
 	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
 	const isProofOn = useRecoilValue(isProofOnState)
+	const loadingAnime = ["🤫", "🫢", "🤔", "🫡"];
+	const animeNum = useRef(0);
+
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -38,7 +41,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 
 	const sendMessage = async (e) => {
 		try {
-			const defaultLoadingAnime = "🤫"
+			
 			e.preventDefault()
 			if (message.content === "") return;
 			resetTranscript()
@@ -46,28 +49,21 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 			else updateChatsData(currentUser.email, chatsId)
 			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
-			setChats((prev) => [...prev, message, { role: "loadingNow", content: defaultLoadingAnime }]);
+			setChats((prev) => [...prev, message, { role: "loadingNow", content: loadingAnime[animeNum.current] }]);
 			
 			const intervalId = setInterval(() => {
-				// 毎回のインターバルで文字列を変更
 				setChats((prev) => {
-				const lastMessage = prev[prev.length - 1];
-				if (lastMessage.role === "loadingNow") {
-					if (lastMessage.content === "🤫") {
-					return [...prev.slice(0, -1), { role: "loadingNow", content: "🫢" }];
-					} else if (lastMessage.content === "🫢") {
-					return [...prev.slice(0, -1), { role: "loadingNow", content: "🤔" }];
-					} else if (lastMessage.content === "🤔") {
-					return [...prev.slice(0, -1), { role: "loadingNow", content: "🫡" }];
-					} else if (lastMessage.content === "🫡") {
-					return [...prev.slice(0, -1), { role: "loadingNow", content: "🤫" }];
-					} else {
-					return prev;
+					const lastMessage = prev[prev.length - 1];
+					console.log("intervalIdが発火しました.");
+					if (lastMessage.role === "loadingNow") {
+						console.log(animeNum.current, ": ", loadingAnime[animeNum.current]);
+						animeNum.current = (animeNum.current + 1) % loadingAnime.length;
+						return [...prev.slice(0, -1), { role: "loadingNow", content: loadingAnime[animeNum.current] }];
 					}
-				}
-				return prev;
+					console.log("intervalIdがクリアされました."); 
+					return prev;
 				});
-			}, 500);
+			}, 300);
 			
 			if (isProofOn) {
 				const proofResponse = await fetch("/api/proofread", {
@@ -103,8 +99,8 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 				}
 			}
 
-			setChats((prev) => [...prev.filter((chat) => chat.role !== "loadingNow"), { role: "loadingNow", content: defaultLoadingAnime }]);
-
+			setChats((prev) => [...prev.filter((chat) => chat.role !== "loadingNow"), { role: "loadingNow", content: loadingAnime[animeNum.current] }]);
+			
 			// ChatGPT APIと通信
 			const msgResponse = await fetch("/api/messages", {
 				method: 'POST',
