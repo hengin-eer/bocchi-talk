@@ -8,15 +8,15 @@ import { useRecoilValue } from 'recoil';
 import { speechLanguageState } from '@/states/speechLanguageState';
 import { NewerDiffMessages, OlderDiffMessages } from './preview-diff-messages';
 import isProofOnState from '@/states/isProofOnState';
+import { systemPromptState } from '@/states/chatThemeState';
 
 export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const speechLanguage = useRecoilValue(speechLanguageState)
 	const [message, setMessage] = useState({ role: "user", content: "" });
-	const [proovedText, setProovedText] = useState('') // 校正対象のメッセージを管理
-	const [chats, setChats] = useState([{
-		role: "system",
-		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
-	}]); // 初期値の設定
+	const [proovedText, setProovedText] = useState(''); // 校正対象のメッセージを管理
+	const systemPrompt = useRecoilValue(systemPromptState);
+	console.log(systemPrompt);
+	const [chats, setChats] = useState([systemPrompt]); // 初期値の設定
 
 	if (firestoreMessages && (firestoreMessages.length !== 0) && (chats.length === 1)) {
 		setChats([...chats, ...firestoreMessages])

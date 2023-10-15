@@ -13,6 +13,8 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentUserState } from '@/states/currentUserState'
 import { chatsDataState, hoveredChatState } from '@/states/chatsDataState'
 import { useFirestore } from '@/hooks/useFirestore'
+import { router } from 'next/router'
+import { systemPromptState } from '@/states/chatThemeState'
 
 export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
@@ -29,6 +31,7 @@ export default function Dashboard() {
 	const [courseValue, setCourseValue] = useState('1');
 	const [rollValue, setRollValue] = useState('1');
 	const [discussionTheme, setDiscussionTheme] = useState('');
+	const [systemPrompt, setSystemPrompt] = useRecoilState(systemPromptState);
 
 	if (currentUser && chatsData.length === 0) {
 		; (async () => {
@@ -70,20 +73,26 @@ export default function Dashboard() {
 			if (discussionTheme === '') {
 				return;
 			}
-			onClose();
+			setSystemPrompt({ ...systemPrompt, content: `You are my friend. We have to discuss about "${discussionTheme}".` });
 			console.log(discussionTheme);
+			onClose();
 		} else if (courseValue === '2') {
 			if (rollValue === '1') {
-				onClose();
 				console.log('空港');
-			} else if (rollValue === '2') {
+				setSystemPrompt({ ...systemPrompt, content: "You are my airport staff. We are roll-playing." });
 				onClose();
+			} else if (rollValue === '2') {
 				console.log('ホテル');
+				setSystemPrompt({ ...systemPrompt, content: "You are my hotel(the central hotel) staff. We are roll-playing." });
+				onClose();
 			}
 		} else if (courseValue === '3') {
-			onClose();
 			console.log('フリートーク');
+			setSystemPrompt({ ...systemPrompt, content: "You are my friend." });
+			onClose();
 		}
+		console.log("セット完了")
+		router.push(`/chat/${randomSlug}`);
 	}
 
 	return (
