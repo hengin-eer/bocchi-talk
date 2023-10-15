@@ -57,8 +57,8 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					console.log("intervalIdが発火しました.");
 					if (lastMessage.role === "loadingNow") {
 						console.log(animeNum.current, ": ", loadingAnime[animeNum.current]);
-						animeNum.current = (animeNum.current + 1) % loadingAnime.length;
-						return [...prev.slice(0, -1), { role: "loadingNow", content: loadingAnime[animeNum.current] }];
+						animeNum.current = (animeNum.current + 0.5) % loadingAnime.length;
+						return [...prev.slice(0, -1), { role: "loadingNow", content: loadingAnime[Math.floor(animeNum.current)] }];
 					}
 					console.log("intervalIdがクリアされました."); 
 					return prev;
