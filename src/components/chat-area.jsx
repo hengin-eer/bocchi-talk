@@ -30,6 +30,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const scrollContainer = useRef(null);
 	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
 	const isProofOn = useRecoilValue(isProofOnState)
+	const loadingAnime = ["🤫", "🫢", "🤔", "🫡"];
+	const animeNum = useRef(0);
+
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -38,16 +41,30 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 
 	const sendMessage = async (e) => {
 		try {
+			
 			e.preventDefault()
 			if (message.content === "") return;
 			resetTranscript()
-
 			if (firestoreMessages.length === 0) addChatsData(currentUser.email, chatsId)
 			else updateChatsData(currentUser.email, chatsId)
 			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
-			setChats((prev) => [...prev, message]);
-
+			setChats((prev) => [...prev, message, { role: "loadingNow", content: loadingAnime[animeNum.current] }]);
+			
+			const intervalId = setInterval(() => {
+				setChats((prev) => {
+					const lastMessage = prev[prev.length - 1];
+					console.log("intervalIdが発火しました.");
+					if (lastMessage.role === "loadingNow") {
+						console.log(animeNum.current, ": ", loadingAnime[animeNum.current]);
+						animeNum.current = (animeNum.current + 0.5) % loadingAnime.length;
+						return [...prev.slice(0, -1), { role: "loadingNow", content: loadingAnime[Math.floor(animeNum.current)] }];
+					}
+					console.log("intervalIdがクリアされました."); 
+					return prev;
+				});
+			}, 300);
+			
 			if (isProofOn) {
 				const proofResponse = await fetch("/api/proofread", {
 					method: 'POST',
@@ -76,12 +93,14 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 							afterText: proofText,
 						},
 					}
-					setChats((prev) => [...prev, proofreadingSentences]);
+					setChats((prev) => [...prev.filter((chat) => chat.role !== "loadingNow"), proofreadingSentences]);
 					addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
 					// console.log(proovedText)
 				}
 			}
 
+			setChats((prev) => [...prev.filter((chat) => chat.role !== "loadingNow"), { role: "loadingNow", content: loadingAnime[animeNum.current] }]);
+			
 			// ChatGPT APIと通信
 			const msgResponse = await fetch("/api/messages", {
 				method: 'POST',
@@ -89,7 +108,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					message: [...chats, message].filter(d => d.role !== "proofread").map((d) => ({
+					message: [...chats, message].filter(d => d.role !== "proofread").filter(d => d.role !== "loadingNow").map((d) => ({
 						role: d.role,
 						content: d.content,
 					})),
@@ -103,8 +122,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					new Error(`Request failed with status ${msgResponse.status}`)
 				);
 			}
+			clearInterval(intervalId);
 
-			setChats((prev) => [...prev, msgData.result]);
+			setChats(prev => [...prev.filter((chat) => chat.role !== "loadingNow"), msgData.result]);
 			addFirestoreDoc(msgData.result, currentUser.email, chatsId)
 		} catch (error) {
 			console.error(error);
@@ -196,7 +216,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 									</Flex>
 								</Flex>
 							)}
-							{(message.role === "assistant" || message.role === "user") && message.content}
+							{(message.role === "assistant" || message.role === "user" || message.role === "loadingNow") && message.content}
 						</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
