@@ -13,34 +13,36 @@ import {
 } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react';
 import Link from 'next/link'
-import { PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
+import { PiBellRingingFill, PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
 
 export const DashboardNav = ({ user }) => {
 	return (
-		<Flex direction={{ base: 'row', lg: 'column' }} align='center' justify={{ base: 'space-around', lg: 'end' }} h={{ base: '80px', lg: '100dvh' }} w={{ base: '100%', lg: '80px' }} gap={{ base: '20px', lg: '30px' }} p={{ base: '0px 30px', sm: '30px 0px' }} bg='greenyellow'>
+		<Flex direction={{ base: 'row', lg: 'column' }} align='center' justify={{ base: 'space-around', lg: 'flex-end' }} h={{ base: '80px', lg: '100dvh' }} w={{ base: '100%', lg: '80px' }} gap={{ base: '20px', lg: '30px' }} px='20px' py='30px' bg='white' border='1px' borderColor='gray.200'>
 			{user ? (
 				<>
-					<Button display='block' variant='link' colorScheme='orange'>
+					<Button display='block' variant='link' colorScheme='black'>
 						<Link href='/dashboard'>
 							<Icon boxSize='30px' as={PiHouseFill} />
-							<Text fontSize='xs'>Home</Text>
 						</Link>
 					</Button>
-					<Button display='block' variant='link' colorScheme='red'>
+					<Button display='block' variant='link' colorScheme='black'>
+						<Link href='/news'>
+							<Icon boxSize='30px' as={PiBellRingingFill} />
+						</Link>
+					</Button>
+					<Button display='block' variant='link' colorScheme='black'>
 						<Link href='/favorites'>
 							<Icon boxSize='30px' as={PiHeartFill} />
-							<Text fontSize='xs'>Favorites</Text>
 						</Link>
 					</Button>
-					<Button display='block' variant='link' colorScheme='cyan'>
+					<Button display='block' variant='link' colorScheme='black'>
 						<a href="https://forms.gle/EWAGxPBGrEeKSWJg9" target="_blank" rel="noopener noreferrer">
 							<Icon boxSize='30px' as={PiPaperPlaneTiltFill} />
-							<Text fontSize='xs'>FeedBack</Text>
 						</a>
 					</Button>
 					<Menu>
 						<MenuButton variant='unstyled' p={0} bg="transparent">
-							<Image src={user.image} alt={user.name} boxSize="50px" borderRadius="50%" />
+							<Image src={user.image} alt={user.name} boxSize="40px" borderRadius="50%" />
 						</MenuButton>
 						<MenuList>
 							<MenuItem>
