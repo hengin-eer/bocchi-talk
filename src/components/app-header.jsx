@@ -47,11 +47,11 @@ export const AppHeader = ({ chatTitle }) => {
 					message: [
 						{
 							role: "system",
-							content: "system_prompt",
+							content: "命令 \n あなたは高性能な翻訳アプリです。渡された単語またはフレーズを" + translatedLanguage + "に翻訳した結果を出力してください。\n 条件 \n 出力には「翻訳後の単語」or「翻訳後のフレーズ」(\"\"は含まない), 「品詞」, 「意味」, 「例文と" + translatedLanguage + "語訳」, 「説明(簡潔に)」を含めてください。それぞれは改行が必要ですが、箇条書きや太字は使用しないでください。意味などが複数ある場合はすべて出力してください。",
 						},
 						{
 							role: "user",
-							content: "命令 \n あなたは高性能な翻訳アプリです。\"" + originalText.content + "\"を" + translatedLanguage + "に翻訳した結果を出力してください。\n 条件 \n 出力には「翻訳された単語」(\"\"は含まない), 「品詞」, 「意味」, 「例文と" + translatedLanguage + "語訳」, 「説明(簡潔に)」を含めてください。それぞれは改行が必要ですが、箇条書きや太字は使用しないでください。意味などが複数ある場合はすべて出力してください。",
+							content: originalText.content,
 						},]
 				}),
 			});
