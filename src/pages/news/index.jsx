@@ -1,27 +1,24 @@
 import { DashboardLayout } from "@/components/dashboard-layout";
-import { useFirestore } from "@/hooks/useFirestore";
+import { newsDataState, isNewsUpdatedState } from "@/states/newsDataState";
 import { Box, Flex, Heading, Icon, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiArrowSquareOutFill, PiClockClockwiseFill } from "react-icons/pi";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 export default function notification() {
-    const [newsData, setNewsData] = useState([]);
+    const newsData = useRecoilValue(newsDataState);
+    const setIsNewsUpdated = useSetRecoilState(isNewsUpdatedState)
     const [isNewsFetched, setIsNewsFetched] = useState(false);
-    const { getNewsData } = useFirestore();
-
-    if (!isNewsFetched) {
-        ; (async () => {
-            const data = await getNewsData();
-            setNewsData(data);
-            setIsNewsFetched(true);
-        })()
-    }
+    useEffect(() => {
+        if (!isNewsFetched) setIsNewsFetched(true);
+        setIsNewsUpdated(false);
+    }, [])
 
     return (
         <DashboardLayout>
             <Heading as='h1' size='lg' mb='20px'>News</Heading>
-            {newsData.slice()
+            {isNewsFetched && newsData.slice()
                 .sort((b, a) => a.date.seconds - b.date.seconds)
                 .map((news) => (
                     <Flex direction='column' align='flex-start' key={news.strId} mb='20px' p='20px' bg='gray.100' borderRadius='10px'>
