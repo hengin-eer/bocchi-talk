@@ -68,7 +68,7 @@ export default function Dashboard() {
 		setDiscussionTheme(value);
 	}
 
-	const onClickWizardSave = () => {
+	const onClickWizardSave = async() => {
 		if (courseValue === '1') {
 			if (discussionTheme === '') {
 				return;
@@ -92,7 +92,7 @@ export default function Dashboard() {
 			onClose();
 		}
 		console.log("セット完了")
-		router.push(`/chat/${randomSlug}`);
+		await router.push(`/chat/${randomSlug}`);
 	}
 
 	return (
