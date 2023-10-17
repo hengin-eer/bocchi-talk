@@ -29,7 +29,7 @@ export const DashboardNav = ({ user, isNewsUpdated }) => {
 						<Link href='/news'>
 							<Icon boxSize='30px' as={PiBellRingingFill} />
 						</Link>
-						{isNewsUpdated && <Flex position='absolute' top='0' right='0' w='10px' h='10px' bg='cyan.400' borderRadius='50%' />}
+						{isNewsUpdated && <Flex position='absolute' top='-1px' right='4px' w='12px' h='12px' bg='cyan.400' border='2px' borderColor='white' borderRadius='50%' />}
 					</Button>
 					<Button display='block' variant='link' colorScheme='black'>
 						<Link href='/favorites'>
