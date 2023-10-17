@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Text, Textarea, forwardRef } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Heading, Icon, Text, Textarea, forwardRef, useMediaQuery } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { PiArrowSquareOutFill, PiPaperPlaneTiltFill, PiSignInFill } from "react-icons/pi";
@@ -61,6 +61,24 @@ export const ButtonLink = ({ children, icon = PiArrowSquareOutFill, href = '', i
 			<Flex align='center' columnGap='5px'>
 				<Icon as={icon} fontSize='20px' />
 				<Text fontSize='16px'>{children}</Text>
+			</Flex>
+		</Button>
+	)
+}
+
+export const ResponsiveButtonLink = ({ children, icon = PiArrowSquareOutFill, href = null, isBlank=false, onClick }, props) => {
+	const [mqMd] = useMediaQuery('(min-width: 768px)')
+
+	return (
+		<Button as={href ? 'a' : 'button'} href={href} target={isBlank ? '_blank' : '_self'} rel="noopener noreferrer"
+			onClick={onClick}
+			{...props} variant='unstyled' display='block'
+			h='max' w='max' px={mqMd ? '25px' : '10px'} py='10px' color='black' bg='white'
+			border='2px' borderColor='#884FE4' borderRadius='full' transitionDuration='.3s'
+			_hover={{ color: 'white', bg: '#884FE4' }}>
+			<Flex align='center' columnGap={mqMd ? '5px' : '0'}>
+				<Icon as={icon} fontSize={mqMd ? '20px' : '28px'} />
+				<Text fontSize='16px'>{mqMd ? children : null}</Text>
 			</Flex>
 		</Button>
 	)

@@ -19,12 +19,9 @@ import { systemPromptState } from '@/states/chatThemeState'
 export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
-	const { getNewsData } = useFirestore()
 	const hoveredChat = useRecoilValue(hoveredChatState)
 	const currentUser = useRecoilValue(currentUserState)
 	const [currentChatTitle, setCurrentChatTitle] = useState('')
-	const [ newsData, setNewsData ] = useState([])
-	const [ isFetched, setIsFetched ] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const initialRef = useRef(null);
 	const finalRef = useRef(null);
@@ -49,15 +46,6 @@ export default function Dashboard() {
 	}
 
 	const randomSlug = Randomstring.generate(16);
-	
-	if (currentUser && !isFetched) {
-		; (async () => {
-			const data = await getNewsData();
-			setNewsData(data);
-			setIsFetched(true);
-		})()
-	}
-
 	const resetWizard = () => {
 		setCourseValue('1');
 		setRollValue('1');
@@ -133,33 +121,6 @@ export default function Dashboard() {
 					)}
 				</Flex>
 			</Flex>
-			<Heading as='h1' size='lg' mt='10px'>News</Heading>
-			<Accordion allowToggle py='20px'>
-				{newsData.slice() // オリジナルの配列を変更せずにコピーを作成
-  				.sort((b, a) => a.date.seconds - b.date.seconds) // 日付でソート
-  				.map((newData, index) => (
-					<AccordionItem key={index}>
-						<h2>
-							<AccordionButton>
-								<Flex as="span" textAlign='left'>
-									<Icon as={PiBellZBold} w={6} h={6} mr={2} color='slategray' />
-									<Text fontSize='md'>{newData.titleJA}</Text>
-								</Flex>
-								<Spacer />
-								<Text pr={2} color='gray.500'>-{new Date(newData.date.seconds * 1000).toLocaleDateString('ja-JP')}-</Text>
-								<AccordionIcon />
-							</AccordionButton>
-						</h2>
-						<AccordionPanel pb={4} pl={12}>
-							{newData.isInNewTab?(
-								<Link href={newData.linkURL} target="_blank" rel="noopener noreferrer"><Text fontSize='sm'>{newData.contentJA}</Text></Link>
-							) : (
-								<Link href={newData.linkURL}><Text fontSize='sm'>{newData.contentJA}</Text></Link>
-							)}
-						</AccordionPanel>
-					</AccordionItem>
-				))}
-			</Accordion>
 			<Modal
 				initialFocusRef={initialRef}
 				finalFocusRef={finalRef}
