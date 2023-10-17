@@ -17,7 +17,7 @@ import { PiBellRingingFill, PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFi
 
 export const DashboardNav = ({ user, isNewsUpdated }) => {
 	return (
-		<Flex direction={{ base: 'row', lg: 'column' }} align='center' justify={{ base: 'space-around', lg: 'flex-end' }} h={{ base: '80px', lg: '100dvh' }} w={{ base: '100%', lg: '80px' }} gap={{ base: '20px', lg: '30px' }} px='20px' py='30px' bg='white' border='1px' borderColor='gray.200'>
+		<Flex direction={{ base: 'row', lg: 'column' }} align='center' justify={{ base: 'space-around', lg: 'flex-end' }} h={{ base: '80px', lg: '100dvh' }} w={{ base: '100%', lg: '80px' }} gap={{ base: '20px', lg: '30px' }} px={{ base: '20px', lg: '15px' }} py='30px' bg='white' border='1px' borderColor='gray.200'>
 			{user ? (
 				<>
 					<Button display='block' variant='link' colorScheme='black'>
