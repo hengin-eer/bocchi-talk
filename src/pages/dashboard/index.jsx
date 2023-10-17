@@ -32,6 +32,7 @@ export default function Dashboard() {
 	const [rollValue, setRollValue] = useState('1');
 	const [discussionTheme, setDiscussionTheme] = useState('');
 	const [systemPrompt, setSystemPrompt] = useRecoilState(systemPromptState);
+	const [isWizarded, setIsWizarded] = useState(false);
 
 	if (currentUser && chatsData.length === 0) {
 		; (async () => {
@@ -69,6 +70,7 @@ export default function Dashboard() {
 	}
 
 	const onClickWizardSave = async() => {
+		setIsWizarded(true);
 		if (courseValue === '1') {
 			if (discussionTheme === '') {
 				return;
@@ -93,6 +95,7 @@ export default function Dashboard() {
 		}
 		console.log("セット完了")
 		await router.push(`/chat/${randomSlug}`);
+		setIsWizarded(false);
 	}
 
 	return (
@@ -123,7 +126,11 @@ export default function Dashboard() {
 				))}
 				<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
 					<Icon as={PiPlusCircleFill} color='slategray' w={6} h={6} />
-					<Button onClick={resetWizard}>新しくチャットを始める</Button>{/* <Link href={`/chat/${randomSlug}`}>新しくチャットを始める</Link> */}
+					{isWizarded ? (
+						<Button>作成中・・・</Button>
+					) : (
+						<Button onClick={resetWizard}>新しくチャットを始める</Button>
+					)}
 				</Flex>
 			</Flex>
 			<Heading as='h1' size='lg' mt='10px'>News</Heading>
