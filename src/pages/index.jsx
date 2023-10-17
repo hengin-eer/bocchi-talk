@@ -4,9 +4,25 @@ import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react'
 import { ButtonLink, GradientHeading, LoginButton, PrimaryButton, Text100, Text110, Title100 } from '@/components/custom-chakra-ui'
 import { authOptions } from '@/pages/api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
+import { useFirestore } from '@/hooks/useFirestore'
+import { useState } from 'react'
 
 
 export default function Home() {
+  const [newsData, setNewsData] = useState([]);
+  const [isNewsFetched, setIsNewsFetched] = useState(false);
+  const { getNewsData } = useFirestore();
+
+  if (!isNewsFetched) {
+    ; (async () => {
+      const data = await getNewsData();
+      setNewsData(data);
+      setIsNewsFetched(true);
+    })()
+  }
+
+  // TODO 取得したデータをUIで表示する
+
   const reasons = [
     {
       "key": 1,
@@ -40,7 +56,7 @@ export default function Home() {
       </Head>
       <main>
         <Box id='headerSection' h={{ base: 'full', lg: '700px' }} maxW='1080px' px={{ base: '20px', lg: '0' }} mx='auto' overflowY='hidden'>
-          <PageHeader />
+          <PageHeader newsData={newsData} />
           <Flex direction={{ base: 'column-reverse', lg: 'row' }} align={{ base: 'center', lg: 'flex-start' }} justify='center' gap='50px'
             maxW='inherit' pt={{ base: '30px', lg: '80px' }} pb={{ base: '50px', lg: '0' }} mx='auto'>
             <Image w={{ base: '300px', md: '350px' }} src='/hero-mobile.png' alt='hero image' />

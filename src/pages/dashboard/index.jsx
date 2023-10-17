@@ -1,7 +1,7 @@
-import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spacer, Text } from '@chakra-ui/react'
+import { Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spacer, Text, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Stack, Radio, RadioGroup, ModalFooter, Button, Input, Divider } from '@chakra-ui/react'
 import { Box, Editable, Flex, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useLoading } from '@/hooks/useLoading'
 import { PiBellZBold, PiPlusCircleFill } from 'react-icons/pi'
 import Randomstring from 'randomstring'
@@ -13,16 +13,23 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { currentUserState } from '@/states/currentUserState'
 import { chatsDataState, hoveredChatState } from '@/states/chatsDataState'
 import { useFirestore } from '@/hooks/useFirestore'
+import { router } from 'next/router'
+import { systemPromptState } from '@/states/chatThemeState'
 
 export default function Dashboard() {
 	const [chatsData, setChatsData] = useRecoilState(chatsDataState)
 	const { isLoading, isPageLoading } = useLoading()
-	const { getNewsData } = useFirestore()
 	const hoveredChat = useRecoilValue(hoveredChatState)
 	const currentUser = useRecoilValue(currentUserState)
 	const [currentChatTitle, setCurrentChatTitle] = useState('')
-	const [ newsData, setNewsData ] = useState([])
-	const [ isFetched, setIsFetched ] = useState(false);
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const initialRef = useRef(null);
+	const finalRef = useRef(null);
+	const [courseValue, setCourseValue] = useState('1');
+	const [roleValue, setRoleValue] = useState('1');
+	const [discussionTheme, setDiscussionTheme] = useState('');
+	const [systemPrompt, setSystemPrompt] = useRecoilState(systemPromptState);
+	const [isWizarded, setIsWizarded] = useState(false);
 
 	if (currentUser && chatsData.length === 0) {
 		; (async () => {
@@ -39,13 +46,44 @@ export default function Dashboard() {
 	}
 
 	const randomSlug = Randomstring.generate(16);
-	
-	if (currentUser && !isFetched) {
-		; (async () => {
-			const data = await getNewsData();
-			setNewsData(data);
-			setIsFetched(true);
-		})()
+	const resetWizard = () => {
+		setCourseValue('1');
+		setRoleValue('1');
+		setDiscussionTheme('');
+		onOpen();
+	}
+
+	const handleThemeChange = (value) => {
+		setDiscussionTheme(value);
+	}
+
+	const onClickWizardSave = async() => {
+		setIsWizarded(true);
+		if (courseValue === '1') {
+			if (discussionTheme === '') {
+				return;
+			}
+			setSystemPrompt({ ...systemPrompt, content: `You are my friend. We have to discuss about "${discussionTheme}".` });
+			console.log(discussionTheme);
+			onClose();
+		} else if (courseValue === '2') {
+			if (roleValue === '1') {
+				console.log('空港');
+				setSystemPrompt({ ...systemPrompt, content: "You are the Central airport staff. We are role-playing. First, you must say Welcome to Central Airport." });
+				onClose();
+			} else if (roleValue === '2') {
+				console.log('ホテル');
+				setSystemPrompt({ ...systemPrompt, content: "You are my hotel(the central hotel) staff. We are role-playing. First, you must say Welcome to Central Hotel" });
+				onClose();
+			}
+		} else if (courseValue === '3') {
+			console.log('フリートーク');
+			setSystemPrompt({ ...systemPrompt, content: "You are my friend." });
+			onClose();
+		}
+		console.log("セット完了")
+		await router.push(`/chat/${randomSlug}`);
+		setIsWizarded(false);
 	}
 
 	return (
@@ -76,36 +114,63 @@ export default function Dashboard() {
 				))}
 				<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
 					<Icon as={PiPlusCircleFill} color='slategray' w={6} h={6} />
-					<Link href={`/chat/${randomSlug}`}>新しくチャットを始める</Link>
+					{isWizarded ? (
+						<Button bg='gray.200'>作成中・・・</Button>
+					) : (
+						<Button onClick={resetWizard} bg='gray.200'>Create New Chat</Button>
+					)}
 				</Flex>
 			</Flex>
-			<Heading as='h1' size='lg' mt='10px'>News</Heading>
-			<Accordion allowToggle py='20px'>
-				{newsData.slice() // オリジナルの配列を変更せずにコピーを作成
-  				.sort((b, a) => a.date.seconds - b.date.seconds) // 日付でソート
-  				.map((newData, index) => (
-					<AccordionItem key={index}>
-						<h2>
-							<AccordionButton>
-								<Flex as="span" textAlign='left'>
-									<Icon as={PiBellZBold} w={6} h={6} mr={2} color='slategray' />
-									<Text fontSize='md'>{newData.titleJA}</Text>
-								</Flex>
-								<Spacer />
-								<Text pr={2} color='gray.500'>-{new Date(newData.date.seconds * 1000).toLocaleDateString('ja-JP')}-</Text>
-								<AccordionIcon />
-							</AccordionButton>
-						</h2>
-						<AccordionPanel pb={4} pl={12}>
-							{newData.isInNewTab?(
-								<Link href={newData.linkURL} target="_blank" rel="noopener noreferrer"><Text fontSize='sm'>{newData.contentJA}</Text></Link>
-							) : (
-								<Link href={newData.linkURL}><Text fontSize='sm'>{newData.contentJA}</Text></Link>
-							)}
-						</AccordionPanel>
-					</AccordionItem>
-				))}
-			</Accordion>
+			<Modal
+				initialFocusRef={initialRef}
+				finalFocusRef={finalRef}
+				isOpen={isOpen}
+				onClose={onClose}
+			>
+				<ModalOverlay />
+				<ModalContent mx={2}>
+					<ModalHeader>Start Chat with Wizard</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody pb={6}>
+						<RadioGroup onChange={setCourseValue} value={courseValue} mb={2}>
+							<Stack direction='row'>
+								<Radio value='1'>Discussion</Radio>
+								<Radio value='2'>Role Play</Radio>
+								<Radio value='3'>Free Talk</Radio>
+							</Stack>
+						</RadioGroup>
+						{courseValue === '1' && (
+							<>
+								<Divider/>
+								<Text fontSize='sm' mt={2}>Input the theme</Text>
+								<Input placeholder='Theme...' onChange={(e) => handleThemeChange(e.target.value)} mt={1}/>
+								{discussionTheme === '' && (
+									<Text fontSize='xs' ml={2} mt={1} color='tomato'>テーマを入力してください</Text>
+								)}
+							</>
+						)}
+						{courseValue === '2' && (
+							<>
+								<Divider />
+								<RadioGroup onChange={setRoleValue} value={roleValue} mt={2}>
+									<Stack>
+										<Radio value='1'>Airport</Radio>
+										<Radio value='2'>Hotel</Radio>
+										<Radio isDisabled>Coming soon...</Radio>
+									</Stack>
+								</RadioGroup>
+							</>
+						)}
+					</ModalBody>
+
+					<ModalFooter>
+						<Button colorScheme='blue' mr={3} onClick={onClickWizardSave}>
+						Go
+						</Button>
+						<Button onClick={onClose}>Cancel</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</DashboardLayout>
 	)
 }

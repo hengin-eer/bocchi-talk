@@ -7,15 +7,16 @@ import { useFirestore } from '@/hooks/useFirestore';
 import { useRecoilValue } from 'recoil';
 import { speechLanguageState } from '@/states/speechLanguageState';
 import { NewerDiffMessages, OlderDiffMessages } from './preview-diff-messages';
+import isProofOnState from '@/states/isProofOnState';
+import { systemPromptState } from '@/states/chatThemeState';
 
 export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const speechLanguage = useRecoilValue(speechLanguageState)
 	const [message, setMessage] = useState({ role: "user", content: "" });
-	const [proovedText, setProovedText] = useState('') // 校正対象のメッセージを管理
-	const [chats, setChats] = useState([{
-		role: "system",
-		content: "system_prompt" // 初期値としてシステムメッセージを入れておく。
-	}]); // 初期値の設定
+	const [proovedText, setProovedText] = useState(''); // 校正対象のメッセージを管理
+	const systemPrompt = useRecoilValue(systemPromptState);
+	console.log(systemPrompt);
+	const [chats, setChats] = useState([systemPrompt]); // 初期値の設定
 
 	if (firestoreMessages && (firestoreMessages.length !== 0) && (chats.length === 1)) {
 		setChats([...chats, ...firestoreMessages])
@@ -28,6 +29,10 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 	const [isClient, setIsClient] = useState(false);
 	const scrollContainer = useRef(null);
 	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
+	const isProofOn = useRecoilValue(isProofOnState)
+	const loadingAnime = ["🤫", "🫢", "🤔", "🫡"];
+	const animeNum = useRef(0);
+
 
 	const handleInputChange = (value) => {
 		setMessage({ role: "user", content: value });
@@ -36,34 +41,66 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 
 	const sendMessage = async (e) => {
 		try {
+			
 			e.preventDefault()
 			if (message.content === "") return;
 			resetTranscript()
-
 			if (firestoreMessages.length === 0) addChatsData(currentUser.email, chatsId)
 			else updateChatsData(currentUser.email, chatsId)
 			addFirestoreDoc(message, currentUser.email, chatsId)
 			setMessage({ role: "user", content: "" });
-			setChats((prev) => [...prev, message]);
+			setChats((prev) => [...prev, message, { role: "loadingNow", content: loadingAnime[animeNum.current] }]);
+			
+			const intervalId = setInterval(() => {
+				setChats((prev) => {
+					const lastMessage = prev[prev.length - 1];
+					console.log("intervalIdが発火しました.");
+					if (lastMessage.role === "loadingNow") {
+						console.log(animeNum.current, ": ", loadingAnime[animeNum.current]);
+						animeNum.current = (animeNum.current + 0.5) % loadingAnime.length;
+						return [...prev.slice(0, -1), { role: "loadingNow", content: loadingAnime[Math.floor(animeNum.current)] }];
+					}
+					console.log("intervalIdがクリアされました."); 
+					return prev;
+				});
+			}, 300);
+			
+			if (isProofOn) {
+				const proofResponse = await fetch("/api/proofread", {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						message: proovedText,
+					}),
+				});
 
-			const proofResponse = await fetch("/api/proofread", {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					message: proovedText,
-				}),
-			});
+				const proofData = await proofResponse.json();
+				if (proofResponse.status !== 200) {
+					throw (
+						proofData.error ||
+						new Error(`Request failed with status ${proofResponse.status}`)
+					);
+				}
 
-			const proofData = await proofResponse.json();
-			if (proofResponse.status !== 200) {
-				throw (
-					proofData.error ||
-					new Error(`Request failed with status ${proofResponse.status}`)
-				);
+				const proofText = proofData.result.content;
+				if (proofText !== proovedText) {
+					const proofreadingSentences = {
+						role: "proofread",
+						content: {
+							beforeText: proovedText,
+							afterText: proofText,
+						},
+					}
+					setChats((prev) => [...prev.filter((chat) => chat.role !== "loadingNow"), proofreadingSentences]);
+					addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
+					// console.log(proovedText)
+				}
 			}
 
+			setChats((prev) => [...prev.filter((chat) => chat.role !== "loadingNow"), { role: "loadingNow", content: loadingAnime[animeNum.current] }]);
+			
 			// ChatGPT APIと通信
 			const msgResponse = await fetch("/api/messages", {
 				method: 'POST',
@@ -71,7 +108,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					message: [...chats, message].filter(d => d.role !== "proofread").map((d) => ({
+					message: [...chats, message].filter(d => d.role !== "proofread").filter(d => d.role !== "loadingNow").map((d) => ({
 						role: d.role,
 						content: d.content,
 					})),
@@ -85,22 +122,9 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					new Error(`Request failed with status ${msgResponse.status}`)
 				);
 			}
+			clearInterval(intervalId);
 
-			const proofText = proofData.result.content;
-			if (proofText !== proovedText) {
-				const proofreadingSentences = {
-					role: "proofread",
-					content: {
-						beforeText: proovedText,
-						afterText: proofText,
-					},
-				}
-				setChats((prev) => [...prev, proofreadingSentences]);
-				addFirestoreDoc(proofreadingSentences, currentUser.email, chatsId)
-				// console.log(proovedText)
-			}
-
-			setChats((prev) => [...prev, msgData.result]);
+			setChats(prev => [...prev.filter((chat) => chat.role !== "loadingNow"), msgData.result]);
 			addFirestoreDoc(msgData.result, currentUser.email, chatsId)
 		} catch (error) {
 			console.error(error);
@@ -192,7 +216,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 									</Flex>
 								</Flex>
 							)}
-							{(message.role === "assistant" || message.role === "user") && message.content}
+							{(message.role === "assistant" || message.role === "user" || message.role === "loadingNow") && message.content}
 						</Text>
 						{index === menuIndex && (
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
