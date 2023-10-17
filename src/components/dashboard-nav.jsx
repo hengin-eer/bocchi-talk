@@ -15,7 +15,7 @@ import { signOut } from 'next-auth/react';
 import Link from 'next/link'
 import { PiBellRingingFill, PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
 
-export const DashboardNav = ({ user }) => {
+export const DashboardNav = ({ user, isNewsUpdated }) => {
 	return (
 		<Flex direction={{ base: 'row', lg: 'column' }} align='center' justify={{ base: 'space-around', lg: 'flex-end' }} h={{ base: '80px', lg: '100dvh' }} w={{ base: '100%', lg: '80px' }} gap={{ base: '20px', lg: '30px' }} px='20px' py='30px' bg='white' border='1px' borderColor='gray.200'>
 			{user ? (
@@ -25,10 +25,11 @@ export const DashboardNav = ({ user }) => {
 							<Icon boxSize='30px' as={PiHouseFill} />
 						</Link>
 					</Button>
-					<Button display='block' variant='link' colorScheme='black'>
+					<Button position='relative' display='block' variant='link' colorScheme='black'>
 						<Link href='/news'>
 							<Icon boxSize='30px' as={PiBellRingingFill} />
 						</Link>
+						{isNewsUpdated && <Flex position='absolute' top='0' right='0' w='10px' h='10px' bg='cyan.400' borderRadius='50%' />}
 					</Button>
 					<Button display='block' variant='link' colorScheme='black'>
 						<Link href='/favorites'>
