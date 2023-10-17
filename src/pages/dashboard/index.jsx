@@ -26,7 +26,7 @@ export default function Dashboard() {
 	const initialRef = useRef(null);
 	const finalRef = useRef(null);
 	const [courseValue, setCourseValue] = useState('1');
-	const [rollValue, setRollValue] = useState('1');
+	const [roleValue, setRoleValue] = useState('1');
 	const [discussionTheme, setDiscussionTheme] = useState('');
 	const [systemPrompt, setSystemPrompt] = useRecoilState(systemPromptState);
 	const [isWizarded, setIsWizarded] = useState(false);
@@ -48,7 +48,7 @@ export default function Dashboard() {
 	const randomSlug = Randomstring.generate(16);
 	const resetWizard = () => {
 		setCourseValue('1');
-		setRollValue('1');
+		setRoleValue('1');
 		setDiscussionTheme('');
 		onOpen();
 	}
@@ -67,13 +67,13 @@ export default function Dashboard() {
 			console.log(discussionTheme);
 			onClose();
 		} else if (courseValue === '2') {
-			if (rollValue === '1') {
+			if (roleValue === '1') {
 				console.log('空港');
-				setSystemPrompt({ ...systemPrompt, content: "You are the Central airport staff. We are roll-playing. First, you must say Welcome to Central Airport." });
+				setSystemPrompt({ ...systemPrompt, content: "You are the Central airport staff. We are role-playing. First, you must say Welcome to Central Airport." });
 				onClose();
-			} else if (rollValue === '2') {
+			} else if (roleValue === '2') {
 				console.log('ホテル');
-				setSystemPrompt({ ...systemPrompt, content: "You are my hotel(the central hotel) staff. We are roll-playing. First, you must say Welcome to Central Hotel" });
+				setSystemPrompt({ ...systemPrompt, content: "You are my hotel(the central hotel) staff. We are role-playing. First, you must say Welcome to Central Hotel" });
 				onClose();
 			}
 		} else if (courseValue === '3') {
@@ -115,9 +115,9 @@ export default function Dashboard() {
 				<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
 					<Icon as={PiPlusCircleFill} color='slategray' w={6} h={6} />
 					{isWizarded ? (
-						<Button>作成中・・・</Button>
+						<Button bg='gray.200'>作成中・・・</Button>
 					) : (
-						<Button onClick={resetWizard}>新しくチャットを始める</Button>
+						<Button onClick={resetWizard} bg='gray.200'>Create New Chat</Button>
 					)}
 				</Flex>
 			</Flex>
@@ -135,7 +135,7 @@ export default function Dashboard() {
 						<RadioGroup onChange={setCourseValue} value={courseValue} mb={2}>
 							<Stack direction='row'>
 								<Radio value='1'>Discussion</Radio>
-								<Radio value='2'>Roll Play</Radio>
+								<Radio value='2'>Role Play</Radio>
 								<Radio value='3'>Free Talk</Radio>
 							</Stack>
 						</RadioGroup>
@@ -152,7 +152,7 @@ export default function Dashboard() {
 						{courseValue === '2' && (
 							<>
 								<Divider />
-								<RadioGroup onChange={setRollValue} value={rollValue} mt={2}>
+								<RadioGroup onChange={setRoleValue} value={roleValue} mt={2}>
 									<Stack>
 										<Radio value='1'>Airport</Radio>
 										<Radio value='2'>Hotel</Radio>
