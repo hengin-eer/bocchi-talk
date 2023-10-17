@@ -69,11 +69,11 @@ export default function Dashboard() {
 		} else if (courseValue === '2') {
 			if (rollValue === '1') {
 				console.log('空港');
-				setSystemPrompt({ ...systemPrompt, content: "You are my airport staff. We are roll-playing." });
+				setSystemPrompt({ ...systemPrompt, content: "You are the Central airport staff. We are roll-playing. First, you must say Welcome to Central Airport." });
 				onClose();
 			} else if (rollValue === '2') {
 				console.log('ホテル');
-				setSystemPrompt({ ...systemPrompt, content: "You are my hotel(the central hotel) staff. We are roll-playing." });
+				setSystemPrompt({ ...systemPrompt, content: "You are my hotel(the central hotel) staff. We are roll-playing. First, you must say Welcome to Central Hotel" });
 				onClose();
 			}
 		} else if (courseValue === '3') {
