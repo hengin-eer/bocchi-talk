@@ -1,42 +1,39 @@
 import { Box, Button, Divider, Fade, Flex, Icon, Image, Text, useDisclosure } from '@chakra-ui/react'
-import { PiCheckBold, PiMicrophoneFill, PiPaperPlaneRightFill, PiXBold } from 'react-icons/pi'
+import { PiCheckBold, PiXBold } from 'react-icons/pi'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { AutoResizeTextarea } from './custom-chakra-ui';
+import { useSpeechRecognition } from 'react-speech-recognition';
 import { useFirestore } from '@/hooks/useFirestore';
 import { useRecoilValue } from 'recoil';
-import { speechLanguageState } from '@/states/speechLanguageState';
 import { NewerDiffMessages, OlderDiffMessages } from './preview-diff-messages';
 import isProofOnState from '@/states/isProofOnState';
 import { systemPromptState } from '@/states/chatThemeState';
+import { ChatForm } from '@/components/chat-form';
 
 export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
-	const speechLanguage = useRecoilValue(speechLanguageState)
+	// states
 	const [message, setMessage] = useState({ role: "user", content: "" });
 	const [proovedText, setProovedText] = useState(''); // 校正対象のメッセージを管理
 	const systemPrompt = useRecoilValue(systemPromptState);
-	console.log(systemPrompt);
 	const [chats, setChats] = useState([systemPrompt]); // 初期値の設定
-
-	if (firestoreMessages && (firestoreMessages.length !== 0) && (chats.length === 1)) {
-		setChats([...chats, ...firestoreMessages])
-	}
-
-	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [menuIndex, setMenuIndex] = useState(null); // 右クリックされたときのメニューのindexを保持する
 	const [viewportHeight, setViewportHeight] = useState(100);
 	const [textareaHeight, setTextareaHeight] = useState(0);
 	const [isClient, setIsClient] = useState(false);
+	const isProofOn = useRecoilValue(isProofOnState);
+
+	// refs
 	const scrollContainer = useRef(null);
-	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
-	const isProofOn = useRecoilValue(isProofOnState)
-	const loadingAnime = ["🤫", "🫢", "🤔", "🫡"];
 	const animeNum = useRef(0);
 
+	// hooks
+	const { addChatsData, updateChatsData, addFirestoreDoc } = useFirestore()
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+	
+	const loadingAnime = ["🤫", "🫢", "🤔", "🫡"];
 
-	const handleInputChange = (value) => {
-		setMessage({ role: "user", content: value });
-		setProovedText(value);
+	if (firestoreMessages && (firestoreMessages.length !== 0) && (chats.length === 1)) {
+		setChats([...chats, ...firestoreMessages])
 	}
 
 	const sendMessage = async (e) => {
@@ -155,16 +152,6 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 		};
 	}, []);
 
-	const textareaElement = useRef(null);
-	useEffect(() => {
-		if (textareaElement.current) {
-			setTextareaHeight(textareaElement.current.scrollHeight);
-		}
-	}, [message.content])
-
-
-	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
-
 	useEffect(() => {
 		setIsClient(true);
 	}, []);
@@ -234,17 +221,7 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 					</Flex>
 				))}
 			</Flex>
-			<form onSubmit={(e) => sendMessage(e)} >
-				<Flex ref={textareaElement} align='flex-end' w='100%' maxW={800} h='auto' px={3} mx='auto' py={3}>
-					<AutoResizeTextarea placeholder="Let's Chat!!" value={message.content} onChange={(e) => handleInputChange(e.target.value)} />
-					{(message.content !== "" || speechLanguage === "") && (
-						<Button colorScheme='teal' type='submit'><Icon as={PiPaperPlaneRightFill} /></Button>
-					)}
-					{message.content === "" && speechLanguage !== "" && (
-						<Button colorScheme='green' variant={listening ? 'solid' : 'ghost'} onClick={() => SpeechRecognition.startListening({ language: speechLanguage })}><Icon as={PiMicrophoneFill} /></Button>
-					)}
-				</Flex>
-			</form>
+			<ChatForm sendMessage={sendMessage} message={message} listening={listening} setTextareaHeight={setTextareaHeight} setMessage={setMessage} setProovedText={setProovedText} />
 		</Box>
 	)
 }
