@@ -85,7 +85,7 @@ export default function Policy() {
                                 </ReactMarkdown>
                             </TabPanel>
                         </TabPanels>
-                        </Tabs>
+                    </Tabs>
                 </ModalBody>
     
                 <ModalFooter>

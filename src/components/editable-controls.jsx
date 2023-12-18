@@ -43,12 +43,12 @@ export const EditableChatList = ({ currentChatTitle, setCurrentChatTitle, chatDa
 				<AlertDialogOverlay />
 
 				<AlertDialogContent>
-					<AlertDialogHeader>⚠️警告</AlertDialogHeader>
+					<AlertDialogHeader>⚠️ Warning</AlertDialogHeader>
 
-					<AlertDialogBody>チャットデータを削除しても構いませんか？ チャットデータは完全に削除され、2度と復元できません!!</AlertDialogBody>
+					<AlertDialogBody>チャットデータを削除しても構いませんか？ チャットデータは完全に削除され、2度と復元できません!!<br />Can I delete my chat data? The chat data is completely deleted and can never be recovered again!</AlertDialogBody>
 					<AlertDialogFooter>
-						<Button ref={cancelRef} onClick={onClose}>閉じる</Button>
-						<Button colorScheme='red' ml='20px' onClick={() => handleDelete()}>削除する</Button>
+						<Button ref={cancelRef} onClick={onClose}>Close</Button>
+						<Button colorScheme='red' ml='20px' onClick={() => handleDelete()}>Delete</Button>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>

@@ -85,7 +85,7 @@ export default function Terms() {
                                 </ReactMarkdown>
                             </TabPanel>
                         </TabPanels>
-                        </Tabs>
+                    </Tabs>
                 </ModalBody>
     
                 <ModalFooter>

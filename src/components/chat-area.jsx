@@ -222,11 +222,11 @@ export const ChatArea = ({ firestoreMessages, chatsId, currentUser }) => {
 							<Box pos='absolute' zIndex={999} top='40px' right={0}>
 								<Fade in={isOpen} key={index}>
 									<Flex direction='column' align='flex-start' rowGap={2} px={5} py={3} bg='teal' borderRadius={5}>
-										<Button variant='link' color='white'>保存する</Button>
-										<Button variant='link' color='white'>コピー</Button>
-										<Button variant='link' color='white'>翻訳する</Button>
-										<Button variant='link' color='white'>返信する</Button>
-										<Button variant='link' color='white'>辞書を引く</Button>
+										<Button variant='link' color='white'>Save</Button>
+										<Button variant='link' color='white'>Copy</Button>
+										<Button variant='link' color='white'>Translate</Button>
+										<Button variant='link' color='white'>Reply</Button>
+										<Button variant='link' color='white'>Search the Define</Button>
 									</Flex>
 								</Fade>
 							</Box>
