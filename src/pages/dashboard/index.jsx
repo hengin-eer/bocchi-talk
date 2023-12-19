@@ -115,7 +115,7 @@ export default function Dashboard() {
 				<Flex align='center' columnGap='10px' px='30px' py='10px' bg='gray.200' borderRadius='10px'>
 					<Icon as={PiPlusCircleFill} color='slategray' w={6} h={6} />
 					{isWizarded ? (
-						<Button bg='gray.200'>作成中・・・</Button>
+						<Button bg='gray.200'>Generating...</Button>
 					) : (
 						<Button onClick={resetWizard} bg='gray.200'>Create New Chat</Button>
 					)}
@@ -145,7 +145,7 @@ export default function Dashboard() {
 								<Text fontSize='sm' mt={2}>Input the theme</Text>
 								<Input placeholder='Theme...' onChange={(e) => handleThemeChange(e.target.value)} mt={1}/>
 								{discussionTheme === '' && (
-									<Text fontSize='xs' ml={2} mt={1} color='tomato'>テーマを入力してください</Text>
+									<Text fontSize='xs' ml={2} mt={1} color='tomato'>テーマを入力してください<br />Enter your desired topic</Text>
 								)}
 							</>
 						)}

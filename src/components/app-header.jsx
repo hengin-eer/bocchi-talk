@@ -142,14 +142,14 @@ export const AppHeader = ({ chatTitle }) => {
 										</Box>
 									</TabPanel>
 									<TabPanel>
-										<Text>単語帳</Text>
+										<Text>wordbook</Text>
 									</TabPanel>
 									<TabPanel>
-										<Text>なにか</Text>
+										<Text>Something...</Text>
 									</TabPanel>
 									<TabPanel>
 										<Box mb='2rem'>
-											<Text mb='1rem' fontSize='lg'>音声入力言語</Text>
+											<Text mb='1rem' fontSize='lg'>Voice Input Language</Text>
 											<Select value={speechLanguage} placeholder='Language' variant='filled' size='sm' onChange={(e) => setSpeechLanguage(e.target.value)}>
 												<option value='en-US'>English(US)</option>
 												<option value='ja'>日本語</option>
@@ -163,14 +163,14 @@ export const AppHeader = ({ chatTitle }) => {
 										</Box>
 
 										<Box mb='2rem'>
-											<Text mb='1rem' fontSize='lg'>校正機能を有効にする</Text>
+											<Text mb='1rem' fontSize='lg'>Enable the calibration function</Text>
 											<Switch size='lg' colorScheme='green'
 												onChange={() => toggleProof()} isChecked={isProofOn}
 											/>
 										</Box>
 
 										<Box>
-											<Text mb='1rem' fontSize='lg'>その他の設定</Text>
+											<Text mb='1rem' fontSize='lg'>Other Settings</Text>
 										</Box>
 									</TabPanel>
 								</TabPanels>
