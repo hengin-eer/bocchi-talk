@@ -16,8 +16,8 @@ export const PageHeader = ({ newsData }) => {
                 </Flex>
             </Link>
             <Flex align='center' justify='center' gap='10px'>
-                <ResponsiveButtonLink icon={PiBellRingingFill} onClick={onOpen}>News</ResponsiveButtonLink>
-                <ResponsiveButtonLink icon={PiEnvelopeSimpleFill} href='https://forms.gle/NK5GJSAVJzUGDtao7' isBlank={true}>Contact</ResponsiveButtonLink>
+                <ResponsiveButtonLink icon={PiBellRingingFill} onClick={onOpen}>お知らせ</ResponsiveButtonLink>
+                <ResponsiveButtonLink icon={PiEnvelopeSimpleFill} href='https://forms.gle/NK5GJSAVJzUGDtao7' isBlank={true}>お問い合わせ</ResponsiveButtonLink>
             </Flex>
 
             <Modal
@@ -28,7 +28,7 @@ export const PageHeader = ({ newsData }) => {
             >
                 <ModalOverlay />
                 <ModalContent maxW='80vw'>
-                    <ModalHeader>News</ModalHeader>
+                    <ModalHeader>お知らせ</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody h='auto' maxH='70vh' overflowY='auto'>
                         {newsData.slice()
