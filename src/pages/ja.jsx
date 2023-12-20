@@ -63,17 +63,18 @@ export default function Home() {
             <Flex direction='column' rowGap={{ base: '30px', lg: '50px' }}>
               <Flex direction='column' align='flex-start' rowGap={{ base: '30px', lg: '50px' }}>
                 <Box>
-                  <GradientHeading as='h1' fontSize='40px'>Let's talk anytime & anyplace!</GradientHeading>
-                  <Heading mt='20px' color='black' as='h2' fontSize='32px' fontWeight='bold'>You can talk with AI</Heading>
+                  <GradientHeading as='h1' fontSize='40px'>ぼっちでもAIと会話しよう！</GradientHeading>
+                  <Heading mt='20px' color='black' as='h2' fontSize='32px' fontWeight='bold'>Talk any-time / where!</Heading>
                 </Box>
                 <Flex direction='column' align={{ base: 'center', lg: 'flex-start' }} gap='20px'>
                   <Box fontSize={{ base: '16px', lg: '20px' }} lineHeight='150%'>
-                    <Text>Bocchi Talk is a student developed service you can talk with AI. </Text>
-                    <Text>You can learn languages anytime & anyplace with your pace.</Text>
+                    <Text>Bocchi Talkは学生が開発した、AIと英会話ができるサービスです。</Text>
+                    <Text>いつでもどこでも、自分のペースで英会話を学ぶことができます。</Text>
+                    <Text>たとえぼっちでも大丈夫！</Text>
                   </Box>
                   <Flex direction={{ base: 'column', lg: 'row' }} align='center' gap='20px'>
-                    <ButtonLink href='/#target-user'>Target User</ButtonLink>
-                    <ButtonLink href='/#features'>Check the features</ButtonLink>
+                    <ButtonLink href='/#target-user'>こんな人におすすめ</ButtonLink>
+                    <ButtonLink href='/#features'>機能を見る</ButtonLink>
                   </Flex>
                 </Flex>
               </Flex>
@@ -89,30 +90,32 @@ export default function Home() {
             w={{ base: '100%', lg: '1080px' }} px={{ base: '20px', lg: '0' }} mx='auto'>
             <Flex direction='column' gap={{ base: '50px', lg: '80px' }} w={{ base: 'full', lg: '520px' }}>
               <Title100 color='white'>
-                Conversation not going the way you want it to?<br />
-                Because you talk to human.<br />
-                So let's talk to an AI!
+                会話が思い通りにいかない？<br />
+                人間だもの。<br />
+                だからAIとお話ししよう！
               </Title100>
               <Flex direction='column' rowGap='30px'>
-                <Text100 color='white'>Are you fed up with the following when having conversations?</Text100>
+                <Text100 color='white'>会話するときに次のようなことにうんざりしていませんか？</Text100>
                 <Flex direction='column' rowGap='20px' w='full' px={{ base: '20px', lg: '40px' }} py='20px' bg='rgba(255, 255, 255, 0.5)' borderRadius='40px'>
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>You are concerned about language and the mood of the other person.</Text100>
+                    <Text100>言葉遣いや、相手の機嫌に気を遣う</Text100>
                   </Flex>
 
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>You find it difficult to have a conversation because the other person is reluctant to talk to me.</Text100>
+                    <Text100>相手が消極的だから会話が弾まない</Text100>
                   </Flex>
 
                   <Flex align='center' columnGap='20px'>
                     <Image src='/beforeList.svg' h='16px' />
-                    <Text100>You worry about the way the other person speaks or their attitude.</Text100>
+                    <Text100>相手の話し方や、態度が気になる</Text100>
                   </Flex>
                 </Flex>
                 <Text100 color='white'>
-                Communication with people is great, but there are problems that we have because we are dealing with human beings. <br />This can only be detrimental in learning opportunities.
+                  人とのコミュニケーションは素晴らしいですが、相手が
+                  ヒトだからこそ抱える問題があります。<br />
+                  これは学習機会において弊害でしかありません。
                 </Text100>
               </Flex>
             </Flex>
@@ -125,8 +128,9 @@ export default function Home() {
           <Box h='2px' w={{ base: '30px', lg: '50px' }} bg='black' borderRadius='1px'></Box>
 
           <Title100>
-            So I use<Box as='br' display={{ base: 'block', lg: 'none' }} />
-            Bocchi Talk<Box as='br' display={{ base: 'block', md: 'none' }} />
+            だから、私は<Box as='br' display={{ base: 'block', lg: 'none' }} />
+            Bocchi Talkを<Box as='br' display={{ base: 'block', md: 'none' }} />
+            使っています
           </Title100>
 
           <Box h='2px' w={{ base: '30px', lg: '50px' }} bg='black' borderRadius='1px'></Box>
@@ -147,40 +151,40 @@ export default function Home() {
         ))}
 
         <Flex direction='column' align='center' rowGap='30px' py='100px' mx='auto'>
-          <Text fontSize='20px' lineHeight='150%'>We are looking for additional features!</Text>
-          <PrimaryButton>Request a function</PrimaryButton>
+          <Text fontSize='20px' lineHeight='150%'>追加機能を募集しています！！</Text>
+          <PrimaryButton>機能をリクエストする</PrimaryButton>
         </Flex>
 
         <Flex id='target-user' direction='column' align='center' w='full' py='100px' bg='#884FE4'>
-          <Title100 color='white'>Target user</Title100>
+          <Title100 color='white'>こんな人におすすめ</Title100>
 
           <Flex direction={{ base: 'column', lg: 'row' }} align='center' gap='50px' py={{ base: '80px', lg: '100px' }}>
             <Flex direction='column' rowGap='30px' w='300px'>
               <Box h='200px' bg='white' borderRadius='20px'></Box>
               <Text100 color='white'>
-                I would like to start speaking English, but it seems too difficult to start face-to-face.
-                I can't start because not being able to ask questions in Japanese is fatal.
+                英会話を始めてみたいけど、いきなり対面で始めるのは大変そう。
+                日本語で質問できないのは致命的なので始められない。
               </Text100>
             </Flex>
 
             <Flex direction='column' rowGap='30px' w='300px'>
               <Box h='200px' bg='white' borderRadius='20px'></Box>
               <Text100 color='white'>
-                I do English conversation but I don't like being restricted in my lesson time.
-                I can't work on it to the best of my ability because I'm worried about the instructor.
+                英会話をやっているけど、レッスンの時間を制限されるのが嫌。
+                講師の方に気を使って思いっきり取り組めない。
               </Text100>
             </Flex>
 
             <Flex direction='column' rowGap='30px' w='300px'>
               <Box h='200px' bg='white' borderRadius='20px'></Box>
               <Text100 color='white'>
-              I have been speaking English for a long time but would like to enjoy the freedom to talk about more in-depth topics or proceed at my own pace.
+                英会話を長くやっているけど、もう少しディープな話題やマイペースで進めるなど自由に会話を楽しみたい。
               </Text100>
             </Flex>
           </Flex>
 
           <Flex direction='column' align='center' rowGap='50px' py='100px'>
-            <Title100 color='white'>Let's start!</Title100>
+            <Title100 color='white'>早速始めよう！</Title100>
             <LoginButton />
           </Flex>
         </Flex>
