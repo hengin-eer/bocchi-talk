@@ -27,7 +27,7 @@ export const LoginButton = () => {
 				_hover={ischecked ? { color: 'white', bg: 'green.500' } : {}} onClick={ischecked ? () => signIn('google') : () => alert('利用規約とプライバシーポリシーを確認してください')}>
 				<Flex align='center' columnGap='10px'>
 					<Icon as={PiSignInFill} fontSize='30px' />
-					<Text fontSize='20px'>ログインして始める</Text>
+					<Text fontSize='20px'>Login to start</Text>
 				</Flex>
 			</Button>
 			<Flex align='center' gap='5px'>
