@@ -10,6 +10,11 @@ import {
     useDisclosure,
     Button,
     Text,
+    Tab,
+    Tabs,
+    TabList,
+    TabPanels,
+    TabPanel
 } from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown';
 import MarkdownComponents from '@/components/markdownComponents';
@@ -17,6 +22,7 @@ import MarkdownComponents from '@/components/markdownComponents';
 export default function Policy() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ PolicyContent, setPolicyContent ] = useState('');
+    const [ PolicyContentEng, setPolicyContentEng ] = useState('');
 
     const fetchPolicyFile = async () => {
         try {
@@ -32,8 +38,23 @@ export default function Policy() {
         }
     };
 
+    const fetchPolicyEngFile = async () => {
+        try {
+            const response = await fetch('/PrivacyPolicyEng.md');
+            if (response.ok) {
+                const markdownText = await response.text();
+                setPolicyContentEng(markdownText);
+            } else {
+                throw new Error('Failed to fetch policy file. Please reload.');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         fetchPolicyFile();
+        fetchPolicyEngFile();
     }, []);
 
     return (
@@ -43,12 +64,28 @@ export default function Policy() {
             <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
             <ModalOverlay />
             <ModalContent maxW="90vw">
-                <ModalHeader>プライバシーポリシーとCookieポリシー</ModalHeader>
+                <ModalHeader>プライバシーポリシーとCookieポリシー<br />PrivacyPolicy & CookiePolicy</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <ReactMarkdown components={MarkdownComponents}>
-                        {PolicyContent}
-                    </ReactMarkdown>
+                    <Tabs>
+                        <TabList>
+                            <Tab>日本語</Tab>
+                            <Tab>English</Tab>
+                        </TabList>
+
+                        <TabPanels>
+                            <TabPanel>
+                                <ReactMarkdown components={MarkdownComponents}>
+                                    {PolicyContent}
+                                </ReactMarkdown>
+                            </TabPanel>
+                            <TabPanel>
+                                <ReactMarkdown components={MarkdownComponents}>
+                                    {PolicyContentEng}
+                                </ReactMarkdown>
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
                 </ModalBody>
     
                 <ModalFooter>
