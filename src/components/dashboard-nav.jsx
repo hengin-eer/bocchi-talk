@@ -1,4 +1,5 @@
 import HowToUsePWA from '@/components/howToUsePWA';
+import { useLocale } from '@/hooks/useLocale';
 import {
 	Button,
 	Flex,
@@ -13,7 +14,14 @@ import {
 } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react';
 import Link from 'next/link'
+import { useEffect } from 'react';
 import { PiBellRingingFill, PiDevicesBold, PiGearSixFill, PiHeartFill, PiHouseFill, PiPaperPlaneTiltFill, PiSignOutFill } from 'react-icons/pi';
+
+const { locale, t } = useLocale();
+
+useEffect(() => {
+	
+}, [])
 
 export const DashboardNav = ({ user, isNewsUpdated }) => {
 	return (
@@ -60,7 +68,7 @@ export const DashboardNav = ({ user, isNewsUpdated }) => {
 									<HowToUsePWA />
 								</Flex>
 							</MenuItem>
-							<MenuItem onClick={() => signOut({ redirect: true, callbackUrl: '/' })} icon={<Icon boxSize='30px' color='red' as={PiSignOutFill} />}>LogOut</MenuItem>
+							<MenuItem onClick={() => signOut({ redirect: true, callbackUrl: `/${locale}` })} icon={<Icon boxSize='30px' color='red' as={PiSignOutFill} />}>LogOut</MenuItem>
 						</MenuList>
 					</Menu>
 				</>
